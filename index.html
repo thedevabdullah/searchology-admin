@@ -3,238 +3,391 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Searchology — Admin Dashboard</title>
+<title>Searchology — Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  :root {
-    --bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--border:#252d40;
-    --accent:#00ff88;--accent2:#00cc6a;--blue:#4d9fff;--red:#ff4d6a;
-    --yellow:#ffd166;--text:#e2e8f0;--muted:#64748b;
-    --font-mono:'JetBrains Mono',monospace;--font-sans:'Outfit',sans-serif;
-  }
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:14px;line-height:1.6;min-height:100vh;}
-  ::-webkit-scrollbar{width:4px;height:4px;}
-  ::-webkit-scrollbar-track{background:var(--bg);}
-  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+:root {
+  --bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--border:#252d40;
+  --accent:#00ff88;--accent2:#00cc6a;--blue:#4d9fff;--red:#ff4d6a;
+  --orange:#ff9f40;--yellow:#ffd166;--text:#e2e8f0;--muted:#64748b;
+  --font-mono:'JetBrains Mono',monospace;--font-sans:'Outfit',sans-serif;
+  --sidebar-w:220px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:14px;line-height:1.6;min-height:100vh;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
-  .config-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
-  .config-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
-  .config-input{font-family:var(--font-mono);font-size:12px;color:var(--text);background:var(--bg3);border:1px solid var(--border);padding:6px 12px;border-radius:6px;outline:none;flex:1;max-width:340px;transition:border-color .2s;}
-  .config-input:focus{border-color:var(--accent);}
-  .config-input::placeholder{color:var(--muted);}
-  .btn{font-family:var(--font-mono);font-size:11px;font-weight:600;padding:7px 16px;border-radius:6px;border:none;cursor:pointer;letter-spacing:.04em;transition:all .15s;white-space:nowrap;}
-  .btn-primary{background:var(--accent);color:#000;}
-  .btn-primary:hover{background:var(--accent2);}
-  .btn-danger{background:rgba(255,77,106,.12);color:var(--red);border:1px solid rgba(255,77,106,.25);}
-  .btn-danger:hover{background:rgba(255,77,106,.22);}
-  .btn-ghost{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
-  .btn-ghost:hover{color:var(--text);border-color:var(--accent);}
-  .btn-copy{background:rgba(77,159,255,.1);color:var(--blue);border:1px solid rgba(77,159,255,.2);padding:4px 10px;font-size:10px;}
-  .btn-copy:hover{background:rgba(77,159,255,.2);}
-  .btn-view{background:rgba(0,255,136,.08);color:var(--accent);border:1px solid rgba(0,255,136,.2);padding:5px 10px;font-size:10px;}
-  .btn-view:hover{background:rgba(0,255,136,.15);}
-  .status-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s;}
-  .status-dot.online{background:var(--accent);box-shadow:0 0 8px var(--accent);}
-  .status-dot.offline{background:var(--red);}
+/* ── buttons ── */
+.btn{font-family:var(--font-mono);font-size:11px;font-weight:600;padding:7px 14px;border-radius:6px;border:none;cursor:pointer;letter-spacing:.04em;transition:all .15s;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
+.btn-primary{background:var(--accent);color:#000;}
+.btn-primary:hover{background:var(--accent2);}
+.btn-danger{background:rgba(255,77,106,.12);color:var(--red);border:1px solid rgba(255,77,106,.25);}
+.btn-danger:hover{background:rgba(255,77,106,.22);}
+.btn-ghost{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
+.btn-ghost:hover{color:var(--text);border-color:var(--accent);}
+.btn-copy{background:rgba(77,159,255,.1);color:var(--blue);border:1px solid rgba(77,159,255,.2);padding:4px 9px;font-size:10px;}
+.btn-copy:hover{background:rgba(77,159,255,.2);}
+.btn-view{background:rgba(0,255,136,.08);color:var(--accent);border:1px solid rgba(0,255,136,.2);padding:5px 10px;font-size:10px;}
+.btn-view:hover{background:rgba(0,255,136,.15);}
+.btn-refresh{background:rgba(255,159,64,.1);color:var(--orange);border:1px solid rgba(255,159,64,.25);padding:5px 10px;font-size:10px;}
+.btn-refresh:hover{background:rgba(255,159,64,.2);}
+.btn-sm{padding:5px 10px;font-size:10px;}
 
-  .topnav{padding:20px 28px 0;display:flex;align-items:center;justify-content:space-between;}
-  .topnav-logo{font-family:var(--font-mono);font-size:16px;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:10px;}
-  .topnav-logo span{color:var(--muted);font-weight:400;}
-  .topnav-right{font-family:var(--font-mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:16px;}
+/* ── status dot ── */
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s;}
+.status-dot.online{background:var(--accent);box-shadow:0 0 8px var(--accent);}
+.status-dot.offline{background:var(--red);}
 
-  .main{padding:24px 28px;}
-  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
-  .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;position:relative;overflow:hidden;transition:border-color .2s;}
-  .stat-card:hover{border-color:var(--accent);}
-  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);opacity:0;transition:opacity .2s;}
-  .stat-card:hover::before{opacity:1;}
-  .stat-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
-  .stat-value{font-family:var(--font-mono);font-size:32px;font-weight:700;color:var(--text);line-height:1;margin-bottom:6px;}
-  .stat-value.green{color:var(--accent);}
-  .stat-value.blue{color:var(--blue);}
-  .stat-value.yellow{color:var(--yellow);}
-  .stat-sub{font-size:11px;color:var(--muted);}
+/* ── top nav ── */
+.topnav{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(15,17,23,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;}
+.topnav-logo{font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:8px;white-space:nowrap;}
+.topnav-logo span{color:var(--muted);font-weight:400;font-size:13px;}
+.topnav-sep{flex:1;}
+.topnav-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.topnav-info{font-family:var(--font-mono);font-size:10px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.hamburger{display:none;background:none;border:none;cursor:pointer;color:var(--muted);font-size:20px;padding:4px;}
 
-  .charts-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:24px;}
-  .card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-  .card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);}
-  .card-title{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text);letter-spacing:.05em;text-transform:uppercase;}
-  .card-body{padding:18px;}
-  .chart-wrap{position:relative;height:200px;}
+/* ── connect bar ── */
+.connect-bar{position:fixed;top:52px;left:0;right:0;z-index:199;background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.connect-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+.connect-input{font-family:var(--font-mono);font-size:12px;color:var(--text);background:var(--bg3);border:1px solid var(--border);padding:6px 12px;border-radius:6px;outline:none;transition:border-color .2s;min-width:0;}
+.connect-input:focus{border-color:var(--accent);}
+.connect-input::placeholder{color:var(--muted);}
+.connect-url{flex:1;max-width:300px;}
+.connect-secret{width:160px;}
+#last-updated{font-family:var(--font-mono);font-size:10px;color:var(--muted);white-space:nowrap;}
 
-  .section-title{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
-  .count-badge{font-size:10px;padding:2px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;color:var(--muted);font-family:var(--font-mono);}
+/* ── layout ── */
+.layout{display:flex;padding-top:104px;min-height:100vh;}
 
-  .keys-table{width:100%;border-collapse:collapse;}
-  .keys-table th{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;}
-  .keys-table td{padding:10px 12px;border-bottom:1px solid rgba(37,45,64,.5);vertical-align:middle;}
-  .keys-table tr:last-child td{border-bottom:none;}
-  .keys-table tr:hover td{background:rgba(255,255,255,.02);}
-  .key-name{font-weight:500;color:var(--text);}
-  .key-value{font-family:var(--font-mono);font-size:11px;color:var(--muted);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;vertical-align:middle;}
-  .key-requests{font-family:var(--font-mono);font-size:13px;color:var(--blue);font-weight:600;}
-  .key-date{font-family:var(--font-mono);font-size:11px;color:var(--muted);}
-  .badge{font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:4px;font-weight:500;}
-  .badge-active{background:rgba(0,255,136,.1);color:var(--accent);border:1px solid rgba(0,255,136,.2);}
-  .badge-inactive{background:rgba(255,77,106,.1);color:var(--red);border:1px solid rgba(255,77,106,.2);}
-  .key-cell{display:flex;align-items:center;gap:6px;}
-  .action-cell{display:flex;align-items:center;gap:6px;}
+/* ── sidebar ── */
+.sidebar{position:fixed;top:104px;left:0;bottom:0;width:var(--sidebar-w);background:var(--bg);border-right:1px solid var(--border);overflow-y:auto;z-index:150;transition:transform .25s;}
+.sidebar-section{padding:16px 12px 0;}
+.sidebar-label{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;padding:0 8px;margin-bottom:6px;}
+.sidebar-link{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:400;transition:all .15s;margin-bottom:1px;cursor:pointer;background:none;border:none;width:100%;text-align:left;}
+.sidebar-link:hover{color:var(--text);background:var(--bg3);}
+.sidebar-link.active{color:var(--accent);background:rgba(0,255,136,.08);}
+.sidebar-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
 
-  .logs-table{width:100%;border-collapse:collapse;}
-  .logs-table th{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;}
-  .logs-table td{padding:9px 12px;border-bottom:1px solid rgba(37,45,64,.4);vertical-align:middle;font-size:12px;}
-  .logs-table tr:last-child td{border-bottom:none;}
-  .logs-table tr:hover td{background:rgba(255,255,255,.02);}
-  .log-query{color:var(--text);max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .log-keys{font-family:var(--font-mono);color:var(--accent);font-weight:600;}
-  .log-latency{font-family:var(--font-mono);color:var(--yellow);}
-  .log-ok{color:var(--accent);font-family:var(--font-mono);font-size:11px;}
-  .log-err{color:var(--red);font-family:var(--font-mono);font-size:11px;}
-  .log-date{font-family:var(--font-mono);color:var(--muted);font-size:11px;}
+/* ── main content ── */
+.main{margin-left:var(--sidebar-w);flex:1;padding:24px;max-width:100%;}
 
-  .new-key-box{background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.2);border-radius:8px;padding:14px 18px;margin:0 18px 14px;display:none;align-items:center;justify-content:space-between;gap:12px;}
-  .new-key-box.show{display:flex;}
-  .new-key-label{font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;}
-  .new-key-value{font-family:var(--font-mono);font-size:13px;color:var(--text);font-weight:600;word-break:break-all;}
+/* ── page sections ── */
+.page{display:none;}
+.page.active{display:block;}
 
-  .create-row{display:flex;gap:10px;align-items:center;}
-  .create-row input{font-family:var(--font-mono);font-size:12px;color:var(--text);background:var(--bg3);border:1px solid var(--border);padding:7px 14px;border-radius:6px;outline:none;width:180px;transition:border-color .2s;}
-  .create-row input:focus{border-color:var(--accent);}
-  .create-row input::placeholder{color:var(--muted);}
+/* ── stat cards ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;position:relative;overflow:hidden;transition:border-color .2s;}
+.stat-card:hover{border-color:var(--accent);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);opacity:0;transition:opacity .2s;}
+.stat-card:hover::before{opacity:1;}
+.stat-label{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+.stat-value{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:4px;}
+.stat-value.green{color:var(--accent);}
+.stat-value.blue{color:var(--blue);}
+.stat-value.yellow{color:var(--yellow);}
+.stat-value.red{color:var(--red);}
+.stat-sub{font-size:11px;color:var(--muted);}
 
-  /* ── drawer ── */
-  .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;}
-  .drawer-overlay.open{opacity:1;pointer-events:all;}
-  .drawer{position:fixed;top:0;right:0;bottom:0;width:620px;max-width:95vw;background:var(--bg2);border-left:1px solid var(--border);z-index:201;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
-  .drawer.open{transform:translateX(0);}
-  .drawer-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;}
-  .drawer-title{font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--text);}
-  .drawer-sub{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-top:4px;}
-  .drawer-close{font-family:var(--font-mono);font-size:18px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 4px;line-height:1;}
-  .drawer-close:hover{color:var(--text);}
-  .drawer-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px 24px;border-bottom:1px solid var(--border);flex-shrink:0;}
-  .drawer-stat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;}
-  .drawer-stat-label{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
-  .drawer-stat-value{font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--text);}
-  .drawer-stat-value.green{color:var(--accent);}
-  .drawer-stat-value.blue{color:var(--blue);}
-  .drawer-stat-value.yellow{color:var(--yellow);}
-  .drawer-body{flex:1;overflow-y:auto;padding:0;}
+/* ── charts ── */
+.charts-grid{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:20px;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px;}
+.card:last-child{margin-bottom:0;}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap;}
+.card-title{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text);letter-spacing:.05em;text-transform:uppercase;}
+.card-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.card-body{padding:16px;}
+.chart-wrap{position:relative;height:200px;}
 
-  .toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 18px;font-family:var(--font-mono);font-size:12px;color:var(--text);z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;}
-  .toast.show{transform:translateY(0);opacity:1;}
-  .toast.success{border-color:rgba(0,255,136,.3);color:var(--accent);}
-  .toast.error{border-color:rgba(255,77,106,.3);color:var(--red);}
+/* ── section title ── */
+.section-title{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+.count-badge{font-size:10px;padding:2px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;color:var(--muted);font-family:var(--font-mono);}
 
-  .empty{text-align:center;padding:40px;font-family:var(--font-mono);font-size:12px;color:var(--muted);}
-  .loading{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-  .section{margin-bottom:24px;}
-  .fade-in{opacity:0;transform:translateY(12px);animation:fadeIn .4s ease forwards;}
-  @keyframes fadeIn{to{opacity:1;transform:translateY(0);}}
-  .fade-in:nth-child(1){animation-delay:.05s;}
-  .fade-in:nth-child(2){animation-delay:.1s;}
-  .fade-in:nth-child(3){animation-delay:.15s;}
-  .fade-in:nth-child(4){animation-delay:.2s;}
+/* ── create form ── */
+.create-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.create-row input,.create-row select{font-family:var(--font-mono);font-size:12px;color:var(--text);background:var(--bg3);border:1px solid var(--border);padding:7px 12px;border-radius:6px;outline:none;transition:border-color .2s;}
+.create-row input:focus,.create-row select:focus{border-color:var(--accent);}
+.create-row input::placeholder{color:var(--muted);}
+.input-name{width:160px;}
+.input-days{width:90px;}
+select option{background:var(--bg3);}
+
+/* ── new key reveal ── */
+.new-key-box{background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.2);border-radius:8px;padding:12px 16px;margin:0 0 12px;display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.new-key-box.show{display:flex;}
+.new-key-label{font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;}
+.new-key-value{font-family:var(--font-mono);font-size:12px;color:var(--text);font-weight:600;word-break:break-all;}
+
+/* ── tables ── */
+.table-wrap{overflow-x:auto;}
+.data-table{width:100%;border-collapse:collapse;min-width:600px;}
+.data-table th{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;white-space:nowrap;}
+.data-table td{padding:10px 12px;border-bottom:1px solid rgba(37,45,64,.5);vertical-align:middle;font-size:13px;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:rgba(255,255,255,.02);}
+
+/* ── table cell types ── */
+.cell-name{font-weight:500;color:var(--text);}
+.cell-mono{font-family:var(--font-mono);font-size:11px;color:var(--muted);}
+.cell-num{font-family:var(--font-mono);font-size:13px;color:var(--blue);font-weight:600;}
+.cell-key{display:flex;align-items:center;gap:6px;}
+.cell-key-val{font-family:var(--font-mono);font-size:11px;color:var(--muted);max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cell-actions{display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+
+/* ── badges ── */
+.badge{font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:4px;font-weight:500;white-space:nowrap;}
+.badge-active{background:rgba(0,255,136,.1);color:var(--accent);border:1px solid rgba(0,255,136,.2);}
+.badge-revoked{background:rgba(255,77,106,.1);color:var(--red);border:1px solid rgba(255,77,106,.2);}
+.badge-expired{background:rgba(255,159,64,.1);color:var(--orange);border:1px solid rgba(255,159,64,.25);}
+.badge-warning{background:rgba(255,209,102,.1);color:var(--yellow);border:1px solid rgba(255,209,102,.25);}
+
+/* ── expiry indicator ── */
+.expiry-cell{display:flex;align-items:center;gap:6px;}
+.expiry-bar{height:4px;border-radius:2px;background:var(--bg3);width:60px;flex-shrink:0;overflow:hidden;}
+.expiry-fill{height:100%;border-radius:2px;transition:width .3s;}
+.expiry-text{font-family:var(--font-mono);font-size:11px;white-space:nowrap;}
+
+/* ── log cells ── */
+.log-query{color:var(--text);max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.log-keys{font-family:var(--font-mono);color:var(--accent);font-weight:600;}
+.log-latency{font-family:var(--font-mono);color:var(--yellow);}
+.log-ok{color:var(--accent);font-family:var(--font-mono);font-size:11px;}
+.log-err{color:var(--red);font-family:var(--font-mono);font-size:11px;}
+.log-date{font-family:var(--font-mono);color:var(--muted);font-size:11px;white-space:nowrap;}
+
+/* ── drawer ── */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:580px;max-width:100vw;background:var(--bg2);border-left:1px solid var(--border);z-index:301;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+.drawer.open{transform:translateX(0);}
+.drawer-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;gap:12px;}
+.drawer-title{font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--text);}
+.drawer-sub{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-top:3px;}
+.drawer-close{font-family:var(--font-mono);font-size:18px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 4px;line-height:1;flex-shrink:0;}
+.drawer-close:hover{color:var(--text);}
+.drawer-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 20px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.drawer-stat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+.drawer-stat-label{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.drawer-stat-value{font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--text);}
+.drawer-stat-value.green{color:var(--accent);}
+.drawer-stat-value.blue{color:var(--blue);}
+.drawer-stat-value.yellow{color:var(--yellow);}
+.drawer-stat-value.orange{color:var(--orange);}
+
+/* expiry section in drawer */
+.drawer-expiry{padding:14px 20px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.drawer-expiry-title{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.drawer-expiry-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.drawer-expiry-info{flex:1;}
+.drawer-expiry-val{font-family:var(--font-mono);font-size:12px;color:var(--text);margin-bottom:4px;}
+.drawer-expiry-bar{height:6px;border-radius:3px;background:var(--bg3);width:100%;overflow:hidden;margin-bottom:4px;}
+.drawer-expiry-fill{height:100%;border-radius:3px;transition:width .5s;}
+.drawer-expiry-days{font-family:var(--font-mono);font-size:11px;}
+.drawer-refresh-row{display:flex;gap:8px;align-items:center;}
+.drawer-refresh-row input{font-family:var(--font-mono);font-size:12px;color:var(--text);background:var(--bg3);border:1px solid var(--border);padding:6px 10px;border-radius:6px;outline:none;width:80px;transition:border-color .2s;}
+.drawer-refresh-row input:focus{border-color:var(--accent);}
+
+.drawer-body{flex:1;overflow-y:auto;}
+
+/* ── misc ── */
+.empty{text-align:center;padding:36px;font-family:var(--font-mono);font-size:12px;color:var(--muted);}
+.loading{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.divider{height:1px;background:var(--border);margin:16px 0;}
+.page-title{font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--text);letter-spacing:.05em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+
+/* ── toast ── */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-family:var(--font-mono);font-size:12px;color:var(--text);z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;max-width:300px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:rgba(0,255,136,.3);color:var(--accent);}
+.toast.error{border-color:rgba(255,77,106,.3);color:var(--red);}
+
+/* ── responsive ── */
+@media(max-width:1024px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .charts-grid{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  :root{--sidebar-w:0px;}
+  .sidebar{transform:translateX(-100%);width:240px;}
+  .sidebar.open{transform:translateX(0);}
+  .hamburger{display:block;}
+  .main{margin-left:0;padding:16px;}
+  .topnav-info{display:none;}
+  .connect-url{max-width:none;flex:1;}
+  .connect-secret{width:130px;}
+  #last-updated{display:none;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .stat-value{font-size:22px;}
+  .charts-grid{grid-template-columns:1fr;}
+  .input-name{width:130px;}
+  .input-days{width:70px;}
+  .drawer{width:100vw;}
+  .drawer-stats{grid-template-columns:repeat(3,1fr);}
+  .cell-key-val{max-width:100px;}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .stat-card{padding:12px;}
+  .stat-value{font-size:20px;}
+  .create-row{gap:6px;}
+  .input-name{width:110px;}
+  .drawer-stats{grid-template-columns:1fr 1fr;}
+  .connect-bar{gap:6px;}
+}
 </style>
 </head>
 <body>
 
-<div class="config-bar">
-  <div class="status-dot" id="status-dot"></div>
-  <span class="config-label">API URL</span>
-  <input class="config-input" id="api-url" type="text" placeholder="https://searchology.duckdns.org" value="https://searchology.duckdns.org">
-  <span class="config-label">Admin Secret</span>
-  <input class="config-input" id="admin-secret" type="password" placeholder="your_admin_secret" style="max-width:200px;">
-  <button class="btn btn-primary" onclick="loadAll()">Connect</button>
-  <span id="last-updated" style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-left:8px;"></span>
-</div>
-
-<div class="topnav">
+<!-- TOP NAV -->
+<nav class="topnav">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
   <div class="topnav-logo">SEARCHOLOGY <span>/ admin</span></div>
+  <div class="topnav-sep"></div>
   <div class="topnav-right">
-    <span id="server-uptime">uptime: —</span>
-    <span id="server-time">—</span>
+    <div class="topnav-info">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="server-uptime">—</span>
+      <span id="server-time">—</span>
+    </div>
+    <div class="status-dot" id="status-dot-mobile" style="display:none;"></div>
   </div>
+</nav>
+
+<!-- CONNECT BAR -->
+<div class="connect-bar">
+  <span class="connect-label">URL</span>
+  <input class="connect-input connect-url" id="api-url" type="text" placeholder="https://searchology.duckdns.org" value="https://searchology.duckdns.org">
+  <span class="connect-label">Secret</span>
+  <input class="connect-input connect-secret" id="admin-secret" type="password" placeholder="admin secret">
+  <button class="btn btn-primary btn-sm" onclick="loadAll()">Connect</button>
+  <span id="last-updated"></span>
 </div>
 
-<div class="main">
-  <div class="stats-row">
-    <div class="stat-card fade-in"><div class="stat-label">Total Requests</div><div class="stat-value blue" id="stat-total-requests">—</div><div class="stat-sub">all time</div></div>
-    <div class="stat-card fade-in"><div class="stat-label">Active Keys</div><div class="stat-value green" id="stat-active-keys">—</div><div class="stat-sub">of <span id="stat-total-keys">—</span> total</div></div>
-    <div class="stat-card fade-in"><div class="stat-label">Avg Latency</div><div class="stat-value yellow" id="stat-avg-latency">—</div><div class="stat-sub">milliseconds</div></div>
-    <div class="stat-card fade-in"><div class="stat-label">Avg Keys Found</div><div class="stat-value" id="stat-avg-keys">—</div><div class="stat-sub">per request</div></div>
-  </div>
+<!-- LAYOUT -->
+<div class="layout">
 
-  <div class="charts-row">
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Requests Over Time</span>
-        <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">last 14 days</span>
-      </div>
-      <div class="card-body"><div class="chart-wrap"><canvas id="requests-chart"></canvas></div></div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <button class="sidebar-link active" onclick="showPage('overview',this)"><span class="sidebar-icon">📊</span> Dashboard</button>
+      <button class="sidebar-link" onclick="showPage('logs',this)"><span class="sidebar-icon">📋</span> Request Logs</button>
     </div>
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Latency Distribution</span>
-        <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">ms buckets</span>
-      </div>
-      <div class="card-body"><div class="chart-wrap"><canvas id="latency-chart"></canvas></div></div>
+    <div class="sidebar-section" style="margin-top:8px;">
+      <div class="sidebar-label">Keys</div>
+      <button class="sidebar-link" onclick="showPage('keys',this)"><span class="sidebar-icon">🔑</span> API Keys</button>
+      <button class="sidebar-link" onclick="showPage('expiry',this)"><span class="sidebar-icon">⏱️</span> Expiry Manager</button>
     </div>
-  </div>
+  </aside>
 
-  <!-- API KEYS -->
-  <div class="section card">
-    <div class="card-header">
-      <div class="section-title">API Keys <span class="count-badge" id="keys-count">0</span></div>
-      <div class="create-row">
-        <input id="new-key-name" placeholder="client name..." />
-        <button class="btn btn-primary" onclick="createKey()">+ Create Key</button>
-        <button class="btn btn-ghost" onclick="loadKeys()">↻ Refresh</button>
-      </div>
-    </div>
-    <div class="new-key-box" id="new-key-box">
-      <div>
-        <div class="new-key-label">★ New API Key — save this, shown only once</div>
-        <div class="new-key-value" id="new-key-value"></div>
-      </div>
-      <button class="btn btn-ghost" onclick="copyText(document.getElementById('new-key-value').textContent,this)">Copy</button>
-    </div>
-    <table class="keys-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>API Key</th>
-          <th>Requests</th>
-          <th>Status</th>
-          <th>Created</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="keys-tbody">
-        <tr><td colspan="6" class="empty">Connect to load keys</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <!-- MAIN -->
+  <main class="main">
 
-  <!-- RECENT LOGS -->
-  <div class="section card">
-    <div class="card-header">
-      <div class="section-title">Recent Requests <span class="count-badge" id="logs-count">0</span></div>
-      <button class="btn btn-ghost" onclick="loadLogs()">↻ Refresh</button>
+    <!-- ── OVERVIEW PAGE ── -->
+    <div class="page active" id="page-overview">
+      <div class="page-title">📊 Dashboard</div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Total Requests</div><div class="stat-value blue" id="stat-total">—</div><div class="stat-sub">all time</div></div>
+        <div class="stat-card"><div class="stat-label">Active Keys</div><div class="stat-value green" id="stat-active">—</div><div class="stat-sub">of <span id="stat-total-keys">—</span> total</div></div>
+        <div class="stat-card"><div class="stat-label">Avg Latency</div><div class="stat-value yellow" id="stat-latency">—</div><div class="stat-sub">milliseconds</div></div>
+        <div class="stat-card"><div class="stat-label">Expiring Soon</div><div class="stat-value red" id="stat-expiring">—</div><div class="stat-sub">within 7 days</div></div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header"><span class="card-title">Requests Over Time</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">last 14 days</span></div>
+          <div class="card-body"><div class="chart-wrap"><canvas id="requests-chart"></canvas></div></div>
+        </div>
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header"><span class="card-title">Latency Distribution</span></div>
+          <div class="card-body"><div class="chart-wrap"><canvas id="latency-chart"></canvas></div></div>
+        </div>
+      </div>
     </div>
-    <table class="logs-table">
-      <thead>
-        <tr><th>Query</th><th>Keys Found</th><th>Latency</th><th>Status</th><th>Time</th></tr>
-      </thead>
-      <tbody id="logs-tbody">
-        <tr><td colspan="5" class="empty">Connect to load logs</td></tr>
-      </tbody>
-    </table>
-  </div>
+
+    <!-- ── KEYS PAGE ── -->
+    <div class="page" id="page-keys">
+      <div class="page-title">🔑 API Keys</div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="section-title">All Keys <span class="count-badge" id="keys-count">0</span></div>
+          <div class="card-actions">
+            <div class="create-row">
+              <input class="input-name" id="new-key-name" placeholder="client name..." />
+              <input class="input-days" id="new-key-days" type="number" placeholder="days" value="30" min="1" max="365" />
+              <button class="btn btn-primary btn-sm" onclick="createKey()">+ Create</button>
+              <button class="btn btn-ghost btn-sm" onclick="loadKeys()">↻</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body" style="padding-bottom:0;">
+          <div class="new-key-box" id="new-key-box">
+            <div style="flex:1;min-width:0;">
+              <div class="new-key-label">★ Save this key — shown only once</div>
+              <div class="new-key-value" id="new-key-value"></div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="copyText(document.getElementById('new-key-value').textContent,this)">Copy</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Name</th><th>API Key</th><th>Requests</th><th>Expiry</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="keys-tbody"><tr><td colspan="6" class="empty">Connect to load keys</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LOGS PAGE ── -->
+    <div class="page" id="page-logs">
+      <div class="page-title">📋 Request Logs</div>
+      <div class="card">
+        <div class="card-header">
+          <div class="section-title">Recent Requests <span class="count-badge" id="logs-count">0</span></div>
+          <div class="card-actions">
+            <button class="btn btn-ghost btn-sm" onclick="loadLogs()">↻ Refresh</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Query</th><th>Keys Found</th><th>Latency</th><th>Status</th><th>Time</th></tr></thead>
+            <tbody id="logs-tbody"><tr><td colspan="5" class="empty">Connect to load logs</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EXPIRY MANAGER PAGE ── -->
+    <div class="page" id="page-expiry">
+      <div class="page-title">⏱️ Expiry Manager</div>
+      <div class="card">
+        <div class="card-header">
+          <div class="section-title">Key Expiry Status</div>
+          <div class="card-actions">
+            <button class="btn btn-ghost btn-sm" onclick="loadKeys()">↻ Refresh</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Name</th><th>Status</th><th>Expires At</th><th>Days Left</th><th>Refresh</th></tr></thead>
+            <tbody id="expiry-tbody"><tr><td colspan="5" class="empty">Connect to load keys</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
 </div>
 
 <!-- DRAWER -->
@@ -242,33 +395,39 @@
 <div class="drawer" id="drawer">
   <div class="drawer-head">
     <div>
-      <div class="drawer-title" id="drawer-title">Key Requests</div>
+      <div class="drawer-title" id="drawer-title">—</div>
       <div class="drawer-sub" id="drawer-sub">—</div>
     </div>
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
   <div class="drawer-stats">
-    <div class="drawer-stat">
-      <div class="drawer-stat-label">Total Requests</div>
-      <div class="drawer-stat-value blue" id="drawer-total">—</div>
+    <div class="drawer-stat"><div class="drawer-stat-label">Requests</div><div class="drawer-stat-value blue" id="drawer-total">—</div></div>
+    <div class="drawer-stat"><div class="drawer-stat-label">Avg Latency</div><div class="drawer-stat-value yellow" id="drawer-latency">—</div></div>
+    <div class="drawer-stat"><div class="drawer-stat-label">Avg Keys Found</div><div class="drawer-stat-value green" id="drawer-keys">—</div></div>
+  </div>
+
+  <!-- expiry section -->
+  <div class="drawer-expiry">
+    <div class="drawer-expiry-title">Key Expiry</div>
+    <div class="drawer-expiry-row">
+      <div class="drawer-expiry-info">
+        <div class="drawer-expiry-val" id="drawer-expires-at">—</div>
+        <div class="drawer-expiry-bar"><div class="drawer-expiry-fill" id="drawer-expiry-fill"></div></div>
+        <div class="drawer-expiry-days" id="drawer-days-left">—</div>
+      </div>
     </div>
-    <div class="drawer-stat">
-      <div class="drawer-stat-label">Avg Latency</div>
-      <div class="drawer-stat-value yellow" id="drawer-latency">—</div>
-    </div>
-    <div class="drawer-stat">
-      <div class="drawer-stat-label">Avg Keys Found</div>
-      <div class="drawer-stat-value green" id="drawer-keys">—</div>
+    <div class="drawer-refresh-row" style="margin-top:10px;">
+      <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);">Extend by</span>
+      <input type="number" id="drawer-refresh-days" value="30" min="1" max="365" />
+      <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);">days</span>
+      <button class="btn btn-refresh btn-sm" id="drawer-refresh-btn" onclick="refreshKeyExpiry()">↻ Refresh Expiry</button>
     </div>
   </div>
+
   <div class="drawer-body">
-    <table class="logs-table">
-      <thead>
-        <tr><th>Query</th><th>Keys Found</th><th>Latency</th><th>Status</th><th>Time</th></tr>
-      </thead>
-      <tbody id="drawer-tbody">
-        <tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>
-      </tbody>
+    <table class="data-table">
+      <thead><tr><th>Query</th><th>Keys Found</th><th>Latency</th><th>Status</th><th>Time</th></tr></thead>
+      <tbody id="drawer-tbody"><tr><td colspan="5" class="empty"><span class="loading"></span></td></tr></tbody>
     </table>
   </div>
 </div>
@@ -278,13 +437,15 @@
 <script>
 let requestsChart = null
 let latencyChart  = null
+let allKeys       = []
+let activeDrawerKeyId = null
 
-function getConfig() {
-  return {
-    url:    document.getElementById('api-url').value.replace(/\/$/, ''),
-    secret: document.getElementById('admin-secret').value
-  }
-}
+// ── helpers ────────────────────────────────────────────────────────────────
+
+const getConfig = () => ({
+  url:    document.getElementById('api-url').value.replace(/\/$/, ''),
+  secret: document.getElementById('admin-secret').value
+})
 
 function toast(msg, type = 'success') {
   const el = document.getElementById('toast')
@@ -294,10 +455,14 @@ function toast(msg, type = 'success') {
 }
 
 function setStatus(online) {
-  document.getElementById('status-dot').className = `status-dot ${online ? 'online' : 'offline'}`
+  ['status-dot','status-dot-mobile'].forEach(id => {
+    const el = document.getElementById(id)
+    if (el) el.className = `status-dot ${online ? 'online' : 'offline'}`
+  })
 }
 
 function timeAgo(dateStr) {
+  if (!dateStr) return '—'
   const diff  = Date.now() - new Date(dateStr).getTime()
   const mins  = Math.floor(diff / 60000)
   const hours = Math.floor(mins / 60)
@@ -319,20 +484,61 @@ function copyText(text, btn) {
 
 function maskKey(key) {
   if (!key) return '—'
-  return key.slice(0, 12) + '••••••••' + key.slice(-4)
+  return key.slice(0, 10) + '••••••••' + key.slice(-4)
+}
+
+function expiryColor(daysLeft) {
+  if (daysLeft === null) return 'var(--muted)'
+  if (daysLeft <= 0)  return 'var(--red)'
+  if (daysLeft <= 5)  return 'var(--red)'
+  if (daysLeft <= 14) return 'var(--orange)'
+  if (daysLeft <= 30) return 'var(--yellow)'
+  return 'var(--accent)'
+}
+
+function expiryPct(daysLeft, totalDays = 30) {
+  if (daysLeft === null) return 100
+  return Math.min(100, Math.max(0, (daysLeft / totalDays) * 100))
+}
+
+function expiryBadge(k) {
+  if (!k.is_active && k.expired) return `<span class="badge badge-expired">Expired</span>`
+  if (!k.is_active)              return `<span class="badge badge-revoked">Revoked</span>`
+  if (k.days_left !== null && k.days_left <= 7) return `<span class="badge badge-warning">⚠ ${k.days_left}d left</span>`
+  return `<span class="badge badge-active">Active</span>`
 }
 
 function logsRows(logs) {
   if (!logs.length) return '<tr><td colspan="5" class="empty">No requests yet</td></tr>'
   return logs.map(l => `
     <tr>
-      <td><span class="log-query" title="${l.query}">${l.query}</span></td>
+      <td><span class="log-query" title="${escHtml(l.query)}">${escHtml(l.query)}</span></td>
       <td><span class="log-keys">${l.keys_found ?? '—'}</span></td>
-      <td><span class="log-latency">${l.latency_ms ? l.latency_ms + 'ms' : '—'}</span></td>
-      <td><span class="${l.status === 200 ? 'log-ok' : 'log-err'}">${l.status}</span></td>
+      <td><span class="log-latency">${l.latency_ms ? l.latency_ms+'ms' : '—'}</span></td>
+      <td><span class="${l.status===200?'log-ok':'log-err'}">${l.status}</span></td>
       <td><span class="log-date">${timeAgo(l.created_at)}</span></td>
-    </tr>
-  `).join('')
+    </tr>`).join('')
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+
+// ── navigation ─────────────────────────────────────────────────────────────
+
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'))
+  document.getElementById(`page-${name}`).classList.add('active')
+  btn.classList.add('active')
+  if (window.innerWidth <= 768) closeSidebar()
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open')
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open')
 }
 
 // ── API ────────────────────────────────────────────────────────────────────
@@ -341,16 +547,18 @@ async function apiFetch(path, options = {}) {
   const { url, secret } = getConfig()
   const res = await fetch(`${url}${path}`, {
     ...options,
-    headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret, ...(options.headers || {}) }
+    headers: { 'Content-Type':'application/json', 'x-admin-secret':secret, ...(options.headers||{}) }
   })
-  if (!res.ok) throw new Error(`${res.status}`)
+  if (!res.ok) throw Object.assign(new Error(`${res.status}`), { status: res.status })
   return res.json()
 }
+
+// ── load all ───────────────────────────────────────────────────────────────
 
 async function loadAll() {
   try {
     await Promise.all([loadHealth(), loadKeys(), loadLogs()])
-    document.getElementById('last-updated').textContent = 'updated ' + new Date().toLocaleTimeString()
+    document.getElementById('last-updated').textContent = 'updated '+new Date().toLocaleTimeString()
   } catch(e) {
     setStatus(false)
     toast('Connection failed — check URL and secret', 'error')
@@ -360,67 +568,106 @@ async function loadAll() {
 async function loadHealth() {
   const { url } = getConfig()
   try {
-    const data = await fetch(`${url}/health`).then(r => r.json())
+    const d = await fetch(`${url}/health`).then(r => r.json())
     setStatus(true)
-    const h = Math.floor(data.uptime_seconds / 3600)
-    const m = Math.floor((data.uptime_seconds % 3600) / 60)
-    document.getElementById('server-uptime').textContent = `uptime: ${h}h ${m}m`
-    document.getElementById('server-time').textContent = new Date(data.timestamp).toLocaleTimeString()
+    const h = Math.floor(d.uptime_seconds/3600), m = Math.floor((d.uptime_seconds%3600)/60)
+    document.getElementById('server-uptime').textContent = `${h}h ${m}m`
+    document.getElementById('server-time').textContent = new Date(d.timestamp).toLocaleTimeString()
   } catch { setStatus(false) }
 }
 
+// ── keys ───────────────────────────────────────────────────────────────────
+
 async function loadKeys() {
-  const tbody = document.getElementById('keys-tbody')
-  tbody.innerHTML = '<tr><td colspan="6" class="empty"><span class="loading"></span></td></tr>'
+  document.getElementById('keys-tbody').innerHTML = '<tr><td colspan="6" class="empty"><span class="loading"></span></td></tr>'
+  document.getElementById('expiry-tbody').innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
+
   try {
     const data = await apiFetch('/keys')
-    const keys = data.keys || []
-    document.getElementById('keys-count').textContent = keys.length
-    document.getElementById('stat-active-keys').textContent = keys.filter(k => k.is_active).length
-    document.getElementById('stat-total-keys').textContent  = keys.length
-    document.getElementById('stat-total-requests').textContent = keys.reduce((s, k) => s + k.requests, 0).toLocaleString()
+    allKeys = data.keys || []
 
-    if (!keys.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">No API keys yet</td></tr>'; return }
+    document.getElementById('keys-count').textContent = allKeys.length
+    document.getElementById('stat-active').textContent = allKeys.filter(k => k.is_active).length
+    document.getElementById('stat-total-keys').textContent = allKeys.length
+    document.getElementById('stat-total').textContent = allKeys.reduce((s,k) => s+k.requests,0).toLocaleString()
 
-    tbody.innerHTML = keys.map(k => `
-      <tr>
-        <td><span class="key-name">${k.name}</span></td>
-        <td>
-          <div class="key-cell">
-            <span class="key-value" title="${k.key}">${maskKey(k.key)}</span>
-            <button class="btn btn-copy" onclick="copyText('${k.key}',this)">Copy</button>
-          </div>
-        </td>
-        <td><span class="key-requests">${k.requests.toLocaleString()}</span></td>
-        <td><span class="badge ${k.is_active ? 'badge-active' : 'badge-inactive'}">${k.is_active ? 'active' : 'revoked'}</span></td>
-        <td><span class="key-date">${timeAgo(k.created_at)}</span></td>
-        <td>
-          <div class="action-cell">
-            <button class="btn btn-view" onclick="openDrawer('${k.id}','${k.name}','${k.key}',${k.requests})">View Logs</button>
-            ${k.is_active
-              ? `<button class="btn btn-danger" onclick="revokeKey('${k.id}','${k.name}')">Revoke</button>`
-              : `<span style="color:var(--muted);font-size:11px;font-family:var(--font-mono);">revoked</span>`
-            }
-          </div>
-        </td>
-      </tr>
-    `).join('')
+    const expiringSoon = allKeys.filter(k => k.is_active && k.days_left !== null && k.days_left <= 7).length
+    document.getElementById('stat-expiring').textContent = expiringSoon
+
+    renderKeysTable(allKeys)
+    renderExpiryTable(allKeys)
+
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="6" class="empty" style="color:var(--red);">Failed to load keys</td></tr>`
+    document.getElementById('keys-tbody').innerHTML = `<tr><td colspan="6" class="empty" style="color:var(--red);">Failed to load keys</td></tr>`
     throw e
   }
 }
 
+function renderKeysTable(keys) {
+  if (!keys.length) {
+    document.getElementById('keys-tbody').innerHTML = '<tr><td colspan="6" class="empty">No API keys yet</td></tr>'
+    return
+  }
+  document.getElementById('keys-tbody').innerHTML = keys.map(k => {
+    const color = expiryColor(k.days_left)
+    const pct   = expiryPct(k.days_left)
+    return `<tr>
+      <td><span class="cell-name">${escHtml(k.name)}</span></td>
+      <td><div class="cell-key"><span class="cell-key-val" title="${k.key}">${maskKey(k.key)}</span><button class="btn btn-copy" onclick="copyText('${k.key}',this)">Copy</button></div></td>
+      <td><span class="cell-num">${k.requests.toLocaleString()}</span></td>
+      <td>
+        <div class="expiry-cell">
+          <div><div class="expiry-bar"><div class="expiry-fill" style="width:${pct}%;background:${color};"></div></div></div>
+          <span class="expiry-text" style="color:${color};">${k.days_left !== null ? k.days_left+'d' : '—'}</span>
+        </div>
+      </td>
+      <td>${expiryBadge(k)}</td>
+      <td><div class="cell-actions">
+        <button class="btn btn-view" onclick="openDrawer('${k.id}','${escHtml(k.name)}','${k.key}',${k.requests},${JSON.stringify(k.expires_at)},${k.days_left})">Logs</button>
+        ${k.is_active ? `<button class="btn btn-danger btn-sm" onclick="revokeKey('${k.id}','${escHtml(k.name)}')">Revoke</button>` : `<span class="cell-mono">revoked</span>`}
+      </div></td>
+    </tr>`
+  }).join('')
+}
+
+function renderExpiryTable(keys) {
+  if (!keys.length) {
+    document.getElementById('expiry-tbody').innerHTML = '<tr><td colspan="5" class="empty">No API keys yet</td></tr>'
+    return
+  }
+  document.getElementById('expiry-tbody').innerHTML = keys.map(k => {
+    const color = expiryColor(k.days_left)
+    const pct   = expiryPct(k.days_left)
+    return `<tr>
+      <td><span class="cell-name">${escHtml(k.name)}</span></td>
+      <td>${expiryBadge(k)}</td>
+      <td><span class="cell-mono">${k.expires_at ? new Date(k.expires_at).toLocaleDateString() : '—'}</span></td>
+      <td>
+        <div class="expiry-cell">
+          <div class="expiry-bar" style="width:80px;"><div class="expiry-fill" style="width:${pct}%;background:${color};"></div></div>
+          <span class="expiry-text" style="color:${color};">${k.days_left !== null ? k.days_left+'d left' : '—'}</span>
+        </div>
+      </td>
+      <td><div class="cell-actions">
+        <input type="number" value="30" min="1" max="365" style="width:60px;font-family:var(--font-mono);font-size:11px;color:var(--text);background:var(--bg3);border:1px solid var(--border);padding:4px 6px;border-radius:5px;outline:none;" id="refresh-days-${k.id}">
+        <button class="btn btn-refresh btn-sm" onclick="quickRefresh('${k.id}','${escHtml(k.name)}')">↻ Refresh</button>
+      </div></td>
+    </tr>`
+  }).join('')
+}
+
 async function createKey() {
-  const input = document.getElementById('new-key-name')
-  const name  = input.value.trim()
-  if (!name) { toast('Enter a client name first', 'error'); input.focus(); return }
+  const nameInput = document.getElementById('new-key-name')
+  const daysInput = document.getElementById('new-key-days')
+  const name = nameInput.value.trim()
+  const days = parseInt(daysInput.value) || 30
+  if (!name) { toast('Enter a client name first', 'error'); nameInput.focus(); return }
   try {
-    const data = await apiFetch('/keys', { method: 'POST', body: JSON.stringify({ name }) })
-    input.value = ''
+    const data = await apiFetch('/keys', { method:'POST', body: JSON.stringify({ name, expires_in_days: days }) })
+    nameInput.value = ''
     document.getElementById('new-key-value').textContent = data.key
     document.getElementById('new-key-box').classList.add('show')
-    toast(`Key created for "${name}"`)
+    toast(`Key created for "${name}" — ${days} days`)
     await loadKeys()
   } catch(e) { toast('Failed to create key', 'error') }
 }
@@ -428,108 +675,163 @@ async function createKey() {
 async function revokeKey(id, name) {
   if (!confirm(`Revoke key for "${name}"? This cannot be undone.`)) return
   try {
-    await apiFetch(`/keys/${id}`, { method: 'DELETE' })
+    await apiFetch(`/keys/${id}`, { method:'DELETE' })
     toast(`Key for "${name}" revoked`)
     document.getElementById('new-key-box').classList.remove('show')
     await loadKeys()
   } catch(e) { toast('Failed to revoke key', 'error') }
 }
 
+async function quickRefresh(id, name) {
+  const days = parseInt(document.getElementById(`refresh-days-${id}`).value) || 30
+  try {
+    const data = await apiFetch(`/keys/${id}/refresh`, { method:'POST', body: JSON.stringify({ expires_in_days: days }) })
+    toast(`"${name}" extended by ${days} days`)
+    await loadKeys()
+  } catch(e) { toast('Failed to refresh expiry', 'error') }
+}
+
+// ── logs ───────────────────────────────────────────────────────────────────
+
 async function loadLogs() {
-  const tbody = document.getElementById('logs-tbody')
-  tbody.innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
+  document.getElementById('logs-tbody').innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
   try {
     const data = await apiFetch('/logs?limit=50')
     const logs = data.logs || []
     document.getElementById('logs-count').textContent = logs.length
+
     if (logs.length > 0) {
-      document.getElementById('stat-avg-latency').textContent = Math.round(logs.reduce((s,l) => s+(l.latency_ms||0),0)/logs.length) + 'ms'
-      document.getElementById('stat-avg-keys').textContent    = (logs.reduce((s,l) => s+(l.keys_found||0),0)/logs.length).toFixed(1)
+      document.getElementById('stat-latency').textContent = Math.round(logs.reduce((s,l) => s+(l.latency_ms||0),0)/logs.length) + 'ms'
     }
+
     buildCharts(logs)
-    tbody.innerHTML = logsRows(logs)
+    document.getElementById('logs-tbody').innerHTML = logsRows(logs)
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="5" class="empty" style="color:var(--red);">Failed to load logs</td></tr>`
+    document.getElementById('logs-tbody').innerHTML = `<tr><td colspan="5" class="empty" style="color:var(--red);">Failed to load logs</td></tr>`
     buildCharts([])
   }
 }
 
 // ── drawer ─────────────────────────────────────────────────────────────────
 
-async function openDrawer(keyId, keyName, keyValue, totalRequests) {
-  document.getElementById('drawer-title').textContent  = keyName
-  document.getElementById('drawer-sub').textContent    = maskKey(keyValue)
-  document.getElementById('drawer-total').textContent  = totalRequests.toLocaleString()
+function openDrawer(keyId, keyName, keyValue, totalRequests, expiresAt, daysLeft) {
+  activeDrawerKeyId = keyId
+  document.getElementById('drawer-title').textContent = keyName
+  document.getElementById('drawer-sub').textContent   = maskKey(keyValue)
+  document.getElementById('drawer-total').textContent = totalRequests.toLocaleString()
   document.getElementById('drawer-latency').textContent = '—'
   document.getElementById('drawer-keys').textContent    = '—'
   document.getElementById('drawer-tbody').innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
+
+  // expiry info
+  const expiry = expiresAt ? new Date(expiresAt) : null
+  document.getElementById('drawer-expires-at').textContent = expiry ? expiry.toLocaleDateString('en',{year:'numeric',month:'long',day:'numeric'}) : 'No expiry set'
+  const color = expiryColor(daysLeft)
+  const pct   = expiryPct(daysLeft)
+  document.getElementById('drawer-expiry-fill').style.width = pct + '%'
+  document.getElementById('drawer-expiry-fill').style.background = color
+  document.getElementById('drawer-days-left').textContent = daysLeft !== null ? `${daysLeft} days remaining` : '—'
+  document.getElementById('drawer-days-left').style.color = color
 
   document.getElementById('drawer-overlay').classList.add('open')
   document.getElementById('drawer').classList.add('open')
   document.body.style.overflow = 'hidden'
 
-  try {
-    const data = await apiFetch(`/logs?key_id=${keyId}&limit=100`)
+  apiFetch(`/logs?key_id=${keyId}&limit=100`).then(data => {
     const logs = data.logs || []
-
     if (logs.length > 0) {
       document.getElementById('drawer-latency').textContent = Math.round(logs.reduce((s,l) => s+(l.latency_ms||0),0)/logs.length) + 'ms'
       document.getElementById('drawer-keys').textContent    = (logs.reduce((s,l) => s+(l.keys_found||0),0)/logs.length).toFixed(1)
     }
-
     document.getElementById('drawer-tbody').innerHTML = logsRows(logs)
-  } catch(e) {
+  }).catch(() => {
     document.getElementById('drawer-tbody').innerHTML = `<tr><td colspan="5" class="empty" style="color:var(--red);">Failed to load logs</td></tr>`
-  }
+  })
 }
 
 function closeDrawer() {
   document.getElementById('drawer-overlay').classList.remove('open')
   document.getElementById('drawer').classList.remove('open')
   document.body.style.overflow = ''
+  activeDrawerKeyId = null
 }
 
-// close drawer on Escape
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer() })
+async function refreshKeyExpiry() {
+  if (!activeDrawerKeyId) return
+  const days = parseInt(document.getElementById('drawer-refresh-days').value) || 30
+  try {
+    const data = await apiFetch(`/keys/${activeDrawerKeyId}/refresh`, {
+      method: 'POST',
+      body: JSON.stringify({ expires_in_days: days })
+    })
+    toast(`Expiry extended by ${days} days`)
+    await loadKeys()
+    closeDrawer()
+  } catch(e) { toast('Failed to refresh expiry', 'error') }
+}
 
 // ── charts ─────────────────────────────────────────────────────────────────
 
 function buildCharts(logs) {
   const days = [], counts = []
   for (let i = 13; i >= 0; i--) {
-    const d = new Date()
-    d.setDate(d.getDate() - i)
-    days.push(d.toLocaleDateString('en', { month: 'short', day: 'numeric' }))
+    const d = new Date(); d.setDate(d.getDate()-i)
+    days.push(d.toLocaleDateString('en',{month:'short',day:'numeric'}))
     counts.push(logs.filter(l => l.created_at && l.created_at.startsWith(d.toISOString().slice(0,10))).length)
   }
-  const buckets = { '<500ms':0, '500ms-1s':0, '1s-2s':0, '2s-3s':0, '>3s':0 }
+  const buckets = {'<500ms':0,'500ms-1s':0,'1s-2s':0,'2s-3s':0,'>3s':0}
   logs.forEach(l => {
-    const ms = l.latency_ms || 0
-    if      (ms < 500)  buckets['<500ms']++
-    else if (ms < 1000) buckets['500ms-1s']++
-    else if (ms < 2000) buckets['1s-2s']++
-    else if (ms < 3000) buckets['2s-3s']++
-    else                buckets['>3s']++
+    const ms = l.latency_ms||0
+    if      (ms<500)  buckets['<500ms']++
+    else if (ms<1000) buckets['500ms-1s']++
+    else if (ms<2000) buckets['1s-2s']++
+    else if (ms<3000) buckets['2s-3s']++
+    else              buckets['>3s']++
   })
-  const gridColor = '#1e2535'
-  const tickFont  = { family: 'JetBrains Mono', size: 10 }
+  const grid = '#1e2535', tick = {family:'JetBrains Mono',size:10}
   if (requestsChart) requestsChart.destroy()
-  requestsChart = new Chart(document.getElementById('requests-chart'), {
-    type: 'bar',
-    data: { labels: days, datasets: [{ data: counts, backgroundColor: 'rgba(0,255,136,.15)', borderColor: '#00ff88', borderWidth: 1, borderRadius: 3 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: gridColor }, ticks: { color: '#64748b', font: tickFont } }, y: { grid: { color: gridColor }, ticks: { color: '#64748b', font: tickFont } } } }
+  requestsChart = new Chart(document.getElementById('requests-chart'),{
+    type:'bar',
+    data:{labels:days,datasets:[{data:counts,backgroundColor:'rgba(0,255,136,.15)',borderColor:'#00ff88',borderWidth:1,borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:grid},ticks:{color:'#64748b',font:tick}},y:{grid:{color:grid},ticks:{color:'#64748b',font:tick}}}}
   })
   if (latencyChart) latencyChart.destroy()
-  latencyChart = new Chart(document.getElementById('latency-chart'), {
-    type: 'doughnut',
-    data: { labels: Object.keys(buckets), datasets: [{ data: Object.values(buckets), backgroundColor: ['#00ff88','#4d9fff','#ffd166','#ff9f40','#ff4d6a'], borderColor: '#161b27', borderWidth: 2 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#64748b', font: { family: 'JetBrains Mono', size: 10 }, padding: 12 } } } }
+  latencyChart = new Chart(document.getElementById('latency-chart'),{
+    type:'doughnut',
+    data:{labels:Object.keys(buckets),datasets:[{data:Object.values(buckets),backgroundColor:['#00ff88','#4d9fff','#ffd166','#ff9f40','#ff4d6a'],borderColor:'#161b27',borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:'#64748b',font:{family:'JetBrains Mono',size:10},padding:10}}}}
   })
 }
 
-document.getElementById('admin-secret').addEventListener('keydown', e => { if (e.key === 'Enter') loadAll() })
-document.getElementById('new-key-name').addEventListener('keydown', e => { if (e.key === 'Enter') createKey() })
-// setInterval(() => { const { url, secret } = getConfig(); if (url && secret) loadAll() }, 30000)
+// ── event listeners ────────────────────────────────────────────────────────
+
+document.getElementById('admin-secret').addEventListener('keydown', e => { if(e.key==='Enter') loadAll() })
+document.getElementById('new-key-name').addEventListener('keydown', e => { if(e.key==='Enter') createKey() })
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeDrawer() })
+
+// close sidebar when clicking outside on mobile
+document.addEventListener('click', e => {
+  const sidebar = document.getElementById('sidebar')
+  const hamburger = document.querySelector('.hamburger')
+  if (window.innerWidth <= 768 && sidebar.classList.contains('open') && !sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+    closeSidebar()
+  }
+})
+
+// mobile status dot visibility
+function updateMobileDot() {
+  const isMobile = window.innerWidth <= 768
+  document.getElementById('status-dot').parentElement.style.display = isMobile ? 'none' : 'flex'
+  document.getElementById('status-dot-mobile').style.display = isMobile ? 'block' : 'none'
+}
+window.addEventListener('resize', updateMobileDot)
+updateMobileDot()
+
+// auto refresh
+setInterval(() => {
+  const { url, secret } = getConfig()
+  if (url && secret) loadAll()
+}, 30000)
 </script>
 </body>
 </html>
