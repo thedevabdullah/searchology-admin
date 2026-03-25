@@ -285,6 +285,10 @@ select option{background:var(--bg3);}
       <button class="sidebar-link" onclick="showPage('keys',this)"><span class="sidebar-icon">🔑</span> API Keys</button>
       <button class="sidebar-link" onclick="showPage('expiry',this)"><span class="sidebar-icon">⏱️</span> Expiry Manager</button>
     </div>
+    <div class="sidebar-section" style="margin-top:8px;">
+      <div class="sidebar-label">System</div>
+      <button class="sidebar-link" onclick="showPage('models',this)"><span class="sidebar-icon">🤖</span> Models</button>
+    </div>
   </aside>
 
   <!-- MAIN -->
@@ -382,6 +386,54 @@ select option{background:var(--bg3);}
           <table class="data-table">
             <thead><tr><th>Name</th><th>Status</th><th>Expires At</th><th>Days Left</th><th>Refresh</th></tr></thead>
             <tbody id="expiry-tbody"><tr><td colspan="5" class="empty">Connect to load keys</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODELS PAGE ── -->
+    <div class="page" id="page-models">
+      <div class="page-title">🤖 Model Management</div>
+
+      <!-- active model banner -->
+      <div id="active-model-banner" style="background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);flex-shrink:0;"></div>
+        <div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;">Currently Active Model</div>
+          <div style="font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--accent);" id="active-model-name">—</div>
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:2px;" id="active-model-id">—</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="section-title">Available Models <span class="count-badge" id="models-count">0</span></div>
+          <div class="card-actions">
+            <button class="btn btn-ghost btn-sm" onclick="loadModels()">↻ Refresh</button>
+          </div>
+        </div>
+
+        <!-- add model form -->
+        <div class="card-body" style="padding-bottom:0;border-bottom:1px solid var(--border);">
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">Add New Model</div>
+          <div class="create-row" style="margin-bottom:14px;">
+            <input style="width:180px;" id="model-name-input" placeholder="Display name..." />
+            <input style="width:240px;" id="model-id-input" placeholder="model_id e.g. llama-3.3-70b-versatile" />
+            <button class="btn btn-primary btn-sm" onclick="addModel()">+ Add Model</button>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:14px;">
+            Common Groq models:
+            <span onclick="fillModelId('llama-3.1-8b-instant','LLaMA 3.1 8B Instant')" style="color:var(--blue);cursor:pointer;margin:0 6px;">llama-3.1-8b-instant</span>
+            <span onclick="fillModelId('llama-3.3-70b-versatile','LLaMA 3.3 70B Versatile')" style="color:var(--blue);cursor:pointer;margin:0 6px;">llama-3.3-70b-versatile</span>
+            <span onclick="fillModelId('mixtral-8x7b-32768','Mixtral 8x7B')" style="color:var(--blue);cursor:pointer;margin:0 6px;">mixtral-8x7b-32768</span>
+            <span onclick="fillModelId('gemma2-9b-it','Gemma 2 9B')" style="color:var(--blue);cursor:pointer;margin:0 6px;">gemma2-9b-it</span>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Name</th><th>Model ID</th><th>Status</th><th>Added</th><th>Actions</th></tr></thead>
+            <tbody id="models-tbody"><tr><td colspan="5" class="empty">Connect to load models</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -557,7 +609,7 @@ async function apiFetch(path, options = {}) {
 
 async function loadAll() {
   try {
-    await Promise.all([loadHealth(), loadKeys(), loadLogs()])
+    await Promise.all([loadHealth(), loadKeys(), loadLogs(), loadModels()])
     document.getElementById('last-updated').textContent = 'updated '+new Date().toLocaleTimeString()
   } catch(e) {
     setStatus(false)
@@ -804,6 +856,107 @@ function buildCharts(logs) {
 }
 
 // ── event listeners ────────────────────────────────────────────────────────
+
+// ── models ─────────────────────────────────────────────────────────────────
+
+async function loadModels() {
+  const tbody = document.getElementById('models-tbody')
+  if (!tbody) return
+  tbody.innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
+
+  try {
+    const data   = await apiFetch('/models')
+    const models = data.models || []
+
+    document.getElementById('models-count').textContent = models.length
+
+    const active = models.find(m => m.is_active)
+    if (active) {
+      document.getElementById('active-model-name').textContent = active.name
+      document.getElementById('active-model-id').textContent   = active.model_id
+    }
+
+    if (!models.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty">No models found</td></tr>'
+      return
+    }
+
+    tbody.innerHTML = models.map(m => `
+      <tr>
+        <td><span class="cell-name">${escHtml(m.name)}</span></td>
+        <td><span class="cell-mono" style="color:var(--blue);">${escHtml(m.model_id)}</span></td>
+        <td>
+          ${m.is_active
+            ? `<span class="badge badge-active">● Active</span>`
+            : `<span class="badge" style="background:var(--bg3);color:var(--muted);border:1px solid var(--border);">Inactive</span>`
+          }
+        </td>
+        <td><span class="log-date">${timeAgo(m.created_at)}</span></td>
+        <td><div class="cell-actions">
+          ${!m.is_active
+            ? `<button class="btn btn-view" onclick="activateModel('${m.id}','${escHtml(m.name)}')">Set Active</button>`
+            : `<span class="cell-mono" style="color:var(--accent);">✓ Default</span>`
+          }
+          <button class="btn btn-danger btn-sm" onclick="deleteModel('${m.id}','${escHtml(m.name)}','${escHtml(m.model_id)}')">Remove</button>
+        </div></td>
+      </tr>
+    `).join('')
+
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="5" class="empty" style="color:var(--red);">Failed to load models</td></tr>`
+  }
+}
+
+async function addModel() {
+  const nameInput    = document.getElementById('model-name-input')
+  const modelIdInput = document.getElementById('model-id-input')
+  const name         = nameInput.value.trim()
+  const model_id     = modelIdInput.value.trim()
+
+  if (!name)     { toast('Enter a display name', 'error'); nameInput.focus(); return }
+  if (!model_id) { toast('Enter a model ID', 'error'); modelIdInput.focus(); return }
+
+  try {
+    const data = await apiFetch('/models', {
+      method: 'POST',
+      body:   JSON.stringify({ name, model_id })
+    })
+    nameInput.value    = ''
+    modelIdInput.value = ''
+    toast(`Model "${name}" added`)
+    await loadModels()
+  } catch(e) { toast('Failed to add model — may already exist', 'error') }
+}
+
+async function activateModel(id, name) {
+  try {
+    await apiFetch(`/models/${id}/activate`, { method: 'POST', body: '{}' })
+    toast(`Switched to "${name}"`)
+    await loadModels()
+  } catch(e) { toast('Failed to activate model', 'error') }
+}
+
+async function deleteModel(id, name, modelId) {
+  if (modelId === 'llama-3.1-8b-instant') {
+    toast('Cannot delete the default model', 'error'); return
+  }
+  if (!confirm(`Remove model "${name}"?`)) return
+  try {
+    await apiFetch(`/models/${id}`, { method: 'DELETE' })
+    toast(`Model "${name}" removed`)
+    await loadModels()
+  } catch(e) { toast('Failed to remove model', 'error') }
+}
+
+function fillModelId(modelId, name) {
+  document.getElementById('model-id-input').value  = modelId
+  document.getElementById('model-name-input').value = name
+}
+
+document.getElementById('model-id-input') &&
+  document.getElementById('model-id-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addModel()
+  })
 
 document.getElementById('admin-secret').addEventListener('keydown', e => { if(e.key==='Enter') loadAll() })
 document.getElementById('new-key-name').addEventListener('keydown', e => { if(e.key==='Enter') createKey() })
