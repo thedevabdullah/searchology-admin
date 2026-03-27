@@ -8,249 +8,276 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
 :root {
-  --bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--border:#252d40;
-  --accent:#00ff88;--accent2:#00cc6a;--blue:#4d9fff;--red:#ff4d6a;
-  --orange:#ff9f40;--yellow:#ffd166;--text:#e2e8f0;--muted:#64748b;
-  --font-mono:'JetBrains Mono',monospace;--font-sans:'Outfit',sans-serif;
-  --sidebar-w:220px;
+  --bg:#0f1117; --bg2:#161b27; --bg3:#1e2535; --border:#252d40;
+  --accent:#00ff88; --accent2:#00cc6a; --blue:#4d9fff; --red:#ff4d6a;
+  --orange:#ff9f40; --yellow:#ffd166; --purple:#b48eff; --text:#e2e8f0; --muted:#64748b;
+  --font-mono:'JetBrains Mono',monospace; --font-sans:'Outfit',sans-serif;
+  --sidebar-w:224px; --topbar-h:52px; --connectbar-h:52px;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:14px;line-height:1.6;min-height:100vh;}
-::-webkit-scrollbar{width:4px;height:4px;}
-::-webkit-scrollbar-track{background:var(--bg);}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); font-family:var(--font-sans); font-size:14px; line-height:1.6; min-height:100vh; }
+::-webkit-scrollbar { width:4px; height:4px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 
-/* ── buttons ── */
-.btn{font-family:var(--font-mono);font-size:11px;font-weight:600;padding:7px 14px;border-radius:6px;border:none;cursor:pointer;letter-spacing:.04em;transition:all .15s;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
-.btn-primary{background:var(--accent);color:#000;}
-.btn-primary:hover{background:var(--accent2);}
-.btn-danger{background:rgba(255,77,106,.12);color:var(--red);border:1px solid rgba(255,77,106,.25);}
-.btn-danger:hover{background:rgba(255,77,106,.22);}
-.btn-ghost{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
-.btn-ghost:hover{color:var(--text);border-color:var(--accent);}
-.btn-copy{background:rgba(77,159,255,.1);color:var(--blue);border:1px solid rgba(77,159,255,.2);padding:4px 9px;font-size:10px;}
-.btn-copy:hover{background:rgba(77,159,255,.2);}
-.btn-view{background:rgba(0,255,136,.08);color:var(--accent);border:1px solid rgba(0,255,136,.2);padding:5px 10px;font-size:10px;}
-.btn-view:hover{background:rgba(0,255,136,.15);}
-.btn-refresh{background:rgba(255,159,64,.1);color:var(--orange);border:1px solid rgba(255,159,64,.25);padding:5px 10px;font-size:10px;}
-.btn-refresh:hover{background:rgba(255,159,64,.2);}
-.btn-sm{padding:5px 10px;font-size:10px;}
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.btn { font-family:var(--font-mono); font-size:11px; font-weight:600; padding:7px 14px; border-radius:6px; border:none; cursor:pointer; letter-spacing:.04em; transition:all .15s; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; }
+.btn:disabled { opacity:.4; cursor:not-allowed; }
+.btn-primary   { background:var(--accent); color:#000; }
+.btn-primary:hover:not(:disabled) { background:var(--accent2); }
+.btn-danger    { background:rgba(255,77,106,.12); color:var(--red); border:1px solid rgba(255,77,106,.25); }
+.btn-danger:hover:not(:disabled)  { background:rgba(255,77,106,.25); }
+.btn-ghost     { background:var(--bg3); color:var(--muted); border:1px solid var(--border); }
+.btn-ghost:hover:not(:disabled)   { color:var(--text); border-color:var(--accent); }
+.btn-blue      { background:rgba(77,159,255,.1); color:var(--blue); border:1px solid rgba(77,159,255,.2); }
+.btn-blue:hover:not(:disabled)    { background:rgba(77,159,255,.2); }
+.btn-orange    { background:rgba(255,159,64,.1); color:var(--orange); border:1px solid rgba(255,159,64,.25); }
+.btn-orange:hover:not(:disabled)  { background:rgba(255,159,64,.2); }
+.btn-purple    { background:rgba(180,142,255,.1); color:var(--purple); border:1px solid rgba(180,142,255,.25); }
+.btn-purple:hover:not(:disabled)  { background:rgba(180,142,255,.2); }
+.btn-green     { background:rgba(0,255,136,.08); color:var(--accent); border:1px solid rgba(0,255,136,.2); }
+.btn-green:hover:not(:disabled)   { background:rgba(0,255,136,.15); }
+.btn-sm { padding:5px 10px; font-size:10px; }
+.btn-xs { padding:3px 8px; font-size:10px; }
 
-/* ── status dot ── */
-.status-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s;}
-.status-dot.online{background:var(--accent);box-shadow:0 0 8px var(--accent);}
-.status-dot.offline{background:var(--red);}
+/* ── Top nav ───────────────────────────────────────────────────────────────── */
+.topnav { position:fixed; top:0; left:0; right:0; z-index:200; height:var(--topbar-h); background:rgba(15,17,23,.96); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 20px; gap:12px; }
+.topnav-logo { font-family:var(--font-mono); font-size:15px; font-weight:700; color:var(--accent); display:flex; align-items:center; gap:8px; white-space:nowrap; }
+.topnav-logo span { color:var(--muted); font-weight:400; font-size:13px; }
+.topnav-sep { flex:1; }
+.topnav-right { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+.topnav-info { font-family:var(--font-mono); font-size:10px; color:var(--muted); display:flex; align-items:center; gap:8px; }
+.auto-refresh-toggle { display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; color:var(--muted); cursor:pointer; }
+.auto-refresh-toggle input { accent-color:var(--accent); cursor:pointer; }
+.hamburger { display:none; background:none; border:none; cursor:pointer; color:var(--muted); font-size:20px; padding:4px; }
+.status-dot { width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0; transition:background .3s; }
+.status-dot.online  { background:var(--accent); box-shadow:0 0 8px var(--accent); }
+.status-dot.offline { background:var(--red); }
 
-/* ── top nav ── */
-.topnav{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(15,17,23,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;}
-.topnav-logo{font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:8px;white-space:nowrap;}
-.topnav-logo span{color:var(--muted);font-weight:400;font-size:13px;}
-.topnav-sep{flex:1;}
-.topnav-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.topnav-info{font-family:var(--font-mono);font-size:10px;color:var(--muted);display:flex;align-items:center;gap:8px;}
-.hamburger{display:none;background:none;border:none;cursor:pointer;color:var(--muted);font-size:20px;padding:4px;}
+/* ── Connect bar ───────────────────────────────────────────────────────────── */
+.connect-bar { position:fixed; top:var(--topbar-h); left:0; right:0; z-index:199; background:var(--bg2); border-bottom:1px solid var(--border); padding:8px 20px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; height:var(--connectbar-h); }
+.connect-label { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; white-space:nowrap; }
+.connect-input { font-family:var(--font-mono); font-size:12px; color:var(--text); background:var(--bg3); border:1px solid var(--border); padding:6px 12px; border-radius:6px; outline:none; transition:border-color .2s; min-width:0; }
+.connect-input:focus { border-color:var(--accent); }
+.connect-input::placeholder { color:var(--muted); }
+.connect-url { flex:1; max-width:300px; }
+.connect-secret { width:160px; }
+#last-updated { font-family:var(--font-mono); font-size:10px; color:var(--muted); white-space:nowrap; }
 
-/* ── connect bar ── */
-.connect-bar{position:fixed;top:52px;left:0;right:0;z-index:199;background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.connect-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
-.connect-input{font-family:var(--font-mono);font-size:12px;color:var(--text);background:var(--bg3);border:1px solid var(--border);padding:6px 12px;border-radius:6px;outline:none;transition:border-color .2s;min-width:0;}
-.connect-input:focus{border-color:var(--accent);}
-.connect-input::placeholder{color:var(--muted);}
-.connect-url{flex:1;max-width:300px;}
-.connect-secret{width:160px;}
-#last-updated{font-family:var(--font-mono);font-size:10px;color:var(--muted);white-space:nowrap;}
+/* ── Layout ────────────────────────────────────────────────────────────────── */
+.layout { display:flex; padding-top:calc(var(--topbar-h) + var(--connectbar-h)); min-height:100vh; }
+.sidebar { position:fixed; top:calc(var(--topbar-h) + var(--connectbar-h)); left:0; bottom:0; width:var(--sidebar-w); background:var(--bg); border-right:1px solid var(--border); overflow-y:auto; z-index:150; transition:transform .25s; }
+.sidebar-section { padding:16px 12px 0; }
+.sidebar-label { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; padding:0 8px; margin-bottom:6px; }
+.sidebar-link { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:6px; color:var(--muted); font-size:13px; font-weight:400; transition:all .15s; margin-bottom:1px; cursor:pointer; background:none; border:none; width:100%; text-align:left; }
+.sidebar-link:hover { color:var(--text); background:var(--bg3); }
+.sidebar-link.active { color:var(--accent); background:rgba(0,255,136,.08); }
+.sidebar-icon { font-size:14px; width:18px; text-align:center; flex-shrink:0; }
+.sidebar-bottom { position:absolute; bottom:0; left:0; right:0; padding:12px; border-top:1px solid var(--border); background:var(--bg); }
+.sidebar-version { font-family:var(--font-mono); font-size:9px; color:var(--muted); text-align:center; letter-spacing:.06em; }
+.main { margin-left:var(--sidebar-w); flex:1; padding:24px; max-width:100%; overflow-x:hidden; }
 
-/* ── layout ── */
-.layout{display:flex;padding-top:104px;min-height:100vh;}
+/* ── Pages ─────────────────────────────────────────────────────────────────── */
+.page { display:none; }
+.page.active { display:block; }
+.page-title { font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--text); letter-spacing:.05em; text-transform:uppercase; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
 
-/* ── sidebar ── */
-.sidebar{position:fixed;top:104px;left:0;bottom:0;width:var(--sidebar-w);background:var(--bg);border-right:1px solid var(--border);overflow-y:auto;z-index:150;transition:transform .25s;}
-.sidebar-section{padding:16px 12px 0;}
-.sidebar-label{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;padding:0 8px;margin-bottom:6px;}
-.sidebar-link{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:400;transition:all .15s;margin-bottom:1px;cursor:pointer;background:none;border:none;width:100%;text-align:left;}
-.sidebar-link:hover{color:var(--text);background:var(--bg3);}
-.sidebar-link.active{color:var(--accent);background:rgba(0,255,136,.08);}
-.sidebar-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
+/* ── Stat cards ────────────────────────────────────────────────────────────── */
+.stats-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:20px; }
+.stat-card { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:18px; position:relative; overflow:hidden; transition:border-color .2s; cursor:default; }
+.stat-card:hover { border-color:rgba(0,255,136,.3); }
+.stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent),transparent); opacity:0; transition:opacity .2s; }
+.stat-card:hover::before { opacity:1; }
+.stat-label { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
+.stat-value { font-family:var(--font-mono); font-size:26px; font-weight:700; color:var(--text); line-height:1; margin-bottom:4px; }
+.stat-value.green  { color:var(--accent); }
+.stat-value.blue   { color:var(--blue); }
+.stat-value.yellow { color:var(--yellow); }
+.stat-value.red    { color:var(--red); }
+.stat-value.purple { color:var(--purple); }
+.stat-sub { font-size:11px; color:var(--muted); }
 
-/* ── main content ── */
-.main{margin-left:var(--sidebar-w);flex:1;padding:24px;max-width:100%;}
+/* ── Cards ─────────────────────────────────────────────────────────────────── */
+.charts-grid { display:grid; grid-template-columns:2fr 1fr; gap:12px; margin-bottom:20px; }
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:20px; }
+.card:last-child { margin-bottom:0; }
+.card-header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--border); gap:10px; flex-wrap:wrap; }
+.card-title { font-family:var(--font-mono); font-size:11px; font-weight:600; color:var(--text); letter-spacing:.05em; text-transform:uppercase; }
+.card-actions { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.card-body { padding:16px; }
+.chart-wrap { position:relative; height:200px; }
+.section-title { font-family:var(--font-mono); font-size:11px; font-weight:600; color:var(--text); letter-spacing:.08em; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+.count-badge { font-size:10px; padding:2px 8px; background:var(--bg3); border:1px solid var(--border); border-radius:20px; color:var(--muted); font-family:var(--font-mono); }
 
-/* ── page sections ── */
-.page{display:none;}
-.page.active{display:block;}
+/* ── Forms ─────────────────────────────────────────────────────────────────── */
+.form-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.form-input { font-family:var(--font-mono); font-size:12px; color:var(--text); background:var(--bg3); border:1px solid var(--border); padding:7px 12px; border-radius:6px; outline:none; transition:border-color .2s; }
+.form-input:focus { border-color:var(--accent); }
+.form-input::placeholder { color:var(--muted); }
+.input-w-sm { width:90px; }
+.input-w-md { width:160px; }
+.input-w-lg { width:240px; }
+.input-w-xl { width:300px; }
+select.form-input option { background:var(--bg3); }
 
-/* ── stat cards ── */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
-.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;position:relative;overflow:hidden;transition:border-color .2s;}
-.stat-card:hover{border-color:var(--accent);}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);opacity:0;transition:opacity .2s;}
-.stat-card:hover::before{opacity:1;}
-.stat-label{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
-.stat-value{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:4px;}
-.stat-value.green{color:var(--accent);}
-.stat-value.blue{color:var(--blue);}
-.stat-value.yellow{color:var(--yellow);}
-.stat-value.red{color:var(--red);}
-.stat-sub{font-size:11px;color:var(--muted);}
+/* ── New key reveal ─────────────────────────────────────────────────────────── */
+.new-key-box { background:rgba(0,255,136,.05); border:1px solid rgba(0,255,136,.2); border-radius:8px; padding:12px 16px; margin:0 0 12px; display:none; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.new-key-box.show { display:flex; }
+.new-key-label { font-family:var(--font-mono); font-size:9px; color:var(--accent); letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; }
+.new-key-value { font-family:var(--font-mono); font-size:12px; color:var(--text); font-weight:600; word-break:break-all; }
 
-/* ── charts ── */
-.charts-grid{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:20px;}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px;}
-.card:last-child{margin-bottom:0;}
-.card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap;}
-.card-title{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text);letter-spacing:.05em;text-transform:uppercase;}
-.card-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.card-body{padding:16px;}
-.chart-wrap{position:relative;height:200px;}
+/* ── Tables ─────────────────────────────────────────────────────────────────── */
+.table-wrap { overflow-x:auto; }
+.data-table { width:100%; border-collapse:collapse; min-width:500px; }
+.data-table th { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; padding:8px 12px; text-align:left; border-bottom:1px solid var(--border); font-weight:500; white-space:nowrap; }
+.data-table td { padding:10px 12px; border-bottom:1px solid rgba(37,45,64,.5); vertical-align:middle; font-size:13px; }
+.data-table tr:last-child td { border-bottom:none; }
+.data-table tr:hover td { background:rgba(255,255,255,.02); }
+.cell-name { font-weight:500; color:var(--text); }
+.cell-mono { font-family:var(--font-mono); font-size:11px; color:var(--muted); }
+.cell-num  { font-family:var(--font-mono); font-size:13px; color:var(--blue); font-weight:600; }
+.cell-key  { display:flex; align-items:center; gap:6px; }
+.cell-key-val { font-family:var(--font-mono); font-size:11px; color:var(--muted); max-width:150px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cell-actions { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
 
-/* ── section title ── */
-.section-title{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
-.count-badge{font-size:10px;padding:2px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;color:var(--muted);font-family:var(--font-mono);}
+/* ── Badges ─────────────────────────────────────────────────────────────────── */
+.badge { font-family:var(--font-mono); font-size:10px; padding:2px 8px; border-radius:4px; font-weight:500; white-space:nowrap; }
+.badge-active  { background:rgba(0,255,136,.1);   color:var(--accent); border:1px solid rgba(0,255,136,.2); }
+.badge-revoked { background:rgba(255,77,106,.1);  color:var(--red);    border:1px solid rgba(255,77,106,.2); }
+.badge-expired { background:rgba(255,159,64,.1);  color:var(--orange); border:1px solid rgba(255,159,64,.25); }
+.badge-warning { background:rgba(255,209,102,.1); color:var(--yellow); border:1px solid rgba(255,209,102,.25); }
+.badge-compact { background:rgba(180,142,255,.1); color:var(--purple); border:1px solid rgba(180,142,255,.25); }
+.badge-full    { background:rgba(77,159,255,.1);  color:var(--blue);   border:1px solid rgba(77,159,255,.2); }
+.badge-schema  { background:rgba(0,255,136,.08);  color:var(--accent); border:1px solid rgba(0,255,136,.15); cursor:pointer; }
+.badge-schema:hover { background:rgba(0,255,136,.15); }
 
-/* ── create form ── */
-.create-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-.create-row input,.create-row select{font-family:var(--font-mono);font-size:12px;color:var(--text);background:var(--bg3);border:1px solid var(--border);padding:7px 12px;border-radius:6px;outline:none;transition:border-color .2s;}
-.create-row input:focus,.create-row select:focus{border-color:var(--accent);}
-.create-row input::placeholder{color:var(--muted);}
-.input-name{width:160px;}
-.input-days{width:90px;}
-select option{background:var(--bg3);}
+/* ── Expiry bar ─────────────────────────────────────────────────────────────── */
+.expiry-cell { display:flex; align-items:center; gap:6px; }
+.expiry-bar  { height:4px; border-radius:2px; background:var(--bg3); width:60px; flex-shrink:0; overflow:hidden; }
+.expiry-fill { height:100%; border-radius:2px; transition:width .3s; }
+.expiry-text { font-family:var(--font-mono); font-size:11px; white-space:nowrap; }
 
-/* ── new key reveal ── */
-.new-key-box{background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.2);border-radius:8px;padding:12px 16px;margin:0 0 12px;display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-.new-key-box.show{display:flex;}
-.new-key-label{font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;}
-.new-key-value{font-family:var(--font-mono);font-size:12px;color:var(--text);font-weight:600;word-break:break-all;}
+/* ── Log cells ──────────────────────────────────────────────────────────────── */
+.log-query   { color:var(--text); max-width:260px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:help; }
+.log-keys    { font-family:var(--font-mono); color:var(--accent); font-weight:600; }
+.log-latency { font-family:var(--font-mono); color:var(--yellow); }
+.log-ok  { color:var(--accent); font-family:var(--font-mono); font-size:11px; }
+.log-err { color:var(--red);    font-family:var(--font-mono); font-size:11px; }
+.log-date{ font-family:var(--font-mono); color:var(--muted); font-size:11px; white-space:nowrap; }
 
-/* ── tables ── */
-.table-wrap{overflow-x:auto;}
-.data-table{width:100%;border-collapse:collapse;min-width:600px;}
-.data-table th{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;white-space:nowrap;}
-.data-table td{padding:10px 12px;border-bottom:1px solid rgba(37,45,64,.5);vertical-align:middle;font-size:13px;}
-.data-table tr:last-child td{border-bottom:none;}
-.data-table tr:hover td{background:rgba(255,255,255,.02);}
+/* ── Drawer ─────────────────────────────────────────────────────────────────── */
+.drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; opacity:0; pointer-events:none; transition:opacity .25s; }
+.drawer-overlay.open { opacity:1; pointer-events:all; }
+.drawer { position:fixed; top:0; right:0; bottom:0; width:600px; max-width:100vw; background:var(--bg2); border-left:1px solid var(--border); z-index:301; transform:translateX(100%); transition:transform .25s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; }
+.drawer.open { transform:translateX(0); }
+.drawer-head { padding:18px 20px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; flex-shrink:0; gap:12px; }
+.drawer-title { font-family:var(--font-mono); font-size:14px; font-weight:700; color:var(--text); }
+.drawer-sub   { font-family:var(--font-mono); font-size:10px; color:var(--muted); margin-top:3px; }
+.drawer-close { font-family:var(--font-mono); font-size:18px; color:var(--muted); background:none; border:none; cursor:pointer; padding:0 4px; line-height:1; flex-shrink:0; }
+.drawer-close:hover { color:var(--text); }
+.drawer-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:14px 20px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.drawer-stat  { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+.drawer-stat-label { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; }
+.drawer-stat-value { font-family:var(--font-mono); font-size:20px; font-weight:700; color:var(--text); }
+.drawer-stat-value.green  { color:var(--accent); }
+.drawer-stat-value.blue   { color:var(--blue); }
+.drawer-stat-value.yellow { color:var(--yellow); }
+.drawer-section { padding:14px 20px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.drawer-section-title { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; margin-bottom:10px; }
+.drawer-expiry-bar { height:6px; border-radius:3px; background:var(--bg3); width:100%; overflow:hidden; margin:6px 0; }
+.drawer-expiry-fill { height:100%; border-radius:3px; transition:width .5s; }
+.drawer-body { flex:1; overflow-y:auto; }
+.drawer-actions { display:flex; gap:8px; flex-wrap:wrap; padding:12px 20px; border-bottom:1px solid var(--border); flex-shrink:0; }
 
-/* ── table cell types ── */
-.cell-name{font-weight:500;color:var(--text);}
-.cell-mono{font-family:var(--font-mono);font-size:11px;color:var(--muted);}
-.cell-num{font-family:var(--font-mono);font-size:13px;color:var(--blue);font-weight:600;}
-.cell-key{display:flex;align-items:center;gap:6px;}
-.cell-key-val{font-family:var(--font-mono);font-size:11px;color:var(--muted);max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.cell-actions{display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+/* ── Schema browser ─────────────────────────────────────────────────────────── */
+.schema-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:12px; }
+.schema-category { background:var(--bg2); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.schema-cat-header { padding:10px 14px; background:var(--bg3); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.schema-cat-name { font-family:var(--font-mono); font-size:11px; font-weight:600; color:var(--text); letter-spacing:.04em; }
+.schema-cat-count { font-family:var(--font-mono); font-size:10px; color:var(--muted); }
+.schema-key-row { padding:8px 14px; border-bottom:1px solid rgba(37,45,64,.4); display:flex; gap:10px; align-items:flex-start; }
+.schema-key-row:last-child { border-bottom:none; }
+.schema-key-name { font-family:var(--font-mono); font-size:11px; color:var(--accent); flex-shrink:0; width:140px; margin-top:2px; }
+.schema-key-desc { font-size:12px; color:var(--muted); line-height:1.5; }
 
-/* ── badges ── */
-.badge{font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:4px;font-weight:500;white-space:nowrap;}
-.badge-active{background:rgba(0,255,136,.1);color:var(--accent);border:1px solid rgba(0,255,136,.2);}
-.badge-revoked{background:rgba(255,77,106,.1);color:var(--red);border:1px solid rgba(255,77,106,.2);}
-.badge-expired{background:rgba(255,159,64,.1);color:var(--orange);border:1px solid rgba(255,159,64,.25);}
-.badge-warning{background:rgba(255,209,102,.1);color:var(--yellow);border:1px solid rgba(255,209,102,.25);}
+/* ── Confirm modal ──────────────────────────────────────────────────────────── */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:400; display:none; align-items:center; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; max-width:380px; width:90%; }
+.modal-title { font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--text); margin-bottom:8px; }
+.modal-msg { font-size:13px; color:var(--muted); margin-bottom:20px; line-height:1.6; }
+.modal-actions { display:flex; gap:8px; justify-content:flex-end; }
 
-/* ── expiry indicator ── */
-.expiry-cell{display:flex;align-items:center;gap:6px;}
-.expiry-bar{height:4px;border-radius:2px;background:var(--bg3);width:60px;flex-shrink:0;overflow:hidden;}
-.expiry-fill{height:100%;border-radius:2px;transition:width .3s;}
-.expiry-text{font-family:var(--font-mono);font-size:11px;white-space:nowrap;}
+/* ── Schema key modal ───────────────────────────────────────────────────────── */
+.schema-modal { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; max-width:560px; width:90%; max-height:80vh; overflow-y:auto; }
+.schema-modal-key { font-family:var(--font-mono); font-size:11px; color:var(--accent); margin-bottom:6px; }
+.schema-modal-desc { font-size:13px; color:var(--text); line-height:1.7; background:var(--bg3); border-radius:8px; padding:12px 14px; border:1px solid var(--border); }
+.schema-kv-list { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.schema-kv-row { display:grid; grid-template-columns:140px 1fr; gap:8px; align-items:start; }
+.schema-kv-key  { font-family:var(--font-mono); font-size:11px; color:var(--accent); padding-top:2px; }
+.schema-kv-val  { font-size:12px; color:var(--muted); background:var(--bg3); border-radius:6px; padding:6px 10px; border:1px solid var(--border); word-break:break-all; }
 
-/* ── log cells ── */
-.log-query{color:var(--text);max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.log-keys{font-family:var(--font-mono);color:var(--accent);font-weight:600;}
-.log-latency{font-family:var(--font-mono);color:var(--yellow);}
-.log-ok{color:var(--accent);font-family:var(--font-mono);font-size:11px;}
-.log-err{color:var(--red);font-family:var(--font-mono);font-size:11px;}
-.log-date{font-family:var(--font-mono);color:var(--muted);font-size:11px;white-space:nowrap;}
+/* ── Misc ───────────────────────────────────────────────────────────────────── */
+.empty { text-align:center; padding:36px; font-family:var(--font-mono); font-size:12px; color:var(--muted); }
+.loading { display:inline-block; width:12px; height:12px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .6s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.divider { height:1px; background:var(--border); margin:16px 0; }
 
-/* ── drawer ── */
-.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s;}
-.drawer-overlay.open{opacity:1;pointer-events:all;}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:580px;max-width:100vw;background:var(--bg2);border-left:1px solid var(--border);z-index:301;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
-.drawer.open{transform:translateX(0);}
-.drawer-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;gap:12px;}
-.drawer-title{font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--text);}
-.drawer-sub{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-top:3px;}
-.drawer-close{font-family:var(--font-mono);font-size:18px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 4px;line-height:1;flex-shrink:0;}
-.drawer-close:hover{color:var(--text);}
-.drawer-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 20px;border-bottom:1px solid var(--border);flex-shrink:0;}
-.drawer-stat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
-.drawer-stat-label{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
-.drawer-stat-value{font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--text);}
-.drawer-stat-value.green{color:var(--accent);}
-.drawer-stat-value.blue{color:var(--blue);}
-.drawer-stat-value.yellow{color:var(--yellow);}
-.drawer-stat-value.orange{color:var(--orange);}
+/* ── Toast ──────────────────────────────────────────────────────────────────── */
+.toast { position:fixed; bottom:20px; right:20px; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:10px 16px; font-family:var(--font-mono); font-size:12px; color:var(--text); z-index:999; transform:translateY(80px); opacity:0; transition:all .3s; pointer-events:none; max-width:320px; }
+.toast.show { transform:translateY(0); opacity:1; }
+.toast.success { border-color:rgba(0,255,136,.3); color:var(--accent); }
+.toast.error   { border-color:rgba(255,77,106,.3); color:var(--red); }
+.toast.info    { border-color:rgba(77,159,255,.3); color:var(--blue); }
 
-/* expiry section in drawer */
-.drawer-expiry{padding:14px 20px;border-bottom:1px solid var(--border);flex-shrink:0;}
-.drawer-expiry-title{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
-.drawer-expiry-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.drawer-expiry-info{flex:1;}
-.drawer-expiry-val{font-family:var(--font-mono);font-size:12px;color:var(--text);margin-bottom:4px;}
-.drawer-expiry-bar{height:6px;border-radius:3px;background:var(--bg3);width:100%;overflow:hidden;margin-bottom:4px;}
-.drawer-expiry-fill{height:100%;border-radius:3px;transition:width .5s;}
-.drawer-expiry-days{font-family:var(--font-mono);font-size:11px;}
-.drawer-refresh-row{display:flex;gap:8px;align-items:center;}
-.drawer-refresh-row input{font-family:var(--font-mono);font-size:12px;color:var(--text);background:var(--bg3);border:1px solid var(--border);padding:6px 10px;border-radius:6px;outline:none;width:80px;transition:border-color .2s;}
-.drawer-refresh-row input:focus{border-color:var(--accent);}
+/* ── Filter bar ─────────────────────────────────────────────────────────────── */
+.filter-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 16px; border-bottom:1px solid var(--border); background:rgba(30,37,53,.5); }
+.filter-label { font-family:var(--font-mono); font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
 
-.drawer-body{flex:1;overflow-y:auto;}
-
-/* ── misc ── */
-.empty{text-align:center;padding:36px;font-family:var(--font-mono);font-size:12px;color:var(--muted);}
-.loading{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.divider{height:1px;background:var(--border);margin:16px 0;}
-.page-title{font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--text);letter-spacing:.05em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-
-/* ── toast ── */
-.toast{position:fixed;bottom:20px;right:20px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-family:var(--font-mono);font-size:12px;color:var(--text);z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;max-width:300px;}
-.toast.show{transform:translateY(0);opacity:1;}
-.toast.success{border-color:rgba(0,255,136,.3);color:var(--accent);}
-.toast.error{border-color:rgba(255,77,106,.3);color:var(--red);}
-
-/* ── responsive ── */
-@media(max-width:1024px){
-  .stats-grid{grid-template-columns:repeat(2,1fr);}
-  .charts-grid{grid-template-columns:1fr;}
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+@media(max-width:1280px) { .stats-grid { grid-template-columns:repeat(3,1fr); } }
+@media(max-width:1024px) { .stats-grid { grid-template-columns:repeat(2,1fr); } .charts-grid { grid-template-columns:1fr; } }
+@media(max-width:768px) {
+  :root { --sidebar-w:0px; }
+  .sidebar { transform:translateX(-100%); width:240px; box-shadow:4px 0 20px rgba(0,0,0,.5); }
+  .sidebar.open { transform:translateX(0); }
+  .hamburger { display:block; }
+  .main { margin-left:0; padding:16px; }
+  .topnav-info { display:none; }
+  .connect-url { max-width:none; flex:1; }
+  .connect-secret { width:130px; }
+  #last-updated { display:none; }
+  .stats-grid { grid-template-columns:1fr 1fr; gap:8px; }
+  .stat-value { font-size:22px; }
+  .drawer { width:100vw; }
+  .cell-key-val { max-width:100px; }
+  .schema-grid { grid-template-columns:1fr; }
+  .schema-key-name { width:110px; }
+  .auto-refresh-toggle { display:none; }
 }
-@media(max-width:768px){
-  :root{--sidebar-w:0px;}
-  .sidebar{transform:translateX(-100%);width:240px;}
-  .sidebar.open{transform:translateX(0);}
-  .hamburger{display:block;}
-  .main{margin-left:0;padding:16px;}
-  .topnav-info{display:none;}
-  .connect-url{max-width:none;flex:1;}
-  .connect-secret{width:130px;}
-  #last-updated{display:none;}
-  .stats-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
-  .stat-value{font-size:22px;}
-  .charts-grid{grid-template-columns:1fr;}
-  .input-name{width:130px;}
-  .input-days{width:70px;}
-  .drawer{width:100vw;}
-  .drawer-stats{grid-template-columns:repeat(3,1fr);}
-  .cell-key-val{max-width:100px;}
-}
-@media(max-width:480px){
-  .stats-grid{grid-template-columns:1fr 1fr;}
-  .stat-card{padding:12px;}
-  .stat-value{font-size:20px;}
-  .create-row{gap:6px;}
-  .input-name{width:110px;}
-  .drawer-stats{grid-template-columns:1fr 1fr;}
-  .connect-bar{gap:6px;}
+@media(max-width:480px) {
+  .stats-grid { grid-template-columns:1fr 1fr; }
+  .stat-card { padding:12px; }
+  .stat-value { font-size:20px; }
+  .connect-bar { gap:6px; }
 }
 </style>
 </head>
 <body>
 
-<!-- TOP NAV -->
+<!-- ── TOP NAV ────────────────────────────────────────────────────────────── -->
 <nav class="topnav">
   <button class="hamburger" onclick="toggleSidebar()">☰</button>
   <div class="topnav-logo">SEARCHOLOGY <span>/ admin</span></div>
   <div class="topnav-sep"></div>
   <div class="topnav-right">
+    <label class="auto-refresh-toggle" title="Auto-refresh every 30s">
+      <input type="checkbox" id="auto-refresh-chk" onchange="toggleAutoRefresh(this.checked)">
+      Auto-refresh
+    </label>
     <div class="topnav-info">
       <div class="status-dot" id="status-dot"></div>
       <span id="server-uptime">—</span>
@@ -260,7 +287,7 @@ select option{background:var(--bg3);}
   </div>
 </nav>
 
-<!-- CONNECT BAR -->
+<!-- ── CONNECT BAR ────────────────────────────────────────────────────────── -->
 <div class="connect-bar">
   <span class="connect-label">URL</span>
   <input class="connect-input connect-url" id="api-url" type="text" placeholder="https://searchology.duckdns.org" value="https://searchology.duckdns.org">
@@ -270,179 +297,218 @@ select option{background:var(--bg3);}
   <span id="last-updated"></span>
 </div>
 
-<!-- LAYOUT -->
+<!-- ── LAYOUT ─────────────────────────────────────────────────────────────── -->
 <div class="layout">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-label">Overview</div>
-      <button class="sidebar-link active" onclick="showPage('overview',this)"><span class="sidebar-icon">📊</span> Dashboard</button>
-      <button class="sidebar-link" onclick="showPage('logs',this)"><span class="sidebar-icon">📋</span> Request Logs</button>
-    </div>
-    <div class="sidebar-section" style="margin-top:8px;">
-      <div class="sidebar-label">Keys</div>
-      <button class="sidebar-link" onclick="showPage('keys',this)"><span class="sidebar-icon">🔑</span> API Keys</button>
-      <button class="sidebar-link" onclick="showPage('expiry',this)"><span class="sidebar-icon">⏱️</span> Expiry Manager</button>
-    </div>
-    <div class="sidebar-section" style="margin-top:8px;">
-      <div class="sidebar-label">System</div>
-      <button class="sidebar-link" onclick="showPage('models',this)"><span class="sidebar-icon">🤖</span> Models</button>
-    </div>
-  </aside>
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Overview</div>
+    <button class="sidebar-link active" onclick="showPage('overview',this)"><span class="sidebar-icon">📊</span> Dashboard</button>
+    <button class="sidebar-link" onclick="showPage('logs',this)"><span class="sidebar-icon">📋</span> Request Logs</button>
+  </div>
+  <div class="sidebar-section" style="margin-top:8px;">
+    <div class="sidebar-label">Keys</div>
+    <button class="sidebar-link" onclick="showPage('keys',this)"><span class="sidebar-icon">🔑</span> API Keys</button>
+    <button class="sidebar-link" onclick="showPage('expiry',this)"><span class="sidebar-icon">⏱️</span> Expiry Manager</button>
+  </div>
+  <div class="sidebar-section" style="margin-top:8px;">
+    <div class="sidebar-label">System</div>
+    <button class="sidebar-link" onclick="showPage('models',this)"><span class="sidebar-icon">🤖</span> Models</button>
+    <button class="sidebar-link" onclick="showPage('schema',this)"><span class="sidebar-icon">📐</span> Schema Browser</button>
+  </div>
+  <div class="sidebar-bottom">
+    <div class="sidebar-version">Searchology Admin v2.0</div>
+  </div>
+</aside>
 
-  <!-- MAIN -->
-  <main class="main">
+<!-- MAIN -->
+<main class="main">
 
-    <!-- ── OVERVIEW PAGE ── -->
-    <div class="page active" id="page-overview">
-      <div class="page-title">📊 Dashboard</div>
-
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-label">Total Requests</div><div class="stat-value blue" id="stat-total">—</div><div class="stat-sub">all time</div></div>
-        <div class="stat-card"><div class="stat-label">Active Keys</div><div class="stat-value green" id="stat-active">—</div><div class="stat-sub">of <span id="stat-total-keys">—</span> total</div></div>
-        <div class="stat-card"><div class="stat-label">Avg Latency</div><div class="stat-value yellow" id="stat-latency">—</div><div class="stat-sub">milliseconds</div></div>
-        <div class="stat-card"><div class="stat-label">Expiring Soon</div><div class="stat-value red" id="stat-expiring">—</div><div class="stat-sub">within 7 days</div></div>
+<!-- ── DASHBOARD PAGE ──────────────────────────────────────────────────────── -->
+<div class="page active" id="page-overview">
+  <div class="page-title">📊 Dashboard</div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Total Requests</div><div class="stat-value blue" id="stat-total">—</div><div class="stat-sub">all time</div></div>
+    <div class="stat-card"><div class="stat-label">Active Keys</div><div class="stat-value green" id="stat-active">—</div><div class="stat-sub">of <span id="stat-total-keys">—</span> total</div></div>
+    <div class="stat-card"><div class="stat-label">Avg Latency</div><div class="stat-value yellow" id="stat-latency">—</div><div class="stat-sub">last 200 requests</div></div>
+    <div class="stat-card"><div class="stat-label">Success Rate</div><div class="stat-value green" id="stat-success">—</div><div class="stat-sub">last 200 requests</div></div>
+    <div class="stat-card"><div class="stat-label">Expiring Soon</div><div class="stat-value red" id="stat-expiring">—</div><div class="stat-sub">within 7 days</div></div>
+  </div>
+  <div class="charts-grid">
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-header">
+        <span class="card-title">Requests Over Time</span>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">last 14 days · last 200 logs</span>
       </div>
-
-      <div class="charts-grid">
-        <div class="card" style="margin-bottom:0;">
-          <div class="card-header"><span class="card-title">Requests Over Time</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">last 14 days</span></div>
-          <div class="card-body"><div class="chart-wrap"><canvas id="requests-chart"></canvas></div></div>
-        </div>
-        <div class="card" style="margin-bottom:0;">
-          <div class="card-header"><span class="card-title">Latency Distribution</span></div>
-          <div class="card-body"><div class="chart-wrap"><canvas id="latency-chart"></canvas></div></div>
-        </div>
-      </div>
+      <div class="card-body"><div class="chart-wrap"><canvas id="requests-chart"></canvas></div></div>
     </div>
-
-    <!-- ── KEYS PAGE ── -->
-    <div class="page" id="page-keys">
-      <div class="page-title">🔑 API Keys</div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="section-title">All Keys <span class="count-badge" id="keys-count">0</span></div>
-          <div class="card-actions">
-            <div class="create-row">
-              <input class="input-name" id="new-key-name" placeholder="client name..." />
-              <input class="input-days" id="new-key-days" type="number" placeholder="days" value="30" min="1" max="365" />
-              <button class="btn btn-primary btn-sm" onclick="createKey()">+ Create</button>
-              <button class="btn btn-ghost btn-sm" onclick="loadKeys()">↻</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-body" style="padding-bottom:0;">
-          <div class="new-key-box" id="new-key-box">
-            <div style="flex:1;min-width:0;">
-              <div class="new-key-label">★ Save this key — shown only once</div>
-              <div class="new-key-value" id="new-key-value"></div>
-            </div>
-            <button class="btn btn-ghost btn-sm" onclick="copyText(document.getElementById('new-key-value').textContent,this)">Copy</button>
-          </div>
-        </div>
-
-        <div class="table-wrap">
-          <table class="data-table">
-            <thead><tr><th>Name</th><th>API Key</th><th>Requests</th><th>Expiry</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody id="keys-tbody"><tr><td colspan="6" class="empty">Connect to load keys</td></tr></tbody>
-          </table>
-        </div>
-      </div>
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-header"><span class="card-title">Latency Distribution</span></div>
+      <div class="card-body"><div class="chart-wrap"><canvas id="latency-chart"></canvas></div></div>
     </div>
-
-    <!-- ── LOGS PAGE ── -->
-    <div class="page" id="page-logs">
-      <div class="page-title">📋 Request Logs</div>
-      <div class="card">
-        <div class="card-header">
-          <div class="section-title">Recent Requests <span class="count-badge" id="logs-count">0</span></div>
-          <div class="card-actions">
-            <button class="btn btn-ghost btn-sm" onclick="loadLogs()">↻ Refresh</button>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table class="data-table">
-            <thead><tr><th>Query</th><th>Keys Found</th><th>Latency</th><th>Status</th><th>Time</th></tr></thead>
-            <tbody id="logs-tbody"><tr><td colspan="5" class="empty">Connect to load logs</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── EXPIRY MANAGER PAGE ── -->
-    <div class="page" id="page-expiry">
-      <div class="page-title">⏱️ Expiry Manager</div>
-      <div class="card">
-        <div class="card-header">
-          <div class="section-title">Key Expiry Status</div>
-          <div class="card-actions">
-            <button class="btn btn-ghost btn-sm" onclick="loadKeys()">↻ Refresh</button>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table class="data-table">
-            <thead><tr><th>Name</th><th>Status</th><th>Expires At</th><th>Days Left</th><th>Refresh</th></tr></thead>
-            <tbody id="expiry-tbody"><tr><td colspan="5" class="empty">Connect to load keys</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── MODELS PAGE ── -->
-    <div class="page" id="page-models">
-      <div class="page-title">🤖 Model Management</div>
-
-      <!-- active model banner -->
-      <div id="active-model-banner" style="background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
-        <div style="width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);flex-shrink:0;"></div>
-        <div>
-          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;">Currently Active Model</div>
-          <div style="font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--accent);" id="active-model-name">—</div>
-          <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:2px;" id="active-model-id">—</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="section-title">Available Models <span class="count-badge" id="models-count">0</span></div>
-          <div class="card-actions">
-            <button class="btn btn-ghost btn-sm" onclick="loadModels()">↻ Refresh</button>
-          </div>
-        </div>
-
-        <!-- add model form -->
-        <div class="card-body" style="padding-bottom:0;border-bottom:1px solid var(--border);">
-          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">Add New Model</div>
-          <div class="create-row" style="margin-bottom:14px;">
-            <input style="width:180px;" id="model-name-input" placeholder="Display name..." />
-            <input style="width:240px;" id="model-id-input" placeholder="model_id e.g. llama-3.3-70b-versatile" />
-            <button class="btn btn-primary btn-sm" onclick="addModel()">+ Add Model</button>
-          </div>
-          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:14px;">
-            Common Groq models:
-            <span onclick="fillModelId('llama-3.1-8b-instant','LLaMA 3.1 8B Instant')" style="color:var(--blue);cursor:pointer;margin:0 6px;">llama-3.1-8b-instant</span>
-            <span onclick="fillModelId('llama-3.3-70b-versatile','LLaMA 3.3 70B Versatile')" style="color:var(--blue);cursor:pointer;margin:0 6px;">llama-3.3-70b-versatile</span>
-            <span onclick="fillModelId('mixtral-8x7b-32768','Mixtral 8x7B')" style="color:var(--blue);cursor:pointer;margin:0 6px;">mixtral-8x7b-32768</span>
-            <span onclick="fillModelId('gemma2-9b-it','Gemma 2 9B')" style="color:var(--blue);cursor:pointer;margin:0 6px;">gemma2-9b-it</span>
-          </div>
-        </div>
-
-        <div class="table-wrap">
-          <table class="data-table">
-            <thead><tr><th>Name</th><th>Model ID</th><th>Status</th><th>Added</th><th>Actions</th></tr></thead>
-            <tbody id="models-tbody"><tr><td colspan="5" class="empty">Connect to load models</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-  </main>
+  </div>
 </div>
 
-<!-- DRAWER -->
+<!-- ── API KEYS PAGE ───────────────────────────────────────────────────────── -->
+<div class="page" id="page-keys">
+  <div class="page-title">🔑 API Keys</div>
+  <div class="card">
+    <div class="card-header">
+      <div class="section-title">All Keys <span class="count-badge" id="keys-count">0</span></div>
+      <div class="card-actions">
+        <div class="form-row">
+          <input class="form-input input-w-md" id="new-key-name" placeholder="client name...">
+          <input class="form-input input-w-sm" id="new-key-days" type="number" placeholder="days" value="30" min="1" max="365">
+          <button class="btn btn-primary btn-sm" onclick="createKey()">+ Create</button>
+          <button class="btn btn-ghost btn-sm" onclick="loadKeys()">↻</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body" style="padding-bottom:0;">
+      <div class="new-key-box" id="new-key-box">
+        <div style="flex:1;min-width:0;">
+          <div class="new-key-label">★ Save this key — shown only once</div>
+          <div class="new-key-value" id="new-key-value"></div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="copyText(document.getElementById('new-key-value').textContent,this)">Copy</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Name</th><th>API Key</th><th>Requests</th><th>Expiry</th><th>Status</th><th>Schema</th><th>Actions</th></tr></thead>
+        <tbody id="keys-tbody"><tr><td colspan="7" class="empty">Connect to load keys</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── REQUEST LOGS PAGE ──────────────────────────────────────────────────── -->
+<div class="page" id="page-logs">
+  <div class="page-title">📋 Request Logs</div>
+  <div class="card">
+    <div class="card-header">
+      <div class="section-title">Recent Requests <span class="count-badge" id="logs-count">0</span></div>
+      <div class="card-actions">
+        <button class="btn btn-ghost btn-sm" onclick="loadLogs()">↻ Refresh</button>
+      </div>
+    </div>
+    <div class="filter-bar">
+      <span class="filter-label">Filter:</span>
+      <select class="form-input" id="log-filter-key" style="font-size:11px;padding:4px 8px;background:var(--bg3);" onchange="applyLogFilter()">
+        <option value="">All Keys</option>
+      </select>
+      <select class="form-input" id="log-filter-status" style="font-size:11px;padding:4px 8px;background:var(--bg3);" onchange="applyLogFilter()">
+        <option value="">All Status</option>
+        <option value="200">200 OK</option>
+        <option value="500">500 Error</option>
+        <option value="413">413 Too Large</option>
+        <option value="429">429 Rate Limited</option>
+      </select>
+      <span class="filter-label" style="margin-left:8px;">Limit:</span>
+      <select class="form-input" id="log-limit" style="font-size:11px;padding:4px 8px;background:var(--bg3);" onchange="loadLogs()">
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="200" selected>200</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Query</th><th>Key</th><th>Keys Found</th><th>Latency</th><th>Status</th><th>Time</th></tr></thead>
+        <tbody id="logs-tbody"><tr><td colspan="6" class="empty">Connect to load logs</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── EXPIRY MANAGER PAGE ────────────────────────────────────────────────── -->
+<div class="page" id="page-expiry">
+  <div class="page-title">⏱️ Expiry Manager</div>
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-header">
+      <div class="section-title">Bulk Actions</div>
+    </div>
+    <div class="card-body" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <button class="btn btn-orange btn-sm" onclick="bulkRefreshExpiring()">↻ Refresh All Expiring (≤7d)</button>
+      <button class="btn btn-danger btn-sm" onclick="bulkDeleteRevoked()">🗑 Delete All Revoked</button>
+      <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">Bulk refresh resets all expiring keys to 30 days. Bulk delete permanently removes revoked keys.</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="section-title">Key Expiry Status</div>
+      <button class="btn btn-ghost btn-sm" onclick="loadKeys()">↻ Refresh</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Name</th><th>Status</th><th>Expires At</th><th>Days Left</th><th>Actions</th></tr></thead>
+        <tbody id="expiry-tbody"><tr><td colspan="5" class="empty">Connect to load keys</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODELS PAGE ────────────────────────────────────────────────────────── -->
+<div class="page" id="page-models">
+  <div class="page-title">🤖 Model Management</div>
+  <div id="active-model-banner" style="background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+    <div style="width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);flex-shrink:0;animation:pulse 2s infinite;"></div>
+    <div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;">Currently Active Model</div>
+      <div style="font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--accent);" id="active-model-name">—</div>
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:2px;" id="active-model-id">—</div>
+    </div>
+    <div style="margin-left:auto;">
+      <span id="active-model-mode" class="badge"></span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="section-title">Models <span class="count-badge" id="models-count">0</span></div>
+      <button class="btn btn-ghost btn-sm" onclick="loadModels()">↻ Refresh</button>
+    </div>
+    <div class="card-body" style="border-bottom:1px solid var(--border);padding-bottom:16px;">
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">Add New Model</div>
+      <div class="form-row" style="margin-bottom:10px;">
+        <input class="form-input" style="width:180px;" id="model-name-input" placeholder="Display name...">
+        <input class="form-input" style="width:260px;" id="model-id-input" placeholder="model_id e.g. llama-3.3-70b-versatile">
+        <input class="form-input input-w-sm" id="model-token-limit-input" type="number" placeholder="token limit" min="1000" style="width:110px;">
+        <button class="btn btn-primary btn-sm" onclick="addModel()">+ Add</button>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">
+        Quick-fill:
+        <span onclick="fillModelId('llama-3.1-8b-instant','LLaMA 3.1 8B Instant',6000)"     style="color:var(--blue);cursor:pointer;margin:0 6px;">llama-3.1-8b-instant</span>
+        <span onclick="fillModelId('llama-3.3-70b-versatile','LLaMA 3.3 70B Versatile',32768)" style="color:var(--blue);cursor:pointer;margin:0 6px;">llama-3.3-70b-versatile</span>
+        <span onclick="fillModelId('mixtral-8x7b-32768','Mixtral 8x7B',32768)"                style="color:var(--blue);cursor:pointer;margin:0 6px;">mixtral-8x7b-32768</span>
+        <span onclick="fillModelId('gemma2-9b-it','Gemma 2 9B',8192)"                         style="color:var(--blue);cursor:pointer;margin:0 6px;">gemma2-9b-it</span>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Name</th><th>Model ID</th><th>Token Limit</th><th>Prompt Mode</th><th>Status</th><th>Added</th><th>Actions</th></tr></thead>
+        <tbody id="models-tbody"><tr><td colspan="7" class="empty">Connect to load models</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCHEMA BROWSER PAGE ────────────────────────────────────────────────── -->
+<div class="page" id="page-schema">
+  <div class="page-title">📐 Schema Browser</div>
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-body" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <span style="font-family:var(--font-mono);font-size:12px;color:var(--muted);">Total keys: <strong id="schema-total" style="color:var(--accent);">—</strong></span>
+      <input class="form-input" id="schema-search" placeholder="Search keys..." style="width:220px;" oninput="filterSchema(this.value)">
+      <button class="btn btn-ghost btn-sm" onclick="loadSchema()">↻ Reload</button>
+    </div>
+  </div>
+  <div class="schema-grid" id="schema-grid"><div class="empty">Connect to load schema</div></div>
+</div>
+
+</main>
+</div><!-- /.layout -->
+
+<!-- ── KEY DETAIL DRAWER ──────────────────────────────────────────────────── -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
@@ -457,26 +523,36 @@ select option{background:var(--bg3);}
     <div class="drawer-stat"><div class="drawer-stat-label">Avg Latency</div><div class="drawer-stat-value yellow" id="drawer-latency">—</div></div>
     <div class="drawer-stat"><div class="drawer-stat-label">Avg Keys Found</div><div class="drawer-stat-value green" id="drawer-keys">—</div></div>
   </div>
-
-  <!-- expiry section -->
-  <div class="drawer-expiry">
-    <div class="drawer-expiry-title">Key Expiry</div>
-    <div class="drawer-expiry-row">
-      <div class="drawer-expiry-info">
-        <div class="drawer-expiry-val" id="drawer-expires-at">—</div>
-        <div class="drawer-expiry-bar"><div class="drawer-expiry-fill" id="drawer-expiry-fill"></div></div>
-        <div class="drawer-expiry-days" id="drawer-days-left">—</div>
-      </div>
-    </div>
-    <div class="drawer-refresh-row" style="margin-top:10px;">
+  <!-- Expiry -->
+  <div class="drawer-section">
+    <div class="drawer-section-title">Expiry</div>
+    <div style="font-family:var(--font-mono);font-size:12px;color:var(--text);margin-bottom:4px;" id="drawer-expires-at">—</div>
+    <div class="drawer-expiry-bar"><div class="drawer-expiry-fill" id="drawer-expiry-fill"></div></div>
+    <div style="font-family:var(--font-mono);font-size:11px;margin-bottom:10px;" id="drawer-days-left">—</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);">Extend by</span>
-      <input type="number" id="drawer-refresh-days" value="30" min="1" max="365" />
+      <input type="number" id="drawer-refresh-days" value="30" min="1" max="365" class="form-input" style="width:70px;">
       <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);">days</span>
-      <button class="btn btn-refresh btn-sm" id="drawer-refresh-btn" onclick="refreshKeyExpiry()">↻ Refresh Expiry</button>
+      <button class="btn btn-orange btn-sm" onclick="refreshKeyExpiry()">↻ Extend Expiry</button>
     </div>
   </div>
-
+  <!-- Custom schema -->
+  <div class="drawer-section" id="drawer-schema-section">
+    <div class="drawer-section-title">Custom Schema</div>
+    <div id="drawer-schema-status" style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-bottom:8px;">—</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-purple btn-sm" id="drawer-view-schema-btn" onclick="viewKeySchema()" style="display:none;">View Schema</button>
+      <button class="btn btn-danger btn-sm" id="drawer-del-schema-btn" onclick="deleteKeySchema()" style="display:none;">Delete Schema</button>
+    </div>
+  </div>
+  <!-- Admin actions -->
+  <div class="drawer-actions">
+    <button class="btn btn-danger btn-sm" id="drawer-revoke-btn" onclick="drawerRevokeKey()">Revoke Key</button>
+    <button class="btn btn-danger btn-sm" id="drawer-delete-btn" onclick="drawerDeleteKey()" style="border-color:rgba(255,77,106,.5);">🗑 Delete Permanently</button>
+  </div>
+  <!-- Logs -->
   <div class="drawer-body">
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Request History</div>
     <table class="data-table">
       <thead><tr><th>Query</th><th>Keys Found</th><th>Latency</th><th>Status</th><th>Time</th></tr></thead>
       <tbody id="drawer-tbody"><tr><td colspan="5" class="empty"><span class="loading"></span></td></tr></tbody>
@@ -484,28 +560,111 @@ select option{background:var(--bg3);}
   </div>
 </div>
 
+<!-- ── SCHEMA KEY MODAL ───────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="schema-key-modal">
+  <div class="schema-modal">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+      <div>
+        <div class="schema-modal-key" id="skm-key">—</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">Built-in schema field</div>
+      </div>
+      <button onclick="closeSchemaKeyModal()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 4px;">✕</button>
+    </div>
+    <div class="schema-modal-desc" id="skm-desc">—</div>
+  </div>
+</div>
+
+<!-- ── CUSTOM SCHEMA VIEW MODAL ───────────────────────────────────────────── -->
+<div class="modal-overlay" id="custom-schema-modal">
+  <div class="schema-modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div style="font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--text);">Custom Schema — <span id="csm-key-name">—</span></div>
+      <button onclick="document.getElementById('custom-schema-modal').classList.remove('open')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 4px;">✕</button>
+    </div>
+    <div class="schema-kv-list" id="csm-list"></div>
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);" id="csm-count">—</div>
+  </div>
+</div>
+
+<!-- ── CONFIRM MODAL ──────────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal">
+    <div class="modal-title" id="confirm-title">Confirm</div>
+    <div class="modal-msg" id="confirm-msg">Are you sure?</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" onclick="confirmCancel()">Cancel</button>
+      <button class="btn btn-danger btn-sm" id="confirm-ok-btn" onclick="confirmOk()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOKEN LIMIT EDIT MODAL ─────────────────────────────────────────────── -->
+<div class="modal-overlay" id="token-limit-modal">
+  <div class="modal">
+    <div class="modal-title">Edit Token Limit</div>
+    <div class="modal-msg" id="tlm-model-name" style="color:var(--accent);margin-bottom:8px;">—</div>
+    <div style="margin-bottom:16px;">
+      <label style="font-family:var(--font-mono);font-size:10px;color:var(--muted);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Token Limit (min 1000, or 0 to clear)</label>
+      <input class="form-input" id="tlm-value" type="number" min="0" step="1000" style="width:100%;" placeholder="e.g. 6000 for llama-3.1-8b-instant">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('token-limit-modal').classList.remove('open')">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveTokenLimit()">Save</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
+<style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}</style>
 
 <script>
-let requestsChart = null
-let latencyChart  = null
-let allKeys       = []
-let activeDrawerKeyId = null
+'use strict'
 
-// ── helpers ────────────────────────────────────────────────────────────────
+/* ── State ──────────────────────────────────────────────────────────────────── */
+let requestsChart   = null
+let latencyChart    = null
+let allKeys         = []
+let allLogs         = []
+let allSchemaData   = {}
+let activeDrawerKey = null   // full key object
+let autoRefreshTimer = null
+let confirmCallback  = null
+let tlmModelId       = null   // for token limit modal
 
+/* ── Config ─────────────────────────────────────────────────────────────────── */
 const getConfig = () => ({
-  url:    document.getElementById('api-url').value.replace(/\/$/, ''),
-  secret: document.getElementById('admin-secret').value
+  url:    document.getElementById('api-url').value.trim().replace(/\/$/, ''),
+  secret: document.getElementById('admin-secret').value.trim()
 })
 
+/* ── Toast ──────────────────────────────────────────────────────────────────── */
 function toast(msg, type = 'success') {
   const el = document.getElementById('toast')
   el.textContent = msg
   el.className = `toast ${type} show`
-  setTimeout(() => el.className = 'toast', 3000)
+  clearTimeout(el._t)
+  el._t = setTimeout(() => el.className = 'toast', 3200)
 }
 
+/* ── Confirm modal ──────────────────────────────────────────────────────────── */
+function confirmAction(title, msg, okLabel = 'Confirm', cb) {
+  document.getElementById('confirm-title').textContent = title
+  document.getElementById('confirm-msg').textContent = msg
+  document.getElementById('confirm-ok-btn').textContent = okLabel
+  confirmCallback = cb
+  document.getElementById('confirm-modal').classList.add('open')
+}
+function confirmOk() {
+  document.getElementById('confirm-modal').classList.remove('open')
+  if (confirmCallback) confirmCallback()
+  confirmCallback = null
+}
+function confirmCancel() {
+  document.getElementById('confirm-modal').classList.remove('open')
+  confirmCallback = null
+}
+
+/* ── Status & helpers ───────────────────────────────────────────────────────── */
 function setStatus(online) {
   ['status-dot','status-dot-mobile'].forEach(id => {
     const el = document.getElementById(id)
@@ -513,9 +672,15 @@ function setStatus(online) {
   })
 }
 
+// Normalize SQLite datetime ("YYYY-MM-DD HH:MM:SS") or ISO string to Date
+function parseDate(s) {
+  if (!s) return null
+  return new Date(s.includes('T') ? s : s.replace(' ', 'T') + 'Z')
+}
+
 function timeAgo(dateStr) {
   if (!dateStr) return '—'
-  const diff  = Date.now() - new Date(dateStr).getTime()
+  const diff  = Date.now() - parseDate(dateStr)
   const mins  = Math.floor(diff / 60000)
   const hours = Math.floor(mins / 60)
   const days  = Math.floor(hours / 24)
@@ -531,7 +696,7 @@ function copyText(text, btn) {
     btn.textContent = 'Copied!'
     setTimeout(() => btn.textContent = orig, 1800)
     toast('Copied to clipboard')
-  })
+  }).catch(() => toast('Copy failed', 'error'))
 }
 
 function maskKey(key) {
@@ -539,18 +704,29 @@ function maskKey(key) {
   return key.slice(0, 10) + '••••••••' + key.slice(-4)
 }
 
+function escHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;')
+}
+
+// Compute expiry % using actual key lifespan
+function expiryPct(key) {
+  if (!key.expires_at || key.days_left === null) return 100
+  const created = parseDate(key.created_at)
+  const expires = parseDate(key.expires_at)
+  if (!created || !expires) return Math.min(100, Math.max(0, (key.days_left / 30) * 100))
+  const totalDays = (expires - created) / 86400000
+  return Math.min(100, Math.max(0, (key.days_left / totalDays) * 100))
+}
+
 function expiryColor(daysLeft) {
-  if (daysLeft === null) return 'var(--muted)'
+  if (daysLeft === null || daysLeft === undefined) return 'var(--muted)'
   if (daysLeft <= 0)  return 'var(--red)'
   if (daysLeft <= 5)  return 'var(--red)'
   if (daysLeft <= 14) return 'var(--orange)'
   if (daysLeft <= 30) return 'var(--yellow)'
   return 'var(--accent)'
-}
-
-function expiryPct(daysLeft, totalDays = 30) {
-  if (daysLeft === null) return 100
-  return Math.min(100, Math.max(0, (daysLeft / totalDays) * 100))
 }
 
 function expiryBadge(k) {
@@ -566,52 +742,55 @@ function logsRows(logs) {
     <tr>
       <td><span class="log-query" title="${escHtml(l.query)}">${escHtml(l.query)}</span></td>
       <td><span class="log-keys">${l.keys_found ?? '—'}</span></td>
-      <td><span class="log-latency">${l.latency_ms ? l.latency_ms+'ms' : '—'}</span></td>
-      <td><span class="${l.status===200?'log-ok':'log-err'}">${l.status}</span></td>
+      <td><span class="log-latency">${l.latency_ms ? l.latency_ms + 'ms' : '—'}</span></td>
+      <td><span class="${l.status === 200 ? 'log-ok' : 'log-err'}">${l.status}</span></td>
       <td><span class="log-date">${timeAgo(l.created_at)}</span></td>
     </tr>`).join('')
 }
 
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+/* ── API fetch ──────────────────────────────────────────────────────────────── */
+async function apiFetch(path, options = {}) {
+  const { url, secret } = getConfig()
+  if (!url) throw new Error('No URL configured')
+  const res = await fetch(`${url}${path}`, {
+    ...options,
+    headers: { 'Content-Type':'application/json', 'x-admin-secret':secret, ...(options.headers || {}) }
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw Object.assign(new Error(body.message || `${res.status}`), { status: res.status, body })
+  }
+  return res.json()
 }
 
-// ── navigation ─────────────────────────────────────────────────────────────
-
+/* ── Navigation ─────────────────────────────────────────────────────────────── */
 function showPage(name, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
   document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'))
   document.getElementById(`page-${name}`).classList.add('active')
   btn.classList.add('active')
   if (window.innerWidth <= 768) closeSidebar()
+  // Lazy load schema if switching to that page
+  if (name === 'schema' && Object.keys(allSchemaData).length === 0) loadSchema()
+}
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open') }
+function closeSidebar()   { document.getElementById('sidebar').classList.remove('open') }
+
+/* ── Auto-refresh ───────────────────────────────────────────────────────────── */
+function toggleAutoRefresh(on) {
+  clearInterval(autoRefreshTimer)
+  if (on) autoRefreshTimer = setInterval(() => {
+    const { url, secret } = getConfig()
+    if (url && secret) loadAll()
+  }, 30000)
 }
 
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open')
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open')
-}
-
-// ── API ────────────────────────────────────────────────────────────────────
-
-async function apiFetch(path, options = {}) {
-  const { url, secret } = getConfig()
-  const res = await fetch(`${url}${path}`, {
-    ...options,
-    headers: { 'Content-Type':'application/json', 'x-admin-secret':secret, ...(options.headers||{}) }
-  })
-  if (!res.ok) throw Object.assign(new Error(`${res.status}`), { status: res.status })
-  return res.json()
-}
-
-// ── load all ───────────────────────────────────────────────────────────────
-
+/* ── Load all ───────────────────────────────────────────────────────────────── */
 async function loadAll() {
   try {
     await Promise.all([loadHealth(), loadKeys(), loadLogs(), loadModels()])
-    document.getElementById('last-updated').textContent = 'updated '+new Date().toLocaleTimeString()
-  } catch(e) {
+    document.getElementById('last-updated').textContent = 'updated ' + new Date().toLocaleTimeString()
+  } catch (e) {
     setStatus(false)
     toast('Connection failed — check URL and secret', 'error')
   }
@@ -622,61 +801,77 @@ async function loadHealth() {
   try {
     const d = await fetch(`${url}/health`).then(r => r.json())
     setStatus(true)
-    const h = Math.floor(d.uptime_seconds/3600), m = Math.floor((d.uptime_seconds%3600)/60)
+    const h = Math.floor(d.uptime_seconds / 3600)
+    const m = Math.floor((d.uptime_seconds % 3600) / 60)
     document.getElementById('server-uptime').textContent = `${h}h ${m}m`
     document.getElementById('server-time').textContent = new Date(d.timestamp).toLocaleTimeString()
   } catch { setStatus(false) }
 }
 
-// ── keys ───────────────────────────────────────────────────────────────────
-
+/* ── Keys ───────────────────────────────────────────────────────────────────── */
 async function loadKeys() {
-  document.getElementById('keys-tbody').innerHTML = '<tr><td colspan="6" class="empty"><span class="loading"></span></td></tr>'
+  document.getElementById('keys-tbody').innerHTML   = '<tr><td colspan="7" class="empty"><span class="loading"></span></td></tr>'
   document.getElementById('expiry-tbody').innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
 
   try {
     const data = await apiFetch('/keys')
     allKeys = data.keys || []
 
-    document.getElementById('keys-count').textContent = allKeys.length
-    document.getElementById('stat-active').textContent = allKeys.filter(k => k.is_active).length
-    document.getElementById('stat-total-keys').textContent = allKeys.length
-    document.getElementById('stat-total').textContent = allKeys.reduce((s,k) => s+k.requests,0).toLocaleString()
+    // stats
+    document.getElementById('keys-count').textContent        = allKeys.length
+    document.getElementById('stat-active').textContent       = allKeys.filter(k => k.is_active).length
+    document.getElementById('stat-total-keys').textContent   = allKeys.length
+    document.getElementById('stat-total').textContent        = allKeys.reduce((s, k) => s + k.requests, 0).toLocaleString()
+    document.getElementById('stat-expiring').textContent     = allKeys.filter(k => k.is_active && k.days_left !== null && k.days_left <= 7).length
 
-    const expiringSoon = allKeys.filter(k => k.is_active && k.days_left !== null && k.days_left <= 7).length
-    document.getElementById('stat-expiring').textContent = expiringSoon
+    // populate key filter dropdown in logs
+    const sel = document.getElementById('log-filter-key')
+    const cur = sel.value
+    sel.innerHTML = '<option value="">All Keys</option>' +
+      allKeys.map(k => `<option value="${k.id}">${escHtml(k.name)}</option>`).join('')
+    sel.value = cur
 
     renderKeysTable(allKeys)
     renderExpiryTable(allKeys)
-
-  } catch(e) {
-    document.getElementById('keys-tbody').innerHTML = `<tr><td colspan="6" class="empty" style="color:var(--red);">Failed to load keys</td></tr>`
+  } catch (e) {
+    document.getElementById('keys-tbody').innerHTML = `<tr><td colspan="7" class="empty" style="color:var(--red);">Failed to load keys</td></tr>`
     throw e
   }
 }
 
 function renderKeysTable(keys) {
   if (!keys.length) {
-    document.getElementById('keys-tbody').innerHTML = '<tr><td colspan="6" class="empty">No API keys yet</td></tr>'
+    document.getElementById('keys-tbody').innerHTML = '<tr><td colspan="7" class="empty">No API keys yet</td></tr>'
     return
   }
   document.getElementById('keys-tbody').innerHTML = keys.map(k => {
     const color = expiryColor(k.days_left)
-    const pct   = expiryPct(k.days_left)
+    const pct   = expiryPct(k)
+    const schemaCell = k.custom_schema
+      ? `<span class="badge badge-schema" onclick="openCustomSchemaBadge('${k.id}','${escHtml(k.name)}')" title="Custom schema saved — click to view">Schema ↗</span>`
+      : `<span style="color:var(--muted);font-family:var(--font-mono);font-size:10px;">built-in</span>`
+
     return `<tr>
       <td><span class="cell-name">${escHtml(k.name)}</span></td>
-      <td><div class="cell-key"><span class="cell-key-val" title="${k.key}">${maskKey(k.key)}</span><button class="btn btn-copy" onclick="copyText('${k.key}',this)">Copy</button></div></td>
-      <td><span class="cell-num">${k.requests.toLocaleString()}</span></td>
+      <td><div class="cell-key">
+        <span class="cell-key-val" title="${escHtml(k.key)}">${maskKey(k.key)}</span>
+        <button class="btn btn-blue btn-xs" onclick="copyText('${escHtml(k.key)}',this)">Copy</button>
+      </div></td>
+      <td><span class="cell-num">${(k.requests || 0).toLocaleString()}</span></td>
       <td>
         <div class="expiry-cell">
-          <div><div class="expiry-bar"><div class="expiry-fill" style="width:${pct}%;background:${color};"></div></div></div>
-          <span class="expiry-text" style="color:${color};">${k.days_left !== null ? k.days_left+'d' : '—'}</span>
+          <div class="expiry-bar"><div class="expiry-fill" style="width:${pct}%;background:${color};"></div></div>
+          <span class="expiry-text" style="color:${color};">${k.days_left !== null ? k.days_left + 'd' : '—'}</span>
         </div>
       </td>
       <td>${expiryBadge(k)}</td>
+      <td>${schemaCell}</td>
       <td><div class="cell-actions">
-        <button class="btn btn-view" onclick="openDrawer('${k.id}','${escHtml(k.name)}','${k.key}',${k.requests},${JSON.stringify(k.expires_at)},${k.days_left})">Logs</button>
-        ${k.is_active ? `<button class="btn btn-danger btn-sm" onclick="revokeKey('${k.id}','${escHtml(k.name)}')">Revoke</button>` : `<span class="cell-mono">revoked</span>`}
+        <button class="btn btn-green btn-xs" onclick="openDrawer('${k.id}')">Details</button>
+        ${k.is_active
+          ? `<button class="btn btn-danger btn-xs" onclick="revokeKey('${k.id}','${escHtml(k.name)}')">Revoke</button>`
+          : `<span class="badge badge-revoked">revoked</span>`}
+        <button class="btn btn-danger btn-xs" style="border-color:rgba(255,77,106,.5);" onclick="deleteKey('${k.id}','${escHtml(k.name)}')">🗑</button>
       </div></td>
     </tr>`
   }).join('')
@@ -689,20 +884,23 @@ function renderExpiryTable(keys) {
   }
   document.getElementById('expiry-tbody').innerHTML = keys.map(k => {
     const color = expiryColor(k.days_left)
-    const pct   = expiryPct(k.days_left)
+    const pct   = expiryPct(k)
     return `<tr>
       <td><span class="cell-name">${escHtml(k.name)}</span></td>
       <td>${expiryBadge(k)}</td>
-      <td><span class="cell-mono">${k.expires_at ? new Date(k.expires_at).toLocaleDateString() : '—'}</span></td>
+      <td><span class="cell-mono">${k.expires_at ? parseDate(k.expires_at).toLocaleDateString() : '—'}</span></td>
       <td>
         <div class="expiry-cell">
           <div class="expiry-bar" style="width:80px;"><div class="expiry-fill" style="width:${pct}%;background:${color};"></div></div>
-          <span class="expiry-text" style="color:${color};">${k.days_left !== null ? k.days_left+'d left' : '—'}</span>
+          <span class="expiry-text" style="color:${color};">${k.days_left !== null ? k.days_left + 'd left' : '—'}</span>
         </div>
       </td>
       <td><div class="cell-actions">
-        <input type="number" value="30" min="1" max="365" style="width:60px;font-family:var(--font-mono);font-size:11px;color:var(--text);background:var(--bg3);border:1px solid var(--border);padding:4px 6px;border-radius:5px;outline:none;" id="refresh-days-${k.id}">
-        <button class="btn btn-refresh btn-sm" onclick="quickRefresh('${k.id}','${escHtml(k.name)}')">↻ Refresh</button>
+        <input type="number" value="30" min="1" max="365" class="form-input" style="width:64px;padding:4px 6px;font-size:11px;" id="expiry-days-${k.id}">
+        <button class="btn btn-orange btn-xs" onclick="quickRefresh('${k.id}','${escHtml(k.name)}')">↻ Refresh</button>
+        ${k.is_active
+          ? `<button class="btn btn-danger btn-xs" onclick="revokeKey('${k.id}','${escHtml(k.name)}')">Revoke</button>`
+          : `<button class="btn btn-danger btn-xs" onclick="deleteKey('${k.id}','${escHtml(k.name)}')">🗑 Delete</button>`}
       </div></td>
     </tr>`
   }).join('')
@@ -721,75 +919,116 @@ async function createKey() {
     document.getElementById('new-key-box').classList.add('show')
     toast(`Key created for "${name}" — ${days} days`)
     await loadKeys()
-  } catch(e) { toast('Failed to create key', 'error') }
+  } catch (e) { toast('Failed to create key: ' + (e.message || 'unknown error'), 'error') }
 }
 
 async function revokeKey(id, name) {
-  if (!confirm(`Revoke key for "${name}"? This cannot be undone.`)) return
-  try {
-    await apiFetch(`/keys/${id}`, { method:'DELETE' })
-    toast(`Key for "${name}" revoked`)
-    document.getElementById('new-key-box').classList.remove('show')
-    await loadKeys()
-  } catch(e) { toast('Failed to revoke key', 'error') }
+  confirmAction('Revoke Key', `Revoke the key for "${name}"? The key will stop working immediately but can still be seen in the table.`, 'Revoke', async () => {
+    try {
+      await apiFetch(`/keys/${id}`, { method:'DELETE' })
+      toast(`Key for "${name}" revoked`)
+      document.getElementById('new-key-box').classList.remove('show')
+      await loadKeys()
+    } catch (e) { toast('Failed to revoke key', 'error') }
+  })
 }
 
+async function deleteKey(id, name) {
+  confirmAction('Delete Permanently', `Permanently delete the key for "${name}"? This cannot be undone — the key record will be removed entirely.`, '🗑 Delete', async () => {
+    try {
+      await apiFetch(`/keys/${id}`, { method:'DELETE' })
+      toast(`Key for "${name}" deleted`)
+      document.getElementById('new-key-box').classList.remove('show')
+      if (activeDrawerKey?.id === id) closeDrawer()
+      await loadKeys()
+    } catch (e) { toast('Failed to delete key', 'error') }
+  })
+}
+
+// Fixed: now calls PATCH /keys/:id/expiry (not POST /keys/:id/refresh)
 async function quickRefresh(id, name) {
-  const days = parseInt(document.getElementById(`refresh-days-${id}`).value) || 30
+  const inp = document.getElementById(`expiry-days-${id}`)
+  const days = parseInt(inp?.value) || 30
   try {
-    const data = await apiFetch(`/keys/${id}/refresh`, { method:'POST', body: JSON.stringify({ expires_in_days: days }) })
+    await apiFetch(`/keys/${id}/expiry`, { method:'PATCH', body: JSON.stringify({ expires_in_days: days }) })
     toast(`"${name}" extended by ${days} days`)
     await loadKeys()
-  } catch(e) { toast('Failed to refresh expiry', 'error') }
+  } catch (e) { toast('Failed to refresh expiry', 'error') }
 }
 
-// ── logs ───────────────────────────────────────────────────────────────────
-
-async function loadLogs() {
-  document.getElementById('logs-tbody').innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
-  try {
-    const data = await apiFetch('/logs?limit=50')
-    const logs = data.logs || []
-    document.getElementById('logs-count').textContent = logs.length
-
-    if (logs.length > 0) {
-      document.getElementById('stat-latency').textContent = Math.round(logs.reduce((s,l) => s+(l.latency_ms||0),0)/logs.length) + 'ms'
+async function bulkRefreshExpiring() {
+  const expiring = allKeys.filter(k => k.is_active && k.days_left !== null && k.days_left <= 7)
+  if (!expiring.length) { toast('No keys expiring within 7 days', 'info'); return }
+  confirmAction('Bulk Refresh', `Refresh expiry for ${expiring.length} key(s) to 30 days?`, 'Refresh All', async () => {
+    let ok = 0, fail = 0
+    for (const k of expiring) {
+      try {
+        await apiFetch(`/keys/${k.id}/expiry`, { method:'PATCH', body: JSON.stringify({ expires_in_days: 30 }) })
+        ok++
+      } catch { fail++ }
     }
-
-    buildCharts(logs)
-    document.getElementById('logs-tbody').innerHTML = logsRows(logs)
-  } catch(e) {
-    document.getElementById('logs-tbody').innerHTML = `<tr><td colspan="5" class="empty" style="color:var(--red);">Failed to load logs</td></tr>`
-    buildCharts([])
-  }
+    toast(`Refreshed ${ok} key(s)${fail ? `, ${fail} failed` : ''}`, fail ? 'error' : 'success')
+    await loadKeys()
+  })
 }
 
-// ── drawer ─────────────────────────────────────────────────────────────────
+async function bulkDeleteRevoked() {
+  const revoked = allKeys.filter(k => !k.is_active)
+  if (!revoked.length) { toast('No revoked keys to delete', 'info'); return }
+  confirmAction('Delete Revoked', `Permanently delete ${revoked.length} revoked key(s)? This cannot be undone.`, '🗑 Delete All', async () => {
+    let ok = 0, fail = 0
+    for (const k of revoked) {
+      try { await apiFetch(`/keys/${k.id}`, { method:'DELETE' }); ok++ }
+      catch { fail++ }
+    }
+    toast(`Deleted ${ok} revoked key(s)${fail ? `, ${fail} failed` : ''}`, fail ? 'error' : 'success')
+    await loadKeys()
+  })
+}
 
-function openDrawer(keyId, keyName, keyValue, totalRequests, expiresAt, daysLeft) {
-  activeDrawerKeyId = keyId
-  document.getElementById('drawer-title').textContent = keyName
-  document.getElementById('drawer-sub').textContent   = maskKey(keyValue)
-  document.getElementById('drawer-total').textContent = totalRequests.toLocaleString()
+/* ── Drawer ─────────────────────────────────────────────────────────────────── */
+async function openDrawer(id) {
+  const k = allKeys.find(k => k.id === id)
+  if (!k) return
+  activeDrawerKey = k
+
+  document.getElementById('drawer-title').textContent = k.name
+  document.getElementById('drawer-sub').textContent   = maskKey(k.key)
+  document.getElementById('drawer-total').textContent = (k.requests || 0).toLocaleString()
   document.getElementById('drawer-latency').textContent = '—'
   document.getElementById('drawer-keys').textContent    = '—'
   document.getElementById('drawer-tbody').innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
 
-  // expiry info
-  const expiry = expiresAt ? new Date(expiresAt) : null
-  document.getElementById('drawer-expires-at').textContent = expiry ? expiry.toLocaleDateString('en',{year:'numeric',month:'long',day:'numeric'}) : 'No expiry set'
-  const color = expiryColor(daysLeft)
-  const pct   = expiryPct(daysLeft)
-  document.getElementById('drawer-expiry-fill').style.width = pct + '%'
+  // Expiry
+  const expiry = k.expires_at ? parseDate(k.expires_at) : null
+  document.getElementById('drawer-expires-at').textContent = expiry
+    ? expiry.toLocaleDateString('en',{year:'numeric',month:'long',day:'numeric'})
+    : 'No expiry set'
+  const color = expiryColor(k.days_left)
+  const pct   = expiryPct(k)
+  document.getElementById('drawer-expiry-fill').style.width      = pct + '%'
   document.getElementById('drawer-expiry-fill').style.background = color
-  document.getElementById('drawer-days-left').textContent = daysLeft !== null ? `${daysLeft} days remaining` : '—'
+  document.getElementById('drawer-days-left').textContent = k.days_left !== null ? `${k.days_left} days remaining` : '—'
   document.getElementById('drawer-days-left').style.color = color
+
+  // Custom schema
+  const hasSchema = !!k.custom_schema
+  document.getElementById('drawer-schema-status').textContent = hasSchema
+    ? `Custom schema saved — ${Object.keys(JSON.parse(k.custom_schema || '{}')).length} keys`
+    : 'Using built-in schema'
+  document.getElementById('drawer-view-schema-btn').style.display = hasSchema ? '' : 'none'
+  document.getElementById('drawer-del-schema-btn').style.display  = hasSchema ? '' : 'none'
+
+  // Action buttons
+  document.getElementById('drawer-revoke-btn').style.display = k.is_active ? '' : 'none'
+  document.getElementById('drawer-delete-btn').style.display = ''
 
   document.getElementById('drawer-overlay').classList.add('open')
   document.getElementById('drawer').classList.add('open')
   document.body.style.overflow = 'hidden'
 
-  apiFetch(`/logs?key_id=${keyId}&limit=100`).then(data => {
+  // Load logs for this key
+  apiFetch(`/logs?key_id=${id}&limit=100`).then(data => {
     const logs = data.logs || []
     if (logs.length > 0) {
       document.getElementById('drawer-latency').textContent = Math.round(logs.reduce((s,l) => s+(l.latency_ms||0),0)/logs.length) + 'ms'
@@ -805,79 +1044,193 @@ function closeDrawer() {
   document.getElementById('drawer-overlay').classList.remove('open')
   document.getElementById('drawer').classList.remove('open')
   document.body.style.overflow = ''
-  activeDrawerKeyId = null
+  activeDrawerKey = null
 }
 
+// Fixed: now calls PATCH /keys/:id/expiry
 async function refreshKeyExpiry() {
-  if (!activeDrawerKeyId) return
+  if (!activeDrawerKey) return
   const days = parseInt(document.getElementById('drawer-refresh-days').value) || 30
   try {
-    const data = await apiFetch(`/keys/${activeDrawerKeyId}/refresh`, {
-      method: 'POST',
-      body: JSON.stringify({ expires_in_days: days })
-    })
+    await apiFetch(`/keys/${activeDrawerKey.id}/expiry`, { method:'PATCH', body: JSON.stringify({ expires_in_days: days }) })
     toast(`Expiry extended by ${days} days`)
     await loadKeys()
-    closeDrawer()
-  } catch(e) { toast('Failed to refresh expiry', 'error') }
+    // Refresh drawer data
+    const updated = allKeys.find(k => k.id === activeDrawerKey.id)
+    if (updated) openDrawer(updated.id)
+    else closeDrawer()
+  } catch (e) { toast('Failed to refresh expiry', 'error') }
 }
 
-// ── charts ─────────────────────────────────────────────────────────────────
+function drawerRevokeKey() {
+  if (!activeDrawerKey) return
+  revokeKey(activeDrawerKey.id, activeDrawerKey.name)
+}
 
+function drawerDeleteKey() {
+  if (!activeDrawerKey) return
+  deleteKey(activeDrawerKey.id, activeDrawerKey.name)
+}
+
+function viewKeySchema() {
+  if (!activeDrawerKey?.custom_schema) return
+  try {
+    const schema = JSON.parse(activeDrawerKey.custom_schema)
+    document.getElementById('csm-key-name').textContent = activeDrawerKey.name
+    document.getElementById('csm-count').textContent = `${Object.keys(schema).length} keys saved`
+    document.getElementById('csm-list').innerHTML = Object.entries(schema).map(([k, v]) =>
+      `<div class="schema-kv-row">
+        <div class="schema-kv-key">${escHtml(k)}</div>
+        <div class="schema-kv-val">${escHtml(v)}</div>
+      </div>`).join('')
+    document.getElementById('custom-schema-modal').classList.add('open')
+  } catch { toast('Failed to parse custom schema', 'error') }
+}
+
+async function openCustomSchemaBadge(id, name) {
+  const k = allKeys.find(k => k.id === id)
+  if (!k?.custom_schema) return
+  activeDrawerKey = k
+  viewKeySchema()
+}
+
+async function deleteKeySchema() {
+  if (!activeDrawerKey) return
+  confirmAction('Delete Custom Schema', `Remove the custom schema for "${activeDrawerKey.name}"? Extractions will revert to the built-in schema.`, 'Delete Schema', async () => {
+    try {
+      await apiFetch(`/key/schema`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${activeDrawerKey.key}` }
+      })
+      toast('Custom schema deleted')
+      await loadKeys()
+      // Refresh drawer
+      const updated = allKeys.find(k => k.id === activeDrawerKey.id)
+      if (updated) openDrawer(updated.id)
+    } catch (e) { toast('Failed to delete schema — admin cannot impersonate user keys directly', 'error') }
+  })
+}
+
+/* ── Logs ───────────────────────────────────────────────────────────────────── */
+async function loadLogs() {
+  document.getElementById('logs-tbody').innerHTML = '<tr><td colspan="6" class="empty"><span class="loading"></span></td></tr>'
+  const limit = document.getElementById('log-limit')?.value || 200
+  try {
+    const data = await apiFetch(`/logs?limit=${limit}`)
+    allLogs = data.logs || []
+    document.getElementById('logs-count').textContent = allLogs.length
+
+    // Stats — use the same logs for both latency and success rate
+    if (allLogs.length > 0) {
+      const successLogs = allLogs.filter(l => l.status === 200)
+      document.getElementById('stat-latency').textContent  = Math.round(allLogs.reduce((s,l) => s+(l.latency_ms||0),0)/allLogs.length) + 'ms'
+      document.getElementById('stat-success').textContent  = Math.round((successLogs.length / allLogs.length) * 100) + '%'
+    }
+
+    buildCharts(allLogs)
+    applyLogFilter()
+  } catch (e) {
+    document.getElementById('logs-tbody').innerHTML = `<tr><td colspan="6" class="empty" style="color:var(--red);">Failed to load logs</td></tr>`
+    buildCharts([])
+  }
+}
+
+function applyLogFilter() {
+  const keyId  = document.getElementById('log-filter-key')?.value || ''
+  const status = document.getElementById('log-filter-status')?.value || ''
+
+  let filtered = allLogs
+  if (keyId)  filtered = filtered.filter(l => l.api_key_id === keyId)
+  if (status) filtered = filtered.filter(l => String(l.status) === status)
+
+  document.getElementById('logs-count').textContent = filtered.length
+
+  if (!filtered.length) {
+    document.getElementById('logs-tbody').innerHTML = '<tr><td colspan="6" class="empty">No logs match the current filter</td></tr>'
+    return
+  }
+
+  // Build key name lookup
+  const keyMap = {}
+  allKeys.forEach(k => { keyMap[k.id] = k.name })
+
+  document.getElementById('logs-tbody').innerHTML = filtered.map(l => `
+    <tr>
+      <td><span class="log-query" title="${escHtml(l.query)}">${escHtml(l.query)}</span></td>
+      <td><span class="cell-mono" style="color:var(--blue);">${escHtml(keyMap[l.api_key_id] || l.api_key_id || '—')}</span></td>
+      <td><span class="log-keys">${l.keys_found ?? '—'}</span></td>
+      <td><span class="log-latency">${l.latency_ms ? l.latency_ms + 'ms' : '—'}</span></td>
+      <td><span class="${l.status === 200 ? 'log-ok' : 'log-err'}">${l.status}</span></td>
+      <td><span class="log-date">${timeAgo(l.created_at)}</span></td>
+    </tr>`).join('')
+}
+
+/* ── Charts ─────────────────────────────────────────────────────────────────── */
 function buildCharts(logs) {
   const days = [], counts = []
   for (let i = 13; i >= 0; i--) {
-    const d = new Date(); d.setDate(d.getDate()-i)
-    days.push(d.toLocaleDateString('en',{month:'short',day:'numeric'}))
-    counts.push(logs.filter(l => l.created_at && l.created_at.startsWith(d.toISOString().slice(0,10))).length)
+    const d = new Date()
+    d.setDate(d.getDate() - i)
+    const dayStr = d.toISOString().slice(0, 10) // YYYY-MM-DD
+    days.push(d.toLocaleDateString('en', {month:'short', day:'numeric'}))
+    // Fix: normalize SQLite "YYYY-MM-DD HH:MM:SS" format before comparing
+    counts.push(logs.filter(l => {
+      if (!l.created_at) return false
+      const normalized = l.created_at.includes('T') ? l.created_at : l.created_at.replace(' ', 'T')
+      return normalized.startsWith(dayStr)
+    }).length)
   }
+
   const buckets = {'<500ms':0,'500ms-1s':0,'1s-2s':0,'2s-3s':0,'>3s':0}
   logs.forEach(l => {
-    const ms = l.latency_ms||0
-    if      (ms<500)  buckets['<500ms']++
-    else if (ms<1000) buckets['500ms-1s']++
-    else if (ms<2000) buckets['1s-2s']++
-    else if (ms<3000) buckets['2s-3s']++
-    else              buckets['>3s']++
+    const ms = l.latency_ms || 0
+    if      (ms < 500)  buckets['<500ms']++
+    else if (ms < 1000) buckets['500ms-1s']++
+    else if (ms < 2000) buckets['1s-2s']++
+    else if (ms < 3000) buckets['2s-3s']++
+    else                buckets['>3s']++
   })
-  const grid = '#1e2535', tick = {family:'JetBrains Mono',size:10}
+
+  const grid = '#1e2535'
+  const tick = {family:'JetBrains Mono', size:10}
+
   if (requestsChart) requestsChart.destroy()
-  requestsChart = new Chart(document.getElementById('requests-chart'),{
-    type:'bar',
-    data:{labels:days,datasets:[{data:counts,backgroundColor:'rgba(0,255,136,.15)',borderColor:'#00ff88',borderWidth:1,borderRadius:3}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:grid},ticks:{color:'#64748b',font:tick}},y:{grid:{color:grid},ticks:{color:'#64748b',font:tick}}}}
+  requestsChart = new Chart(document.getElementById('requests-chart'), {
+    type: 'bar',
+    data: { labels:days, datasets:[{data:counts,backgroundColor:'rgba(0,255,136,.15)',borderColor:'#00ff88',borderWidth:1,borderRadius:3}] },
+    options: {responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:grid},ticks:{color:'#64748b',font:tick}},y:{grid:{color:grid},ticks:{color:'#64748b',font:tick}}}}
   })
+
   if (latencyChart) latencyChart.destroy()
-  latencyChart = new Chart(document.getElementById('latency-chart'),{
-    type:'doughnut',
-    data:{labels:Object.keys(buckets),datasets:[{data:Object.values(buckets),backgroundColor:['#00ff88','#4d9fff','#ffd166','#ff9f40','#ff4d6a'],borderColor:'#161b27',borderWidth:2}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:'#64748b',font:{family:'JetBrains Mono',size:10},padding:10}}}}
+  latencyChart = new Chart(document.getElementById('latency-chart'), {
+    type: 'doughnut',
+    data: { labels:Object.keys(buckets), datasets:[{data:Object.values(buckets),backgroundColor:['#00ff88','#4d9fff','#ffd166','#ff9f40','#ff4d6a'],borderColor:'#161b27',borderWidth:2}] },
+    options: {responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:'#64748b',font:{family:'JetBrains Mono',size:10},padding:10}}}}
   })
 }
 
-// ── event listeners ────────────────────────────────────────────────────────
-
-// ── models ─────────────────────────────────────────────────────────────────
-
+/* ── Models ─────────────────────────────────────────────────────────────────── */
 async function loadModels() {
   const tbody = document.getElementById('models-tbody')
   if (!tbody) return
-  tbody.innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
+  tbody.innerHTML = '<tr><td colspan="7" class="empty"><span class="loading"></span></td></tr>'
 
   try {
     const data   = await apiFetch('/models')
     const models = data.models || []
-
     document.getElementById('models-count').textContent = models.length
 
     const active = models.find(m => m.is_active)
     if (active) {
       document.getElementById('active-model-name').textContent = active.name
       document.getElementById('active-model-id').textContent   = active.model_id
+      const modeEl = document.getElementById('active-model-mode')
+      modeEl.textContent = active.prompt_mode === 'compact' ? 'Compact Prompt' : 'Full Prompt'
+      modeEl.className   = `badge ${active.prompt_mode === 'compact' ? 'badge-compact' : 'badge-full'}`
     }
 
     if (!models.length) {
-      tbody.innerHTML = '<tr><td colspan="5" class="empty">No models found</td></tr>'
+      tbody.innerHTML = '<tr><td colspan="7" class="empty">No models found</td></tr>'
       return
     }
 
@@ -886,92 +1239,174 @@ async function loadModels() {
         <td><span class="cell-name">${escHtml(m.name)}</span></td>
         <td><span class="cell-mono" style="color:var(--blue);">${escHtml(m.model_id)}</span></td>
         <td>
-          ${m.is_active
-            ? `<span class="badge badge-active">● Active</span>`
-            : `<span class="badge" style="background:var(--bg3);color:var(--muted);border:1px solid var(--border);">Inactive</span>`
-          }
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span class="cell-mono" style="color:${m.token_limit ? 'var(--yellow)' : 'var(--muted)'};">
+              ${m.token_limit ? m.token_limit.toLocaleString() : 'unset'}
+            </span>
+            <button class="btn btn-ghost btn-xs" onclick="openTokenLimitModal('${m.id}','${escHtml(m.name)}',${m.token_limit || 0})">Edit</button>
+          </div>
+        </td>
+        <td><span class="badge ${m.prompt_mode === 'compact' ? 'badge-compact' : 'badge-full'}">${m.prompt_mode === 'compact' ? 'Compact' : 'Full'}</span></td>
+        <td>${m.is_active
+          ? `<span class="badge badge-active">● Active</span>`
+          : `<span class="badge" style="background:var(--bg3);color:var(--muted);border:1px solid var(--border);">Inactive</span>`}
         </td>
         <td><span class="log-date">${timeAgo(m.created_at)}</span></td>
         <td><div class="cell-actions">
           ${!m.is_active
-            ? `<button class="btn btn-view" onclick="activateModel('${m.id}','${escHtml(m.name)}')">Set Active</button>`
-            : `<span class="cell-mono" style="color:var(--accent);">✓ Default</span>`
-          }
-          <button class="btn btn-danger btn-sm" onclick="deleteModel('${m.id}','${escHtml(m.name)}','${escHtml(m.model_id)}')">Remove</button>
+            ? `<button class="btn btn-green btn-xs" onclick="activateModel('${m.id}','${escHtml(m.name)}')">Set Active</button>`
+            : `<span class="cell-mono" style="color:var(--accent);font-size:10px;">✓ Active</span>`}
+          <button class="btn btn-danger btn-xs" onclick="deleteModel('${m.id}','${escHtml(m.name)}','${escHtml(m.model_id)}')">🗑</button>
         </div></td>
-      </tr>
-    `).join('')
-
-  } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="5" class="empty" style="color:var(--red);">Failed to load models</td></tr>`
+      </tr>`).join('')
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="7" class="empty" style="color:var(--red);">Failed to load models</td></tr>`
   }
 }
 
+function fillModelId(modelId, name, tokenLimit) {
+  document.getElementById('model-id-input').value          = modelId
+  document.getElementById('model-name-input').value        = name
+  document.getElementById('model-token-limit-input').value = tokenLimit || ''
+}
+
 async function addModel() {
-  const nameInput    = document.getElementById('model-name-input')
-  const modelIdInput = document.getElementById('model-id-input')
-  const name         = nameInput.value.trim()
-  const model_id     = modelIdInput.value.trim()
+  const nameInput  = document.getElementById('model-name-input')
+  const idInput    = document.getElementById('model-id-input')
+  const limitInput = document.getElementById('model-token-limit-input')
+  const name       = nameInput.value.trim()
+  const model_id   = idInput.value.trim()
+  const token_limit = limitInput.value ? parseInt(limitInput.value) : undefined
 
   if (!name)     { toast('Enter a display name', 'error'); nameInput.focus(); return }
-  if (!model_id) { toast('Enter a model ID', 'error'); modelIdInput.focus(); return }
+  if (!model_id) { toast('Enter a model ID',     'error'); idInput.focus();   return }
 
   try {
-    const data = await apiFetch('/models', {
-      method: 'POST',
-      body:   JSON.stringify({ name, model_id })
-    })
-    nameInput.value    = ''
-    modelIdInput.value = ''
+    await apiFetch('/models', { method:'POST', body: JSON.stringify({ name, model_id, token_limit }) })
+    nameInput.value = ''; idInput.value = ''; limitInput.value = ''
     toast(`Model "${name}" added`)
     await loadModels()
-  } catch(e) { toast('Failed to add model — may already exist', 'error') }
+  } catch (e) { toast('Failed to add model: ' + (e.message || 'may already exist'), 'error') }
 }
 
 async function activateModel(id, name) {
   try {
-    await apiFetch(`/models/${id}/activate`, { method: 'POST', body: '{}' })
+    await apiFetch(`/models/${id}/activate`, { method:'POST', body:'{}' })
     toast(`Switched to "${name}"`)
     await loadModels()
-  } catch(e) { toast('Failed to activate model', 'error') }
+  } catch (e) { toast('Failed to activate model', 'error') }
 }
 
 async function deleteModel(id, name, modelId) {
-  if (modelId === 'llama-3.1-8b-instant') {
-    toast('Cannot delete the default model', 'error'); return
-  }
-  if (!confirm(`Remove model "${name}"?`)) return
-  try {
-    await apiFetch(`/models/${id}`, { method: 'DELETE' })
-    toast(`Model "${name}" removed`)
-    await loadModels()
-  } catch(e) { toast('Failed to remove model', 'error') }
-}
-
-function fillModelId(modelId, name) {
-  document.getElementById('model-id-input').value  = modelId
-  document.getElementById('model-name-input').value = name
-}
-
-document.getElementById('model-id-input') &&
-  document.getElementById('model-id-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') addModel()
+  if (modelId === 'llama-3.1-8b-instant') { toast('Cannot delete the default model', 'error'); return }
+  confirmAction('Delete Model', `Remove model "${name}"? If it is active, the system will fall back to the default.`, '🗑 Delete', async () => {
+    try {
+      await apiFetch(`/models/${id}`, { method:'DELETE' })
+      toast(`Model "${name}" removed`)
+      await loadModels()
+    } catch (e) { toast('Failed to remove model', 'error') }
   })
+}
 
-document.getElementById('admin-secret').addEventListener('keydown', e => { if(e.key==='Enter') loadAll() })
-document.getElementById('new-key-name').addEventListener('keydown', e => { if(e.key==='Enter') createKey() })
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeDrawer() })
+/* ── Token limit modal ──────────────────────────────────────────────────────── */
+function openTokenLimitModal(id, name, currentLimit) {
+  tlmModelId = id
+  document.getElementById('tlm-model-name').textContent = name
+  document.getElementById('tlm-value').value = currentLimit || ''
+  document.getElementById('token-limit-modal').classList.add('open')
+}
 
-// close sidebar when clicking outside on mobile
+async function saveTokenLimit() {
+  if (!tlmModelId) return
+  const raw = document.getElementById('tlm-value').value.trim()
+  const token_limit = raw === '' || raw === '0' ? null : parseInt(raw)
+  try {
+    await apiFetch(`/models/${tlmModelId}/token-limit`, { method:'PATCH', body: JSON.stringify({ token_limit }) })
+    toast('Token limit updated')
+    document.getElementById('token-limit-modal').classList.remove('open')
+    tlmModelId = null
+    await loadModels()
+  } catch (e) { toast('Failed to update token limit: ' + (e.message || ''), 'error') }
+}
+
+/* ── Schema browser ─────────────────────────────────────────────────────────── */
+async function loadSchema() {
+  document.getElementById('schema-grid').innerHTML = '<div class="empty"><span class="loading"></span></div>'
+  try {
+    const data = await apiFetch('/schema')
+    allSchemaData = data.schema || {}
+    document.getElementById('schema-total').textContent = data.total_keys
+    renderSchemaGrid(allSchemaData)
+  } catch (e) {
+    document.getElementById('schema-grid').innerHTML = `<div class="empty" style="color:var(--red);">Failed to load schema — connect first</div>`
+  }
+}
+
+function renderSchemaGrid(schemaObj) {
+  if (!Object.keys(schemaObj).length) {
+    document.getElementById('schema-grid').innerHTML = '<div class="empty">No schema data</div>'
+    return
+  }
+  document.getElementById('schema-grid').innerHTML = Object.entries(schemaObj).map(([cat, keys]) => `
+    <div class="schema-category">
+      <div class="schema-cat-header">
+        <span class="schema-cat-name">${cat.replace(/_/g,' ')}</span>
+        <span class="schema-cat-count">${Object.keys(keys).length} keys</span>
+      </div>
+      ${Object.entries(keys).map(([k, desc]) => `
+        <div class="schema-key-row" onclick="openSchemaKeyModal('${escHtml(k)}','${escHtml(desc.slice(0,200))}')" style="cursor:pointer;" title="Click to expand">
+          <div class="schema-key-name">${escHtml(k)}</div>
+          <div class="schema-key-desc">${escHtml(desc.slice(0, 80))}${desc.length > 80 ? '…' : ''}</div>
+        </div>`).join('')}
+    </div>`).join('')
+}
+
+function filterSchema(q) {
+  if (!q.trim()) { renderSchemaGrid(allSchemaData); return }
+  const lower = q.toLowerCase()
+  const filtered = {}
+  Object.entries(allSchemaData).forEach(([cat, keys]) => {
+    const matched = {}
+    Object.entries(keys).forEach(([k, v]) => {
+      if (k.toLowerCase().includes(lower) || v.toLowerCase().includes(lower)) matched[k] = v
+    })
+    if (Object.keys(matched).length) filtered[cat] = matched
+  })
+  renderSchemaGrid(filtered)
+}
+
+function openSchemaKeyModal(key, desc) {
+  document.getElementById('skm-key').textContent  = key
+  document.getElementById('skm-desc').textContent = desc
+  document.getElementById('schema-key-modal').classList.add('open')
+}
+function closeSchemaKeyModal() {
+  document.getElementById('schema-key-modal').classList.remove('open')
+}
+
+/* ── Event listeners ────────────────────────────────────────────────────────── */
+document.getElementById('admin-secret').addEventListener('keydown', e => { if (e.key === 'Enter') loadAll() })
+document.getElementById('new-key-name').addEventListener('keydown', e => { if (e.key === 'Enter') createKey() })
+document.getElementById('model-id-input').addEventListener('keydown', e => { if (e.key === 'Enter') addModel() })
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeDrawer()
+    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'))
+  }
+})
+
+// Close sidebar on outside tap (mobile)
 document.addEventListener('click', e => {
-  const sidebar = document.getElementById('sidebar')
+  const sidebar   = document.getElementById('sidebar')
   const hamburger = document.querySelector('.hamburger')
-  if (window.innerWidth <= 768 && sidebar.classList.contains('open') && !sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+  if (window.innerWidth <= 768 && sidebar.classList.contains('open')
+      && !sidebar.contains(e.target) && !hamburger.contains(e.target)) {
     closeSidebar()
   }
 })
 
-// mobile status dot visibility
+// Mobile status dot visibility
 function updateMobileDot() {
   const isMobile = window.innerWidth <= 768
   document.getElementById('status-dot').parentElement.style.display = isMobile ? 'none' : 'flex'
@@ -979,12 +1414,6 @@ function updateMobileDot() {
 }
 window.addEventListener('resize', updateMobileDot)
 updateMobileDot()
-
-// auto refresh
-// setInterval(() => {
-//   const { url, secret } = getConfig()
-//   if (url && secret) loadAll()
-// }, 30000)
 </script>
 </body>
 </html>
