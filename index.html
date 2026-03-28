@@ -264,6 +264,30 @@ select.form-input option { background:var(--bg3); }
   .stat-value { font-size:20px; }
   .connect-bar { gap:6px; }
 }
+
+/* ── Analytics ──────────────────────────────────────────────────────────────── */
+.analytics-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+.mini-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.mini-bar-label { font-family:var(--font-mono); font-size:11px; color:var(--text); width:160px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex-shrink:0; }
+.mini-bar-track { flex:1; height:6px; background:var(--bg3); border-radius:3px; overflow:hidden; }
+.mini-bar-fill  { height:100%; border-radius:3px; background:var(--accent); transition:width .4s; }
+.mini-bar-count { font-family:var(--font-mono); font-size:10px; color:var(--muted); width:36px; text-align:right; flex-shrink:0; }
+.cache-hit-ring { position:relative; width:90px; height:90px; flex-shrink:0; }
+.cache-ring-svg { transform:rotate(-90deg); }
+.cache-ring-bg  { fill:none; stroke:var(--bg3); stroke-width:8; }
+.cache-ring-fg  { fill:none; stroke:var(--accent); stroke-width:8; stroke-linecap:round; transition:stroke-dashoffset .6s; }
+.cache-ring-label { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.cache-ring-pct { font-family:var(--font-mono); font-size:18px; font-weight:700; color:var(--accent); line-height:1; }
+.cache-ring-sub { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.06em; }
+.by-key-bar { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid rgba(37,45,64,.4); }
+.by-key-bar:last-child { border-bottom:none; }
+.by-key-name { font-size:12px; color:var(--text); width:140px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex-shrink:0; }
+.by-key-track { flex:1; height:8px; background:var(--bg3); border-radius:4px; overflow:hidden; }
+.by-key-fill  { height:100%; border-radius:4px; background:var(--blue); transition:width .4s; }
+.by-key-num   { font-family:var(--font-mono); font-size:11px; color:var(--blue); width:44px; text-align:right; flex-shrink:0; }
+.by-key-hit   { font-family:var(--font-mono); font-size:10px; color:var(--accent); width:36px; text-align:right; flex-shrink:0; }
+@media(max-width:768px) { .analytics-grid { grid-template-columns:1fr; } }
+
 </style>
 </head>
 <body>
@@ -316,9 +340,11 @@ select.form-input option { background:var(--bg3); }
     <div class="sidebar-label">System</div>
     <button class="sidebar-link" onclick="showPage('models',this)"><span class="sidebar-icon">🤖</span> Models</button>
     <button class="sidebar-link" onclick="showPage('schema',this)"><span class="sidebar-icon">📐</span> Schema Browser</button>
+    <button class="sidebar-link" onclick="showPage('playground',this)"><span class="sidebar-icon">🧪</span> Playground</button>
+    <button class="sidebar-link" onclick="showPage('analytics',this)"><span class="sidebar-icon">📈</span> Analytics</button>
   </div>
   <div class="sidebar-bottom">
-    <div class="sidebar-version">Searchology Admin v2.0</div>
+    <div class="sidebar-version">Searchology Admin v3.0</div>
   </div>
 </aside>
 
@@ -331,15 +357,16 @@ select.form-input option { background:var(--bg3); }
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-label">Total Requests</div><div class="stat-value blue" id="stat-total">—</div><div class="stat-sub">all time</div></div>
     <div class="stat-card"><div class="stat-label">Active Keys</div><div class="stat-value green" id="stat-active">—</div><div class="stat-sub">of <span id="stat-total-keys">—</span> total</div></div>
-    <div class="stat-card"><div class="stat-label">Avg Latency</div><div class="stat-value yellow" id="stat-latency">—</div><div class="stat-sub">last 200 requests</div></div>
-    <div class="stat-card"><div class="stat-label">Success Rate</div><div class="stat-value green" id="stat-success">—</div><div class="stat-sub">last 200 requests</div></div>
+    <div class="stat-card"><div class="stat-label">Avg Latency</div><div class="stat-value yellow" id="stat-latency">—</div><div class="stat-sub">server analytics</div></div>
+    <div class="stat-card"><div class="stat-label">Cache Hit Rate</div><div class="stat-value purple" id="stat-cache-rate">—</div><div class="stat-sub">all time</div></div>
+    <div class="stat-card"><div class="stat-label">Success Rate</div><div class="stat-value green" id="stat-success">—</div><div class="stat-sub">all time</div></div>
     <div class="stat-card"><div class="stat-label">Expiring Soon</div><div class="stat-value red" id="stat-expiring">—</div><div class="stat-sub">within 7 days</div></div>
   </div>
   <div class="charts-grid">
     <div class="card" style="margin-bottom:0;">
       <div class="card-header">
         <span class="card-title">Requests Over Time</span>
-        <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">last 14 days · last 200 logs</span>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">last 14 days · server analytics</span>
       </div>
       <div class="card-body"><div class="chart-wrap"><canvas id="requests-chart"></canvas></div></div>
     </div>
@@ -360,6 +387,7 @@ select.form-input option { background:var(--bg3); }
         <div class="form-row">
           <input class="form-input input-w-md" id="new-key-name" placeholder="client name...">
           <input class="form-input input-w-sm" id="new-key-days" type="number" placeholder="days" value="30" min="1" max="365">
+          <input class="form-input" id="new-key-rpm" type="number" placeholder="RPM limit" value="60" min="1" max="10000" style="width:100px;" title="Rate limit (requests per minute)">
           <button class="btn btn-primary btn-sm" onclick="createKey()">+ Create</button>
           <button class="btn btn-ghost btn-sm" onclick="loadKeys()">↻</button>
         </div>
@@ -376,8 +404,8 @@ select.form-input option { background:var(--bg3); }
     </div>
     <div class="table-wrap">
       <table class="data-table">
-        <thead><tr><th>Name</th><th>API Key</th><th>Requests</th><th>Expiry</th><th>Status</th><th>Schema</th><th>Actions</th></tr></thead>
-        <tbody id="keys-tbody"><tr><td colspan="7" class="empty">Connect to load keys</td></tr></tbody>
+        <thead><tr><th>Name</th><th>API Key</th><th>Requests</th><th>Expiry</th><th>Status</th><th>Schema</th><th>Rate Limit</th><th>Actions</th></tr></thead>
+        <tbody id="keys-tbody"><tr><td colspan="8" class="empty">Connect to load keys</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -390,6 +418,7 @@ select.form-input option { background:var(--bg3); }
     <div class="card-header">
       <div class="section-title">Recent Requests <span class="count-badge" id="logs-count">0</span></div>
       <div class="card-actions">
+        <button class="btn btn-danger btn-sm" onclick="clearLogs()">🗑 Clear All</button>
         <button class="btn btn-ghost btn-sm" onclick="loadLogs()">↻ Refresh</button>
       </div>
     </div>
@@ -505,6 +534,119 @@ select.form-input option { background:var(--bg3); }
   <div class="schema-grid" id="schema-grid"><div class="empty">Connect to load schema</div></div>
 </div>
 
+<!-- ── QUERY PLAYGROUND PAGE ──────────────────────────────────────────────── -->
+<div class="page" id="page-playground">
+  <div class="page-title">🧪 Query Playground</div>
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-header">
+      <div class="section-title">Test Extraction</div>
+    </div>
+    <div class="card-body">
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;">Enter a natural language search query</div>
+      <div class="form-row" style="margin-bottom:12px;">
+        <input class="form-input" id="playground-query" placeholder='e.g. "red nike running shoes size 10 under $80"' style="flex:1;min-width:200px;">
+        <select class="form-input" id="playground-key" style="width:180px;font-size:11px;">
+          <option value="">Select API Key...</option>
+        </select>
+        <button class="btn btn-primary btn-sm" onclick="runPlayground()" id="playground-run-btn">▶ Extract</button>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:4px;">Tip: Select an API key that has a custom schema to test with custom schemas using the checkbox below.</div>
+      <label style="display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;color:var(--muted);cursor:pointer;">
+        <input type="checkbox" id="playground-custom-schema" style="accent-color:var(--accent);">
+        Use custom schema (if saved on key)
+      </label>
+    </div>
+  </div>
+  <div class="card" id="playground-result-card" style="display:none;">
+    <div class="card-header">
+      <div class="section-title">Result</div>
+      <div class="card-actions">
+        <span class="cell-mono" id="playground-latency" style="color:var(--yellow);"></span>
+        <span class="cell-mono" id="playground-keys-found" style="color:var(--accent);"></span>
+        <span class="badge" id="playground-schema-used"></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <pre id="playground-json" style="font-family:var(--font-mono);font-size:12px;color:var(--text);background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:0;white-space:pre-wrap;max-height:500px;overflow-y:auto;"></pre>
+      <div id="playground-suggestions" style="display:none;margin-top:12px;">
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Suggested queries</div>
+        <div id="playground-suggestions-list" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" id="playground-error-card" style="display:none;">
+    <div class="card-body" style="color:var(--red);font-family:var(--font-mono);font-size:12px;" id="playground-error"></div>
+  </div>
+</div>
+
+<!-- ── ANALYTICS PAGE ────────────────────────────────────────────────────── -->
+<div class="page" id="page-analytics">
+  <div class="page-title">📈 Analytics</div>
+
+  <!-- Summary cards -->
+  <div class="stats-grid" style="margin-bottom:20px;">
+    <div class="stat-card"><div class="stat-label">Total Requests</div><div class="stat-value blue" id="an-total">—</div><div class="stat-sub">all time</div></div>
+    <div class="stat-card"><div class="stat-label">Successful</div><div class="stat-value green" id="an-success">—</div><div class="stat-sub">status 200</div></div>
+    <div class="stat-card"><div class="stat-label">Failed</div><div class="stat-value red" id="an-failed">—</div><div class="stat-sub">non-200</div></div>
+    <div class="stat-card"><div class="stat-label">Cache Hits</div><div class="stat-value purple" id="an-cache-hits">—</div><div class="stat-sub">all time</div></div>
+    <div class="stat-card"><div class="stat-label">Avg Latency</div><div class="stat-value yellow" id="an-latency">—</div><div class="stat-sub">live requests only</div></div>
+  </div>
+
+  <div class="analytics-grid">
+    <!-- Cache hit rate ring -->
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-header">
+        <span class="card-title">Cache Performance</span>
+        <div class="card-actions">
+          <button class="btn btn-danger btn-sm" onclick="clearCache()">🗑 Clear Cache</button>
+        </div>
+      </div>
+      <div class="card-body" style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+        <div class="cache-hit-ring">
+          <svg class="cache-ring-svg" width="90" height="90" viewBox="0 0 90 90">
+            <circle class="cache-ring-bg" cx="45" cy="45" r="36"/>
+            <circle class="cache-ring-fg" id="cache-ring-circle" cx="45" cy="45" r="36"
+              stroke-dasharray="226" stroke-dashoffset="226"/>
+          </svg>
+          <div class="cache-ring-label">
+            <span class="cache-ring-pct" id="cache-ring-pct">0%</span>
+            <span class="cache-ring-sub">HIT RATE</span>
+          </div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Cache table</div>
+          <div style="display:flex;gap:20px;flex-wrap:wrap;">
+            <div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;">Active Entries</div><div style="font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--accent);" id="an-cache-entries">—</div></div>
+            <div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;">Total Hits</div><div style="font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--purple);" id="an-cache-total-hits">—</div></div>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-top:10px;">7-day TTL · only non-empty results cached · cleared on demand</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 14-day timeline chart -->
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-header"><span class="card-title">14-Day Timeline</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">server aggregated</span></div>
+      <div class="card-body"><div class="chart-wrap"><canvas id="analytics-timeline-chart"></canvas></div></div>
+    </div>
+  </div>
+
+  <div class="analytics-grid" style="margin-top:16px;">
+    <!-- Top queries -->
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-header"><span class="card-title">Top Queries</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">by frequency · successful only</span></div>
+      <div class="card-body" id="top-queries-body"><div class="empty">Load analytics to view</div></div>
+    </div>
+
+    <!-- Usage by key -->
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-header"><span class="card-title">Usage by Key</span></div>
+      <div class="card-body" id="by-key-body"><div class="empty">Load analytics to view</div></div>
+    </div>
+  </div>
+</div>
+
+
 </main>
 </div><!-- /.layout -->
 
@@ -534,6 +676,16 @@ select.form-input option { background:var(--bg3); }
       <input type="number" id="drawer-refresh-days" value="30" min="1" max="365" class="form-input" style="width:70px;">
       <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);">days</span>
       <button class="btn btn-orange btn-sm" onclick="refreshKeyExpiry()">↻ Extend Expiry</button>
+    </div>
+  </div>
+  <!-- Rate limit -->
+  <div class="drawer-section">
+    <div class="drawer-section-title">Rate Limit</div>
+    <div id="drawer-rpm-display" style="font-family:var(--font-mono);font-size:13px;color:var(--yellow);margin-bottom:10px;">— req/min</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <input type="number" id="drawer-rpm-input" value="60" min="1" max="10000" class="form-input" style="width:90px;">
+      <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);">req/min</span>
+      <button class="btn btn-blue btn-sm" onclick="updateDrawerRateLimit()">Save Limit</button>
     </div>
   </div>
   <!-- Custom schema -->
@@ -630,6 +782,7 @@ let activeDrawerKey = null   // full key object
 let autoRefreshTimer = null
 let confirmCallback  = null
 let tlmModelId       = null   // for token limit modal
+let analyticsTimelineChart = null
 
 /* ── Config ─────────────────────────────────────────────────────────────────── */
 const getConfig = () => ({
@@ -788,7 +941,7 @@ function toggleAutoRefresh(on) {
 /* ── Load all ───────────────────────────────────────────────────────────────── */
 async function loadAll() {
   try {
-    await Promise.all([loadHealth(), loadKeys(), loadLogs(), loadModels()])
+    await Promise.all([loadHealth(), loadKeys(), loadLogs(), loadModels(), loadAnalytics()])
     document.getElementById('last-updated').textContent = 'updated ' + new Date().toLocaleTimeString()
   } catch (e) {
     setStatus(false)
@@ -810,7 +963,7 @@ async function loadHealth() {
 
 /* ── Keys ───────────────────────────────────────────────────────────────────── */
 async function loadKeys() {
-  document.getElementById('keys-tbody').innerHTML   = '<tr><td colspan="7" class="empty"><span class="loading"></span></td></tr>'
+  document.getElementById('keys-tbody').innerHTML   = '<tr><td colspan="8" class="empty"><span class="loading"></span></td></tr>'
   document.getElementById('expiry-tbody').innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
 
   try {
@@ -831,6 +984,15 @@ async function loadKeys() {
       allKeys.map(k => `<option value="${k.id}">${escHtml(k.name)}</option>`).join('')
     sel.value = cur
 
+    // populate playground key dropdown
+    const pgSel = document.getElementById('playground-key')
+    if (pgSel) {
+      const pgCur = pgSel.value
+      pgSel.innerHTML = '<option value="">Select API Key...</option>' +
+        allKeys.filter(k => k.is_active).map(k => `<option value="${escHtml(k.key)}">${escHtml(k.name)}</option>`).join('')
+      pgSel.value = pgCur
+    }
+
     renderKeysTable(allKeys)
     renderExpiryTable(allKeys)
   } catch (e) {
@@ -850,6 +1012,7 @@ function renderKeysTable(keys) {
     const schemaCell = k.custom_schema
       ? `<span class="badge badge-schema" onclick="openCustomSchemaBadge('${k.id}','${escHtml(k.name)}')" title="Custom schema saved — click to view">Schema ↗</span>`
       : `<span style="color:var(--muted);font-family:var(--font-mono);font-size:10px;">built-in</span>`
+    const rpmColor = (k.rate_limit_rpm || 60) > 60 ? 'var(--accent)' : (k.rate_limit_rpm < 60 ? 'var(--orange)' : 'var(--yellow)')
 
     return `<tr>
       <td><span class="cell-name">${escHtml(k.name)}</span></td>
@@ -866,6 +1029,7 @@ function renderKeysTable(keys) {
       </td>
       <td>${expiryBadge(k)}</td>
       <td>${schemaCell}</td>
+      <td><span style="font-family:var(--font-mono);font-size:12px;color:${rpmColor};">${k.rate_limit_rpm || 60}</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);"> rpm</span></td>
       <td><div class="cell-actions">
         <button class="btn btn-green btn-xs" onclick="openDrawer('${k.id}')">Details</button>
         ${k.is_active
@@ -909,11 +1073,13 @@ function renderExpiryTable(keys) {
 async function createKey() {
   const nameInput = document.getElementById('new-key-name')
   const daysInput = document.getElementById('new-key-days')
+  const rpmInput  = document.getElementById('new-key-rpm')
   const name = nameInput.value.trim()
   const days = parseInt(daysInput.value) || 30
+  const rpm  = parseInt(rpmInput?.value) || 60
   if (!name) { toast('Enter a client name first', 'error'); nameInput.focus(); return }
   try {
-    const data = await apiFetch('/keys', { method:'POST', body: JSON.stringify({ name, expires_in_days: days }) })
+    const data = await apiFetch('/keys', { method:'POST', body: JSON.stringify({ name, expires_in_days: days, rate_limit_rpm: rpm }) })
     nameInput.value = ''
     document.getElementById('new-key-value').textContent = data.key
     document.getElementById('new-key-box').classList.add('show')
@@ -934,10 +1100,10 @@ async function revokeKey(id, name) {
 }
 
 async function deleteKey(id, name) {
-  confirmAction('Delete Permanently', `Permanently delete the key for "${name}"? This cannot be undone — the key record will be removed entirely.`, '🗑 Delete', async () => {
+  confirmAction('Delete Permanently', `Permanently delete the key for "${name}"? This cannot be undone — the key record and all its logs will be removed entirely.`, '🗑 Delete', async () => {
     try {
-      await apiFetch(`/keys/${id}`, { method:'DELETE' })
-      toast(`Key for "${name}" deleted`)
+      await apiFetch(`/keys/${id}?permanent=true`, { method:'DELETE' })
+      toast(`Key for "${name}" permanently deleted`)
       document.getElementById('new-key-box').classList.remove('show')
       if (activeDrawerKey?.id === id) closeDrawer()
       await loadKeys()
@@ -978,7 +1144,7 @@ async function bulkDeleteRevoked() {
   confirmAction('Delete Revoked', `Permanently delete ${revoked.length} revoked key(s)? This cannot be undone.`, '🗑 Delete All', async () => {
     let ok = 0, fail = 0
     for (const k of revoked) {
-      try { await apiFetch(`/keys/${k.id}`, { method:'DELETE' }); ok++ }
+      try { await apiFetch(`/keys/${k.id}?permanent=true`, { method:'DELETE' }); ok++ }
       catch { fail++ }
     }
     toast(`Deleted ${ok} revoked key(s)${fail ? `, ${fail} failed` : ''}`, fail ? 'error' : 'success')
@@ -998,6 +1164,11 @@ async function openDrawer(id) {
   document.getElementById('drawer-latency').textContent = '—'
   document.getElementById('drawer-keys').textContent    = '—'
   document.getElementById('drawer-tbody').innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
+
+  // Rate limit
+  const rpm = k.rate_limit_rpm || 60
+  document.getElementById('drawer-rpm-display').textContent = rpm + ' req/min'
+  document.getElementById('drawer-rpm-input').value = rpm
 
   // Expiry
   const expiry = k.expires_at ? parseDate(k.expires_at) : null
@@ -1098,16 +1269,14 @@ async function deleteKeySchema() {
   if (!activeDrawerKey) return
   confirmAction('Delete Custom Schema', `Remove the custom schema for "${activeDrawerKey.name}"? Extractions will revert to the built-in schema.`, 'Delete Schema', async () => {
     try {
-      await apiFetch(`/key/schema`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${activeDrawerKey.key}` }
-      })
+      await apiFetch(`/keys/${activeDrawerKey.id}/schema`, { method: 'DELETE' })
       toast('Custom schema deleted')
       await loadKeys()
       // Refresh drawer
       const updated = allKeys.find(k => k.id === activeDrawerKey.id)
       if (updated) openDrawer(updated.id)
-    } catch (e) { toast('Failed to delete schema — admin cannot impersonate user keys directly', 'error') }
+      else closeDrawer()
+    } catch (e) { toast('Failed to delete schema', 'error') }
   })
 }
 
@@ -1120,18 +1289,13 @@ async function loadLogs() {
     allLogs = data.logs || []
     document.getElementById('logs-count').textContent = allLogs.length
 
-    // Stats — use the same logs for both latency and success rate
-    if (allLogs.length > 0) {
-      const successLogs = allLogs.filter(l => l.status === 200)
-      document.getElementById('stat-latency').textContent  = Math.round(allLogs.reduce((s,l) => s+(l.latency_ms||0),0)/allLogs.length) + 'ms'
-      document.getElementById('stat-success').textContent  = Math.round((successLogs.length / allLogs.length) * 100) + '%'
-    }
+    // Stats are now driven by /analytics — loadLogs no longer overwrites them
 
-    buildCharts(allLogs)
+    buildCharts(allLogs, window._serverTimeline || null)
     applyLogFilter()
   } catch (e) {
     document.getElementById('logs-tbody').innerHTML = `<tr><td colspan="6" class="empty" style="color:var(--red);">Failed to load logs</td></tr>`
-    buildCharts([])
+    buildCharts([], null)
   }
 }
 
@@ -1166,19 +1330,34 @@ function applyLogFilter() {
 }
 
 /* ── Charts ─────────────────────────────────────────────────────────────────── */
-function buildCharts(logs) {
+// serverTimeline: array of { day, total } from GET /analytics — preferred over log scan.
+// Falls back to local log scan when analytics data is unavailable.
+function buildCharts(logs, serverTimeline) {
   const days = [], counts = []
-  for (let i = 13; i >= 0; i--) {
-    const d = new Date()
-    d.setDate(d.getDate() - i)
-    const dayStr = d.toISOString().slice(0, 10) // YYYY-MM-DD
-    days.push(d.toLocaleDateString('en', {month:'short', day:'numeric'}))
-    // Fix: normalize SQLite "YYYY-MM-DD HH:MM:SS" format before comparing
-    counts.push(logs.filter(l => {
-      if (!l.created_at) return false
-      const normalized = l.created_at.includes('T') ? l.created_at : l.created_at.replace(' ', 'T')
-      return normalized.startsWith(dayStr)
-    }).length)
+  if (serverTimeline && serverTimeline.length > 0) {
+    // Build a day→count map from server data for O(1) lookup
+    const dayMap = {}
+    serverTimeline.forEach(row => { dayMap[row.day] = row.total })
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date()
+      d.setDate(d.getDate() - i)
+      const dayStr = d.toISOString().slice(0, 10)
+      days.push(d.toLocaleDateString('en', {month:'short', day:'numeric'}))
+      counts.push(dayMap[dayStr] || 0)
+    }
+  } else {
+    // Fallback: scan local logs (limited to whatever was fetched)
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date()
+      d.setDate(d.getDate() - i)
+      const dayStr = d.toISOString().slice(0, 10)
+      days.push(d.toLocaleDateString('en', {month:'short', day:'numeric'}))
+      counts.push(logs.filter(l => {
+        if (!l.created_at) return false
+        const normalized = l.created_at.includes('T') ? l.created_at : l.created_at.replace(' ', 'T')
+        return normalized.startsWith(dayStr)
+      }).length)
+    }
   }
 
   const buckets = {'<500ms':0,'500ms-1s':0,'1s-2s':0,'2s-3s':0,'>3s':0}
@@ -1354,7 +1533,7 @@ function renderSchemaGrid(schemaObj) {
         <span class="schema-cat-count">${Object.keys(keys).length} keys</span>
       </div>
       ${Object.entries(keys).map(([k, desc]) => `
-        <div class="schema-key-row" onclick="openSchemaKeyModal('${escHtml(k)}','${escHtml(desc.slice(0,200))}')" style="cursor:pointer;" title="Click to expand">
+        <div class="schema-key-row" onclick="openSchemaKeyModal('${escHtml(k)}',allSchemaData)" style="cursor:pointer;" title="Click to expand">
           <div class="schema-key-name">${escHtml(k)}</div>
           <div class="schema-key-desc">${escHtml(desc.slice(0, 80))}${desc.length > 80 ? '…' : ''}</div>
         </div>`).join('')}
@@ -1375,19 +1554,235 @@ function filterSchema(q) {
   renderSchemaGrid(filtered)
 }
 
-function openSchemaKeyModal(key, desc) {
+function openSchemaKeyModal(key, schemaData) {
+  // Find the full description from schema data
+  let fullDesc = key
+  if (schemaData && typeof schemaData === 'object') {
+    for (const [cat, keys] of Object.entries(schemaData)) {
+      if (keys[key]) { fullDesc = keys[key]; break }
+    }
+  } else if (typeof schemaData === 'string') {
+    fullDesc = schemaData
+  }
   document.getElementById('skm-key').textContent  = key
-  document.getElementById('skm-desc').textContent = desc
+  document.getElementById('skm-desc').textContent = fullDesc
   document.getElementById('schema-key-modal').classList.add('open')
 }
 function closeSchemaKeyModal() {
   document.getElementById('schema-key-modal').classList.remove('open')
 }
 
+/* ── Clear logs ──────────────────────────────────────────────────────────────────── */
+async function clearLogs() {
+  if (!allLogs.length) { toast('No logs to clear', 'info'); return }
+  confirmAction('Clear All Logs', `Permanently delete all ${allLogs.length} request log(s)? This cannot be undone.`, '🗑 Clear All', async () => {
+    try {
+      const data = await apiFetch('/logs', { method: 'DELETE' })
+      toast(`Cleared ${data.deleted} log(s)`)
+      await loadLogs()
+      await loadKeys() // refresh stats
+    } catch (e) { toast('Failed to clear logs', 'error') }
+  })
+}
+
+/* ── Playground ────────────────────────────────────────────────────────────────── */
+async function runPlayground() {
+  const query = document.getElementById('playground-query').value.trim()
+  const key = document.getElementById('playground-key').value
+  const useCustom = document.getElementById('playground-custom-schema').checked
+
+  if (!query) { toast('Enter a search query first', 'error'); document.getElementById('playground-query').focus(); return }
+  if (!key) { toast('Select an API key first', 'error'); return }
+
+  const btn = document.getElementById('playground-run-btn')
+  btn.disabled = true
+  btn.innerHTML = '<span class="loading"></span> Running...'
+  document.getElementById('playground-result-card').style.display = 'none'
+  document.getElementById('playground-error-card').style.display = 'none'
+
+  try {
+    const { url } = getConfig()
+    const path = useCustom ? '/extract?schema=true' : '/extract'
+    const res = await fetch(`${url}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+      body: JSON.stringify({ query })
+    })
+    const data = await res.json()
+
+    if (!res.ok) {
+      document.getElementById('playground-error').textContent = data.message || data.error || `Error ${res.status}`
+      document.getElementById('playground-error-card').style.display = ''
+      return
+    }
+
+    // Show result
+    document.getElementById('playground-json').textContent = JSON.stringify(data.result || {}, null, 2)
+    document.getElementById('playground-latency').textContent = data.latency_ms ? data.latency_ms + 'ms' : ''
+    document.getElementById('playground-keys-found').textContent = data.keys_found !== undefined ? data.keys_found + ' keys found' : ''
+    const schemaEl = document.getElementById('playground-schema-used')
+    schemaEl.textContent = data.schema_used === 'custom' ? 'Custom Schema' : 'Built-in Schema'
+    schemaEl.className = `badge ${data.schema_used === 'custom' ? 'badge-compact' : 'badge-full'}`
+    document.getElementById('playground-result-card').style.display = ''
+
+    // Suggestions
+    const sugDiv = document.getElementById('playground-suggestions')
+    const sugList = document.getElementById('playground-suggestions-list')
+    if (data.suggestions && data.suggestions.length) {
+      sugList.innerHTML = data.suggestions.map(s =>
+        `<button class="btn btn-ghost btn-xs" onclick="document.getElementById('playground-query').value='${escHtml(s)}';runPlayground()">${escHtml(s)}</button>`
+      ).join('')
+      sugDiv.style.display = ''
+    } else {
+      sugDiv.style.display = 'none'
+    }
+  } catch (e) {
+    document.getElementById('playground-error').textContent = 'Network error: ' + (e.message || 'check connection')
+    document.getElementById('playground-error-card').style.display = ''
+  } finally {
+    btn.disabled = false
+    btn.innerHTML = '▶ Extract'
+  }
+}
+
+
+/* ── Rate limit update from drawer ──────────────────────────────────────────── */
+async function updateDrawerRateLimit() {
+  if (!activeDrawerKey) return
+  const rpm = parseInt(document.getElementById('drawer-rpm-input').value)
+  if (!rpm || rpm < 1) { toast('Enter a valid rate limit (min 1)', 'error'); return }
+  try {
+    await apiFetch(`/keys/${activeDrawerKey.id}/rate-limit`, { method:'PATCH', body: JSON.stringify({ rate_limit_rpm: rpm }) })
+    toast(`Rate limit updated to ${rpm} req/min`)
+    await loadKeys()
+    const updated = allKeys.find(k => k.id === activeDrawerKey.id)
+    if (updated) openDrawer(updated.id)
+  } catch (e) { toast('Failed to update rate limit: ' + (e.message || ''), 'error') }
+}
+
+/* ── Analytics ───────────────────────────────────────────────────────────────── */
+async function loadAnalytics() {
+  try {
+    const data = await apiFetch('/analytics')
+
+    // ── Dashboard stat cards ────────────────────────────────────────────────
+    const s = data.summary || {}
+    document.getElementById('stat-total').textContent       = (s.total_requests || 0).toLocaleString()
+    document.getElementById('stat-latency').textContent     = s.avg_latency_ms ? Math.round(s.avg_latency_ms) + 'ms' : '—'
+    document.getElementById('stat-success').textContent     = s.total_requests ? Math.round((s.successful / s.total_requests) * 100) + '%' : '—'
+    document.getElementById('stat-cache-rate').textContent  = (s.cache_hit_rate || 0) + '%'
+
+    // ── Server timeline → update dashboard chart ───────────────────────────
+    window._serverTimeline = data.timeline || []
+    buildCharts(allLogs, window._serverTimeline)
+
+    // ── Analytics page summary ─────────────────────────────────────────────
+    document.getElementById('an-total').textContent          = (s.total_requests || 0).toLocaleString()
+    document.getElementById('an-success').textContent        = (s.successful || 0).toLocaleString()
+    document.getElementById('an-failed').textContent         = (s.failed || 0).toLocaleString()
+    document.getElementById('an-cache-hits').textContent     = (s.total_cache_hits || 0).toLocaleString()
+    document.getElementById('an-latency').textContent        = s.avg_latency_ms ? Math.round(s.avg_latency_ms) + 'ms' : '—'
+
+    // ── Cache ring ─────────────────────────────────────────────────────────
+    const rate = s.cache_hit_rate || 0
+    document.getElementById('cache-ring-pct').textContent = rate + '%'
+    const circ = 2 * Math.PI * 36  // r=36 → circumference ≈ 226.2
+    document.getElementById('cache-ring-circle').setAttribute('stroke-dashoffset', circ * (1 - rate / 100))
+
+    const c = data.cache || {}
+    document.getElementById('an-cache-entries').textContent    = (c.active_entries || 0).toLocaleString()
+    document.getElementById('an-cache-total-hits').textContent = (c.total_hits || 0).toLocaleString()
+
+    // ── Analytics timeline chart ───────────────────────────────────────────
+    const tl = data.timeline || []
+    const tlDays   = tl.map(r => { const d = new Date(r.day); return d.toLocaleDateString('en',{month:'short',day:'numeric'}) })
+    const tlTotal  = tl.map(r => r.total || 0)
+    const tlCached = tl.map(r => r.cached || 0)
+    const grid = '#1e2535', tick = {family:'JetBrains Mono', size:10}
+    if (analyticsTimelineChart) analyticsTimelineChart.destroy()
+    const canvas = document.getElementById('analytics-timeline-chart')
+    if (canvas) {
+      analyticsTimelineChart = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: tlDays,
+          datasets: [
+            { label:'Total',  data:tlTotal,  backgroundColor:'rgba(77,159,255,.2)', borderColor:'#4d9fff', borderWidth:1, borderRadius:2 },
+            { label:'Cached', data:tlCached, backgroundColor:'rgba(180,142,255,.3)', borderColor:'#b48eff', borderWidth:1, borderRadius:2 },
+          ]
+        },
+        options: {
+          responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{ display:true, position:'bottom', labels:{ color:'#64748b', font:{ family:'JetBrains Mono', size:10 }, padding:10 } } },
+          scales:{ x:{ grid:{color:grid}, ticks:{color:'#64748b',font:tick}, stacked:false }, y:{ grid:{color:grid}, ticks:{color:'#64748b',font:tick} } }
+        }
+      })
+    }
+
+    // ── Top queries ─────────────────────────────────────────────────────────
+    const topQ = data.top_queries || []
+    const topQBody = document.getElementById('top-queries-body')
+    if (topQBody) {
+      if (!topQ.length) {
+        topQBody.innerHTML = '<div class="empty">No data yet</div>'
+      } else {
+        const maxCount = topQ[0]?.count || 1
+        topQBody.innerHTML = topQ.map(q => `
+          <div class="mini-bar-row">
+            <div class="mini-bar-label" title="${escHtml(q.query)}">${escHtml(q.query)}</div>
+            <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${Math.round((q.count/maxCount)*100)}%"></div></div>
+            <div class="mini-bar-count">${q.count}</div>
+          </div>`).join('')
+      }
+    }
+
+    // ── Usage by key ────────────────────────────────────────────────────────
+    const byKey = data.by_key || []
+    const byKeyBody = document.getElementById('by-key-body')
+    if (byKeyBody) {
+      if (!byKey.length) {
+        byKeyBody.innerHTML = '<div class="empty">No data yet</div>'
+      } else {
+        const keyMap = {}
+        allKeys.forEach(k => { keyMap[k.id] = k.name })
+        const maxReqs = byKey[0]?.total_requests || 1
+        byKeyBody.innerHTML = byKey.map(k => {
+          const name = escHtml(k.name || keyMap[k.api_key_id] || k.api_key_id || 'Unknown')
+          const pct  = Math.round((k.total_requests / maxReqs) * 100)
+          const hitPct = k.total_requests ? Math.round((k.cache_hits / k.total_requests) * 100) : 0
+          return `<div class="by-key-bar">
+            <div class="by-key-name" title="${name}">${name}</div>
+            <div class="by-key-track"><div class="by-key-fill" style="width:${pct}%"></div></div>
+            <div class="by-key-num">${k.total_requests.toLocaleString()}</div>
+            <div class="by-key-hit" title="Cache hit rate">${hitPct}%</div>
+          </div>`
+        }).join('')
+      }
+    }
+
+  } catch (e) {
+    // Analytics is non-critical — fail silently on dashboard, show error on analytics page
+    const body = document.getElementById('top-queries-body')
+    if (body) body.innerHTML = `<div class="empty" style="color:var(--red);">Failed to load analytics</div>`
+  }
+}
+
+/* ── Clear query cache ───────────────────────────────────────────────────────── */
+async function clearCache() {
+  confirmAction('Clear Query Cache', 'Delete all cached query results? Future identical queries will hit Groq until the cache rebuilds.', '🗑 Clear Cache', async () => {
+    try {
+      const data = await apiFetch('/cache', { method:'DELETE' })
+      toast(`Cache cleared — ${data.deleted} entries removed`)
+      await loadAnalytics()
+    } catch (e) { toast('Failed to clear cache', 'error') }
+  })
+}
+
 /* ── Event listeners ────────────────────────────────────────────────────────── */
 document.getElementById('admin-secret').addEventListener('keydown', e => { if (e.key === 'Enter') loadAll() })
 document.getElementById('new-key-name').addEventListener('keydown', e => { if (e.key === 'Enter') createKey() })
 document.getElementById('model-id-input').addEventListener('keydown', e => { if (e.key === 'Enter') addModel() })
+document.getElementById('playground-query').addEventListener('keydown', e => { if (e.key === 'Enter') runPlayground() })
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
