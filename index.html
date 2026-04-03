@@ -10,87 +10,110 @@
 <style>
 /* ── Design tokens ─────────────────────────────────────────────────────────── */
 :root {
-  --bg:#0f1117; --bg2:#161b27; --bg3:#1e2535; --border:#252d40;
-  --accent:#00ff88; --accent2:#00cc6a; --blue:#4d9fff; --red:#ff4d6a;
-  --orange:#ff9f40; --yellow:#ffd166; --purple:#b48eff; --text:#e2e8f0; --muted:#64748b;
+  --bg:#0f1117; --bg2:#161b27; --bg3:#1e2535; --bg4:#232c3d; --border:#252d40; --border2:#2e3a52;
+  --accent:#00ff88; --accent2:#00cc6a; --accent-dim:rgba(0,255,136,.08);
+  --blue:#4d9fff; --blue-dim:rgba(77,159,255,.1);
+  --red:#ff4d6a; --red-dim:rgba(255,77,106,.1);
+  --orange:#ff9f40; --yellow:#ffd166; --purple:#b48eff; --purple-dim:rgba(180,142,255,.1);
+  --text:#e2e8f0; --text2:#94a3b8; --muted:#64748b;
   --font-mono:'JetBrains Mono',monospace; --font-sans:'Outfit',sans-serif;
-  --sidebar-w:224px; --topbar-h:52px; --connectbar-h:52px;
+  --radius:8px; --radius-lg:12px;
+  --sidebar-w:228px; --topbar-h:52px; --connectbar-h:52px;
+  --shadow:0 4px 24px rgba(0,0,0,.4);
 }
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
 html { scroll-behavior:smooth; }
 body { background:var(--bg); color:var(--text); font-family:var(--font-sans); font-size:14px; line-height:1.6; min-height:100vh; }
 ::-webkit-scrollbar { width:4px; height:4px; }
 ::-webkit-scrollbar-track { background:var(--bg); }
-::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+::-webkit-scrollbar-thumb:hover { background:var(--muted); }
 
 /* ── Buttons ───────────────────────────────────────────────────────────────── */
-.btn { font-family:var(--font-mono); font-size:11px; font-weight:600; padding:7px 14px; border-radius:6px; border:none; cursor:pointer; letter-spacing:.04em; transition:all .15s; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; }
+.btn { font-family:var(--font-mono); font-size:11px; font-weight:600; padding:7px 14px; border-radius:var(--radius); border:none; cursor:pointer; letter-spacing:.04em; transition:all .15s; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; }
 .btn:disabled { opacity:.4; cursor:not-allowed; }
+.btn:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
 .btn-primary   { background:var(--accent); color:#000; }
-.btn-primary:hover:not(:disabled) { background:var(--accent2); }
-.btn-danger    { background:rgba(255,77,106,.12); color:var(--red); border:1px solid rgba(255,77,106,.25); }
-.btn-danger:hover:not(:disabled)  { background:rgba(255,77,106,.25); }
+.btn-primary:hover:not(:disabled) { background:var(--accent2); transform:translateY(-1px); }
+.btn-danger    { background:var(--red-dim); color:var(--red); border:1px solid rgba(255,77,106,.25); }
+.btn-danger:hover:not(:disabled)  { background:rgba(255,77,106,.2); }
 .btn-ghost     { background:var(--bg3); color:var(--muted); border:1px solid var(--border); }
-.btn-ghost:hover:not(:disabled)   { color:var(--text); border-color:var(--accent); }
-.btn-blue      { background:rgba(77,159,255,.1); color:var(--blue); border:1px solid rgba(77,159,255,.2); }
+.btn-ghost:hover:not(:disabled)   { color:var(--text); border-color:var(--border2); }
+.btn-blue      { background:var(--blue-dim); color:var(--blue); border:1px solid rgba(77,159,255,.2); }
 .btn-blue:hover:not(:disabled)    { background:rgba(77,159,255,.2); }
 .btn-orange    { background:rgba(255,159,64,.1); color:var(--orange); border:1px solid rgba(255,159,64,.25); }
 .btn-orange:hover:not(:disabled)  { background:rgba(255,159,64,.2); }
-.btn-purple    { background:rgba(180,142,255,.1); color:var(--purple); border:1px solid rgba(180,142,255,.25); }
+.btn-purple    { background:var(--purple-dim); color:var(--purple); border:1px solid rgba(180,142,255,.25); }
 .btn-purple:hover:not(:disabled)  { background:rgba(180,142,255,.2); }
-.btn-green     { background:rgba(0,255,136,.08); color:var(--accent); border:1px solid rgba(0,255,136,.2); }
+.btn-green     { background:var(--accent-dim); color:var(--accent); border:1px solid rgba(0,255,136,.2); }
 .btn-green:hover:not(:disabled)   { background:rgba(0,255,136,.15); }
 .btn-sm { padding:5px 10px; font-size:10px; }
 .btn-xs { padding:3px 8px; font-size:10px; }
 
 /* ── Top nav ───────────────────────────────────────────────────────────────── */
 .topnav { position:fixed; top:0; left:0; right:0; z-index:200; height:var(--topbar-h); background:rgba(15,17,23,.96); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 20px; gap:12px; }
-.topnav-logo { font-family:var(--font-mono); font-size:15px; font-weight:700; color:var(--accent); display:flex; align-items:center; gap:8px; white-space:nowrap; }
-.topnav-logo span { color:var(--muted); font-weight:400; font-size:13px; }
+.topnav-logo { font-family:var(--font-mono); font-size:14px; font-weight:700; color:var(--accent); display:flex; align-items:center; gap:8px; white-space:nowrap; letter-spacing:.04em; }
+.topnav-logo span { color:var(--muted); font-weight:400; font-size:12px; letter-spacing:.02em; }
 .topnav-sep { flex:1; }
-.topnav-right { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+.topnav-right { display:flex; align-items:center; gap:14px; flex-shrink:0; }
 .topnav-info { font-family:var(--font-mono); font-size:10px; color:var(--muted); display:flex; align-items:center; gap:8px; }
 .auto-refresh-toggle { display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; color:var(--muted); cursor:pointer; }
 .auto-refresh-toggle input { accent-color:var(--accent); cursor:pointer; }
 .hamburger { display:none; background:none; border:none; cursor:pointer; color:var(--muted); font-size:20px; padding:4px; }
 .status-dot { width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0; transition:background .3s; }
-.status-dot.online  { background:var(--accent); box-shadow:0 0 8px var(--accent); }
+.status-dot.online  { background:var(--accent); box-shadow:0 0 8px rgba(0,255,136,.6); }
 .status-dot.offline { background:var(--red); }
 
 /* ── Connect bar ───────────────────────────────────────────────────────────── */
-.connect-bar { position:fixed; top:var(--topbar-h); left:0; right:0; z-index:199; background:var(--bg2); border-bottom:1px solid var(--border); padding:8px 20px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; height:var(--connectbar-h); }
+.connect-bar { position:fixed; top:var(--topbar-h); left:0; right:0; z-index:199; background:var(--bg2); border-bottom:1px solid var(--border); padding:8px 20px; display:flex; align-items:center; gap:10px; flex-wrap:nowrap; height:var(--connectbar-h); }
 .connect-label { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; white-space:nowrap; }
-.connect-input { font-family:var(--font-mono); font-size:12px; color:var(--text); background:var(--bg3); border:1px solid var(--border); padding:6px 12px; border-radius:6px; outline:none; transition:border-color .2s; min-width:0; }
+.connect-input { font-family:var(--font-mono); font-size:12px; color:var(--text); background:var(--bg3); border:1px solid var(--border); padding:6px 12px; border-radius:var(--radius); outline:none; transition:border-color .2s; min-width:0; }
 .connect-input:focus { border-color:var(--accent); }
 .connect-input::placeholder { color:var(--muted); }
-.connect-url { flex:1; max-width:300px; }
-.connect-secret { width:160px; }
-#last-updated { font-family:var(--font-mono); font-size:10px; color:var(--muted); white-space:nowrap; }
+.connect-url { flex:1; max-width:280px; }
+.connect-secret { width:150px; }
+.cred-save-row { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.cred-remember-label { display:flex; align-items:center; gap:5px; font-family:var(--font-mono); font-size:10px; color:var(--muted); cursor:pointer; white-space:nowrap; }
+.cred-remember-label input { accent-color:var(--accent); cursor:pointer; }
+.cred-saved-badge { display:none; align-items:center; gap:4px; font-family:var(--font-mono); font-size:10px; color:var(--accent); background:rgba(0,255,136,.08); border:1px solid rgba(0,255,136,.2); padding:3px 8px; border-radius:20px; white-space:nowrap; }
+.cred-saved-badge.show { display:flex; }
+.cred-forget-btn { font-family:var(--font-mono); font-size:10px; color:var(--muted); background:none; border:none; cursor:pointer; padding:2px 4px; }
+.cred-forget-btn:hover { color:var(--red); }
+#last-updated { font-family:var(--font-mono); font-size:10px; color:var(--muted); white-space:nowrap; margin-left:auto; }
 
 /* ── Layout ────────────────────────────────────────────────────────────────── */
 .layout { display:flex; padding-top:calc(var(--topbar-h) + var(--connectbar-h)); min-height:100vh; }
-.sidebar { position:fixed; top:calc(var(--topbar-h) + var(--connectbar-h)); left:0; bottom:0; width:var(--sidebar-w); background:var(--bg); border-right:1px solid var(--border); overflow-y:auto; z-index:150; transition:transform .25s; }
-.sidebar-section { padding:16px 12px 0; }
-.sidebar-label { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; padding:0 8px; margin-bottom:6px; }
-.sidebar-link { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:6px; color:var(--muted); font-size:13px; font-weight:400; transition:all .15s; margin-bottom:1px; cursor:pointer; background:none; border:none; width:100%; text-align:left; }
+.sidebar { position:fixed; top:calc(var(--topbar-h) + var(--connectbar-h)); left:0; bottom:0; width:var(--sidebar-w); background:var(--bg); border-right:1px solid var(--border); overflow-y:auto; z-index:150; transition:transform .25s; display:flex; flex-direction:column; }
+.sidebar-inner { flex:1; padding-bottom:60px; }
+.sidebar-section { padding:14px 10px 0; }
+.sidebar-label { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.14em; text-transform:uppercase; padding:0 8px; margin-bottom:4px; }
+.sidebar-link { display:flex; align-items:center; gap:9px; padding:7px 10px; border-radius:var(--radius); color:var(--text2); font-size:13px; font-weight:400; transition:all .15s; margin-bottom:1px; cursor:pointer; background:none; border:none; width:100%; text-align:left; }
 .sidebar-link:hover { color:var(--text); background:var(--bg3); }
-.sidebar-link.active { color:var(--accent); background:rgba(0,255,136,.08); }
-.sidebar-icon { font-size:14px; width:18px; text-align:center; flex-shrink:0; }
+.sidebar-link.active { color:var(--accent); background:var(--accent-dim); font-weight:500; }
+.sidebar-link.active .sidebar-icon { filter:none; }
+.sidebar-icon { font-size:13px; width:18px; text-align:center; flex-shrink:0; opacity:.8; }
+.sidebar-link.active .sidebar-icon { opacity:1; }
 .sidebar-bottom { position:absolute; bottom:0; left:0; right:0; padding:12px; border-top:1px solid var(--border); background:var(--bg); }
 .sidebar-version { font-family:var(--font-mono); font-size:9px; color:var(--muted); text-align:center; letter-spacing:.06em; }
 .main { margin-left:var(--sidebar-w); flex:1; padding:24px; max-width:100%; overflow-x:hidden; }
 
 /* ── Pages ─────────────────────────────────────────────────────────────────── */
-.page { display:none; }
+.page { display:none; animation:fadeIn .15s ease; }
 .page.active { display:block; }
-.page-title { font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--text); letter-spacing:.05em; text-transform:uppercase; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+.page-title { font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--text); letter-spacing:.06em; text-transform:uppercase; margin-bottom:18px; display:flex; align-items:center; gap:8px; }
 
 /* ── Stat cards ────────────────────────────────────────────────────────────── */
 .stats-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:20px; }
-.stat-card { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:18px; position:relative; overflow:hidden; transition:border-color .2s; cursor:default; }
-.stat-card:hover { border-color:rgba(0,255,136,.3); }
-.stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent),transparent); opacity:0; transition:opacity .2s; }
+.stat-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); padding:18px; position:relative; overflow:hidden; transition:border-color .2s, transform .15s; cursor:default; }
+.stat-card:hover { border-color:rgba(0,255,136,.25); transform:translateY(-1px); }
+.stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; opacity:0; transition:opacity .2s; }
 .stat-card:hover::before { opacity:1; }
+.stat-card:nth-child(1)::before { background:linear-gradient(90deg,var(--blue),transparent); }
+.stat-card:nth-child(2)::before { background:linear-gradient(90deg,var(--accent),transparent); }
+.stat-card:nth-child(3)::before { background:linear-gradient(90deg,var(--yellow),transparent); }
+.stat-card:nth-child(4)::before { background:linear-gradient(90deg,var(--accent),transparent); }
+.stat-card:nth-child(5)::before { background:linear-gradient(90deg,var(--red),transparent); }
 .stat-label { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
 .stat-value { font-family:var(--font-mono); font-size:26px; font-weight:700; color:var(--text); line-height:1; margin-bottom:4px; }
 .stat-value.green  { color:var(--accent); }
@@ -102,7 +125,7 @@ body { background:var(--bg); color:var(--text); font-family:var(--font-sans); fo
 
 /* ── Cards ─────────────────────────────────────────────────────────────────── */
 .charts-grid { display:grid; grid-template-columns:2fr 1fr; gap:12px; margin-bottom:20px; }
-.card { background:var(--bg2); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:20px; }
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:20px; }
 .card:last-child { margin-bottom:0; }
 .card-header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--border); gap:10px; flex-wrap:wrap; }
 .card-title { font-family:var(--font-mono); font-size:11px; font-weight:600; color:var(--text); letter-spacing:.05em; text-transform:uppercase; }
@@ -114,7 +137,7 @@ body { background:var(--bg); color:var(--text); font-family:var(--font-sans); fo
 
 /* ── Forms ─────────────────────────────────────────────────────────────────── */
 .form-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-.form-input { font-family:var(--font-mono); font-size:12px; color:var(--text); background:var(--bg3); border:1px solid var(--border); padding:7px 12px; border-radius:6px; outline:none; transition:border-color .2s; }
+.form-input { font-family:var(--font-mono); font-size:12px; color:var(--text); background:var(--bg3); border:1px solid var(--border); padding:7px 12px; border-radius:var(--radius); outline:none; transition:border-color .2s; }
 .form-input:focus { border-color:var(--accent); }
 .form-input::placeholder { color:var(--muted); }
 .input-w-sm { width:90px; }
@@ -124,7 +147,7 @@ body { background:var(--bg); color:var(--text); font-family:var(--font-sans); fo
 select.form-input option { background:var(--bg3); }
 
 /* ── New key reveal ─────────────────────────────────────────────────────────── */
-.new-key-box { background:rgba(0,255,136,.05); border:1px solid rgba(0,255,136,.2); border-radius:8px; padding:12px 16px; margin:0 0 12px; display:none; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.new-key-box { background:rgba(0,255,136,.05); border:1px solid rgba(0,255,136,.2); border-radius:var(--radius); padding:12px 16px; margin:0 0 12px; display:none; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
 .new-key-box.show { display:flex; }
 .new-key-label { font-family:var(--font-mono); font-size:9px; color:var(--accent); letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; }
 .new-key-value { font-family:var(--font-mono); font-size:12px; color:var(--text); font-weight:600; word-break:break-all; }
@@ -135,7 +158,7 @@ select.form-input option { background:var(--bg3); }
 .data-table th { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; padding:8px 12px; text-align:left; border-bottom:1px solid var(--border); font-weight:500; white-space:nowrap; }
 .data-table td { padding:10px 12px; border-bottom:1px solid rgba(37,45,64,.5); vertical-align:middle; font-size:13px; }
 .data-table tr:last-child td { border-bottom:none; }
-.data-table tr:hover td { background:rgba(255,255,255,.02); }
+.data-table tr:hover td { background:rgba(255,255,255,.015); }
 .cell-name { font-weight:500; color:var(--text); }
 .cell-mono { font-family:var(--font-mono); font-size:11px; color:var(--muted); }
 .cell-num  { font-family:var(--font-mono); font-size:13px; color:var(--blue); font-weight:600; }
@@ -149,9 +172,9 @@ select.form-input option { background:var(--bg3); }
 .badge-revoked { background:rgba(255,77,106,.1);  color:var(--red);    border:1px solid rgba(255,77,106,.2); }
 .badge-expired { background:rgba(255,159,64,.1);  color:var(--orange); border:1px solid rgba(255,159,64,.25); }
 .badge-warning { background:rgba(255,209,102,.1); color:var(--yellow); border:1px solid rgba(255,209,102,.25); }
-.badge-compact { background:rgba(180,142,255,.1); color:var(--purple); border:1px solid rgba(180,142,255,.25); }
-.badge-full    { background:rgba(77,159,255,.1);  color:var(--blue);   border:1px solid rgba(77,159,255,.2); }
-.badge-schema  { background:rgba(0,255,136,.08);  color:var(--accent); border:1px solid rgba(0,255,136,.15); cursor:pointer; }
+.badge-compact { background:var(--purple-dim); color:var(--purple); border:1px solid rgba(180,142,255,.25); }
+.badge-full    { background:var(--blue-dim);   color:var(--blue);   border:1px solid rgba(77,159,255,.2); }
+.badge-schema  { background:var(--accent-dim); color:var(--accent); border:1px solid rgba(0,255,136,.15); cursor:pointer; }
 .badge-schema:hover { background:rgba(0,255,136,.15); }
 
 /* ── Expiry bar ─────────────────────────────────────────────────────────────── */
@@ -167,78 +190,140 @@ select.form-input option { background:var(--bg3); }
 .log-ok  { color:var(--accent); font-family:var(--font-mono); font-size:11px; }
 .log-err { color:var(--red);    font-family:var(--font-mono); font-size:11px; }
 .log-date{ font-family:var(--font-mono); color:var(--muted); font-size:11px; white-space:nowrap; }
+.log-cached { font-family:var(--font-mono); font-size:10px; color:var(--purple); }
 
 /* ── Drawer ─────────────────────────────────────────────────────────────────── */
-.drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; opacity:0; pointer-events:none; transition:opacity .25s; }
+.drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:300; opacity:0; pointer-events:none; transition:opacity .25s; }
 .drawer-overlay.open { opacity:1; pointer-events:all; }
-.drawer { position:fixed; top:0; right:0; bottom:0; width:600px; max-width:100vw; background:var(--bg2); border-left:1px solid var(--border); z-index:301; transform:translateX(100%); transition:transform .25s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; }
+.drawer { position:fixed; top:0; right:0; bottom:0; width:620px; max-width:100vw; background:var(--bg2); border-left:1px solid var(--border); z-index:301; transform:translateX(100%); transition:transform .28s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; }
 .drawer.open { transform:translateX(0); }
 .drawer-head { padding:18px 20px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; flex-shrink:0; gap:12px; }
 .drawer-title { font-family:var(--font-mono); font-size:14px; font-weight:700; color:var(--text); }
 .drawer-sub   { font-family:var(--font-mono); font-size:10px; color:var(--muted); margin-top:3px; }
 .drawer-close { font-family:var(--font-mono); font-size:18px; color:var(--muted); background:none; border:none; cursor:pointer; padding:0 4px; line-height:1; flex-shrink:0; }
 .drawer-close:hover { color:var(--text); }
-.drawer-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:14px 20px; border-bottom:1px solid var(--border); flex-shrink:0; }
-.drawer-stat  { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+.drawer-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:14px 20px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.drawer-stat  { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:10px 12px; }
 .drawer-stat-label { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; }
 .drawer-stat-value { font-family:var(--font-mono); font-size:20px; font-weight:700; color:var(--text); }
 .drawer-stat-value.green  { color:var(--accent); }
 .drawer-stat-value.blue   { color:var(--blue); }
 .drawer-stat-value.yellow { color:var(--yellow); }
+.drawer-stat-value.red    { color:var(--red); }
 .drawer-section { padding:14px 20px; border-bottom:1px solid var(--border); flex-shrink:0; }
-.drawer-section-title { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; margin-bottom:10px; }
+.drawer-section-title { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; }
 .drawer-expiry-bar { height:6px; border-radius:3px; background:var(--bg3); width:100%; overflow:hidden; margin:6px 0; }
 .drawer-expiry-fill { height:100%; border-radius:3px; transition:width .5s; }
 .drawer-body { flex:1; overflow-y:auto; }
 .drawer-actions { display:flex; gap:8px; flex-wrap:wrap; padding:12px 20px; border-bottom:1px solid var(--border); flex-shrink:0; }
 
+/* ── Drawer usage chart ─────────────────────────────────────────────────────── */
+.drawer-usage-wrap { position:relative; height:110px; }
+.usage-stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; }
+.usage-stat-mini { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:8px 10px; text-align:center; }
+.usage-stat-mini-val { font-family:var(--font-mono); font-size:16px; font-weight:700; color:var(--text); }
+.usage-stat-mini-val.green { color:var(--accent); }
+.usage-stat-mini-val.red   { color:var(--red); }
+.usage-stat-mini-val.yellow { color:var(--yellow); }
+.usage-stat-mini-lbl { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; margin-top:2px; }
+
+/* ── System page ──────────────────────────────────────────────────────────────── */
+.system-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+.system-health-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.sys-stat { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:14px; }
+.sys-stat-label { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px; }
+.sys-stat-value { font-family:var(--font-mono); font-size:22px; font-weight:700; color:var(--text); }
+.sys-stat-value.green  { color:var(--accent); }
+.sys-stat-value.yellow { color:var(--yellow); }
+.sys-stat-value.blue   { color:var(--blue); }
+.sys-stat-value.purple { color:var(--purple); }
+.sys-action-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.sys-action-card { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:14px; display:flex; flex-direction:column; gap:8px; }
+.sys-action-title { font-family:var(--font-mono); font-size:11px; font-weight:600; color:var(--text); }
+.sys-action-desc  { font-size:12px; color:var(--muted); line-height:1.5; flex:1; }
+
+/* ── Analytics page ──────────────────────────────────────────────────────────── */
+.analytics-summary { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:20px; }
+.analytics-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+.cache-ring-wrap { display:flex; align-items:center; justify-content:center; gap:20px; padding:8px 0; }
+.cache-ring-svg { flex-shrink:0; }
+.cache-ring-info { display:flex; flex-direction:column; gap:8px; }
+.cache-ring-stat { display:flex; flex-direction:column; }
+.cache-ring-val { font-family:var(--font-mono); font-size:18px; font-weight:700; color:var(--purple); }
+.cache-ring-lbl { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; }
+.mini-bar-row { display:grid; grid-template-columns:1fr 100px 40px; gap:8px; align-items:center; padding:5px 0; border-bottom:1px solid rgba(37,45,64,.5); }
+.mini-bar-row:last-child { border-bottom:none; }
+.mini-bar-label { font-size:12px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:var(--font-mono); font-size:11px; }
+.mini-bar-track { height:6px; background:var(--bg3); border-radius:3px; overflow:hidden; }
+.mini-bar-fill  { height:100%; background:rgba(0,255,136,.4); border-radius:3px; transition:width .4s; }
+.mini-bar-count { font-family:var(--font-mono); font-size:11px; color:var(--blue); text-align:right; }
+.by-key-bar  { display:grid; grid-template-columns:1fr 100px 50px 36px; gap:8px; align-items:center; padding:5px 0; border-bottom:1px solid rgba(37,45,64,.5); }
+.by-key-bar:last-child { border-bottom:none; }
+.by-key-name  { font-size:12px; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.by-key-track { height:6px; background:var(--bg3); border-radius:3px; overflow:hidden; }
+.by-key-fill  { height:100%; background:rgba(77,159,255,.4); border-radius:3px; transition:width .4s; }
+.by-key-num   { font-family:var(--font-mono); font-size:11px; color:var(--blue); text-align:right; }
+.by-key-hit   { font-family:var(--font-mono); font-size:10px; color:var(--purple); text-align:right; }
+#stat-cache-rate { color:var(--purple) !important; }
+
 /* ── Schema browser ─────────────────────────────────────────────────────────── */
 .schema-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:12px; }
-.schema-category { background:var(--bg2); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.schema-category { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; }
 .schema-cat-header { padding:10px 14px; background:var(--bg3); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
 .schema-cat-name { font-family:var(--font-mono); font-size:11px; font-weight:600; color:var(--text); letter-spacing:.04em; }
 .schema-cat-count { font-family:var(--font-mono); font-size:10px; color:var(--muted); }
-.schema-key-row { padding:8px 14px; border-bottom:1px solid rgba(37,45,64,.4); display:flex; gap:10px; align-items:flex-start; }
+.schema-key-row { padding:8px 14px; border-bottom:1px solid rgba(37,45,64,.4); display:flex; gap:10px; align-items:flex-start; transition:background .12s; }
 .schema-key-row:last-child { border-bottom:none; }
+.schema-key-row:hover { background:var(--bg3); }
 .schema-key-name { font-family:var(--font-mono); font-size:11px; color:var(--accent); flex-shrink:0; width:140px; margin-top:2px; }
 .schema-key-desc { font-size:12px; color:var(--muted); line-height:1.5; }
 
-/* ── Confirm modal ──────────────────────────────────────────────────────────── */
-.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:400; display:none; align-items:center; justify-content:center; }
+/* ── Modals ──────────────────────────────────────────────────────────────────── */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:400; display:none; align-items:center; justify-content:center; }
 .modal-overlay.open { display:flex; }
-.modal { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; max-width:380px; width:90%; }
+.modal { background:var(--bg2); border:1px solid var(--border2); border-radius:var(--radius-lg); padding:24px; max-width:400px; width:90%; box-shadow:var(--shadow); }
 .modal-title { font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--text); margin-bottom:8px; }
 .modal-msg { font-size:13px; color:var(--muted); margin-bottom:20px; line-height:1.6; }
 .modal-actions { display:flex; gap:8px; justify-content:flex-end; }
-
-/* ── Schema key modal ───────────────────────────────────────────────────────── */
-.schema-modal { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; max-width:560px; width:90%; max-height:80vh; overflow-y:auto; }
+.schema-modal { background:var(--bg2); border:1px solid var(--border2); border-radius:var(--radius-lg); padding:24px; max-width:560px; width:90%; max-height:80vh; overflow-y:auto; box-shadow:var(--shadow); }
 .schema-modal-key { font-family:var(--font-mono); font-size:11px; color:var(--accent); margin-bottom:6px; }
-.schema-modal-desc { font-size:13px; color:var(--text); line-height:1.7; background:var(--bg3); border-radius:8px; padding:12px 14px; border:1px solid var(--border); }
+.schema-modal-desc { font-size:13px; color:var(--text); line-height:1.7; background:var(--bg3); border-radius:var(--radius); padding:12px 14px; border:1px solid var(--border); }
 .schema-kv-list { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
 .schema-kv-row { display:grid; grid-template-columns:140px 1fr; gap:8px; align-items:start; }
-.schema-kv-key  { font-family:var(--font-mono); font-size:11px; color:var(--accent); padding-top:2px; }
-.schema-kv-val  { font-size:12px; color:var(--muted); background:var(--bg3); border-radius:6px; padding:6px 10px; border:1px solid var(--border); word-break:break-all; }
+.schema-kv-key { font-family:var(--font-mono); font-size:11px; color:var(--accent); padding-top:2px; }
+.schema-kv-val { font-size:12px; color:var(--muted); background:var(--bg3); border-radius:var(--radius); padding:6px 10px; border:1px solid var(--border); word-break:break-all; }
 
 /* ── Misc ───────────────────────────────────────────────────────────────────── */
 .empty { text-align:center; padding:36px; font-family:var(--font-mono); font-size:12px; color:var(--muted); }
 .loading { display:inline-block; width:12px; height:12px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .6s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
 .divider { height:1px; background:var(--border); margin:16px 0; }
+.info-row { display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid rgba(37,45,64,.4); }
+.info-row:last-child { border-bottom:none; }
+.info-key { font-family:var(--font-mono); font-size:11px; color:var(--muted); width:140px; flex-shrink:0; }
+.info-val { font-family:var(--font-mono); font-size:11px; color:var(--text); }
 
 /* ── Toast ──────────────────────────────────────────────────────────────────── */
-.toast { position:fixed; bottom:20px; right:20px; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:10px 16px; font-family:var(--font-mono); font-size:12px; color:var(--text); z-index:999; transform:translateY(80px); opacity:0; transition:all .3s; pointer-events:none; max-width:320px; }
+.toast { position:fixed; bottom:24px; right:24px; background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius); padding:10px 16px; font-family:var(--font-mono); font-size:12px; color:var(--text); z-index:999; transform:translateY(80px); opacity:0; transition:all .3s cubic-bezier(.4,0,.2,1); pointer-events:none; max-width:320px; box-shadow:var(--shadow); }
 .toast.show { transform:translateY(0); opacity:1; }
-.toast.success { border-color:rgba(0,255,136,.3); color:var(--accent); }
-.toast.error   { border-color:rgba(255,77,106,.3); color:var(--red); }
-.toast.info    { border-color:rgba(77,159,255,.3); color:var(--blue); }
+.toast.success { border-color:rgba(0,255,136,.35); color:var(--accent); }
+.toast.error   { border-color:rgba(255,77,106,.35); color:var(--red); }
+.toast.info    { border-color:rgba(77,159,255,.35); color:var(--blue); }
 
 /* ── Filter bar ─────────────────────────────────────────────────────────────── */
 .filter-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 16px; border-bottom:1px solid var(--border); background:rgba(30,37,53,.5); }
 .filter-label { font-family:var(--font-mono); font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
 
+/* ── Playground ──────────────────────────────────────────────────────────────── */
+.playground-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.playground-result-json { font-family:var(--font-mono); font-size:12px; color:var(--text); background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:14px; white-space:pre; overflow-x:auto; max-height:320px; overflow-y:auto; line-height:1.6; }
+.playground-meta { display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+.playground-error { font-family:var(--font-mono); font-size:12px; color:var(--red); background:rgba(255,77,106,.05); border:1px solid rgba(255,77,106,.2); border-radius:var(--radius); padding:12px 14px; }
+
 /* ── Responsive ─────────────────────────────────────────────────────────────── */
-@media(max-width:1280px) { .stats-grid { grid-template-columns:repeat(3,1fr); } }
+@media(max-width:1400px) { .analytics-summary { grid-template-columns:repeat(3,1fr); } }
+@media(max-width:1280px) { .stats-grid { grid-template-columns:repeat(3,1fr); } .analytics-grid { grid-template-columns:1fr; } }
+@media(max-width:1100px) { .system-grid { grid-template-columns:1fr; } .playground-grid { grid-template-columns:1fr; } }
 @media(max-width:1024px) { .stats-grid { grid-template-columns:repeat(2,1fr); } .charts-grid { grid-template-columns:1fr; } }
 @media(max-width:768px) {
   :root { --sidebar-w:0px; }
@@ -249,45 +334,26 @@ select.form-input option { background:var(--bg3); }
   .topnav-info { display:none; }
   .connect-url { max-width:none; flex:1; }
   .connect-secret { width:130px; }
+  .cred-save-row { display:none; }
   #last-updated { display:none; }
   .stats-grid { grid-template-columns:1fr 1fr; gap:8px; }
   .stat-value { font-size:22px; }
   .drawer { width:100vw; }
+  .drawer-stats { grid-template-columns:1fr 1fr; }
+  .analytics-summary { grid-template-columns:1fr 1fr; }
+  .system-grid { grid-template-columns:1fr; }
+  .system-health-grid { grid-template-columns:1fr 1fr; }
+  .sys-action-grid { grid-template-columns:1fr; }
+  .auto-refresh-toggle { display:none; }
   .cell-key-val { max-width:100px; }
   .schema-grid { grid-template-columns:1fr; }
-  .schema-key-name { width:110px; }
-  .auto-refresh-toggle { display:none; }
 }
 @media(max-width:480px) {
   .stats-grid { grid-template-columns:1fr 1fr; }
   .stat-card { padding:12px; }
   .stat-value { font-size:20px; }
-  .connect-bar { gap:6px; }
+  .drawer-stats { grid-template-columns:1fr 1fr; }
 }
-
-/* ── Analytics ──────────────────────────────────────────────────────────────── */
-.analytics-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
-.mini-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-.mini-bar-label { font-family:var(--font-mono); font-size:11px; color:var(--text); width:160px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex-shrink:0; }
-.mini-bar-track { flex:1; height:6px; background:var(--bg3); border-radius:3px; overflow:hidden; }
-.mini-bar-fill  { height:100%; border-radius:3px; background:var(--accent); transition:width .4s; }
-.mini-bar-count { font-family:var(--font-mono); font-size:10px; color:var(--muted); width:36px; text-align:right; flex-shrink:0; }
-.cache-hit-ring { position:relative; width:90px; height:90px; flex-shrink:0; }
-.cache-ring-svg { transform:rotate(-90deg); }
-.cache-ring-bg  { fill:none; stroke:var(--bg3); stroke-width:8; }
-.cache-ring-fg  { fill:none; stroke:var(--accent); stroke-width:8; stroke-linecap:round; transition:stroke-dashoffset .6s; }
-.cache-ring-label { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-.cache-ring-pct { font-family:var(--font-mono); font-size:18px; font-weight:700; color:var(--accent); line-height:1; }
-.cache-ring-sub { font-family:var(--font-mono); font-size:9px; color:var(--muted); letter-spacing:.06em; }
-.by-key-bar { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid rgba(37,45,64,.4); }
-.by-key-bar:last-child { border-bottom:none; }
-.by-key-name { font-size:12px; color:var(--text); width:140px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex-shrink:0; }
-.by-key-track { flex:1; height:8px; background:var(--bg3); border-radius:4px; overflow:hidden; }
-.by-key-fill  { height:100%; border-radius:4px; background:var(--blue); transition:width .4s; }
-.by-key-num   { font-family:var(--font-mono); font-size:11px; color:var(--blue); width:44px; text-align:right; flex-shrink:0; }
-.by-key-hit   { font-family:var(--font-mono); font-size:10px; color:var(--accent); width:36px; text-align:right; flex-shrink:0; }
-@media(max-width:768px) { .analytics-grid { grid-template-columns:1fr; } }
-
 </style>
 </head>
 <body>
@@ -314,10 +380,17 @@ select.form-input option { background:var(--bg3); }
 <!-- ── CONNECT BAR ────────────────────────────────────────────────────────── -->
 <div class="connect-bar">
   <span class="connect-label">URL</span>
-  <input class="connect-input connect-url" id="api-url" type="text" placeholder="https://searchology.duckdns.org" value="https://searchology.duckdns.org">
+  <input class="connect-input connect-url" id="api-url" type="text" placeholder="https://your-server.com" value="https://searchology.duckdns.org">
   <span class="connect-label">Secret</span>
   <input class="connect-input connect-secret" id="admin-secret" type="password" placeholder="admin secret">
   <button class="btn btn-primary btn-sm" onclick="loadAll()">Connect</button>
+  <div class="cred-save-row">
+    <label class="cred-remember-label" title="Save URL and secret to browser storage">
+      <input type="checkbox" id="remember-me-chk">
+      Remember
+    </label>
+    <div class="cred-saved-badge" id="cred-saved-badge">🔐 Saved <button class="cred-forget-btn" onclick="forgetCredentials()" title="Clear saved credentials">✕</button></div>
+  </div>
   <span id="last-updated"></span>
 </div>
 
@@ -326,25 +399,31 @@ select.form-input option { background:var(--bg3); }
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-section">
-    <div class="sidebar-label">Overview</div>
-    <button class="sidebar-link active" onclick="showPage('overview',this)"><span class="sidebar-icon">📊</span> Dashboard</button>
-    <button class="sidebar-link" onclick="showPage('logs',this)"><span class="sidebar-icon">📋</span> Request Logs</button>
-  </div>
-  <div class="sidebar-section" style="margin-top:8px;">
-    <div class="sidebar-label">Keys</div>
-    <button class="sidebar-link" onclick="showPage('keys',this)"><span class="sidebar-icon">🔑</span> API Keys</button>
-    <button class="sidebar-link" onclick="showPage('expiry',this)"><span class="sidebar-icon">⏱️</span> Expiry Manager</button>
-  </div>
-  <div class="sidebar-section" style="margin-top:8px;">
-    <div class="sidebar-label">System</div>
-    <button class="sidebar-link" onclick="showPage('models',this)"><span class="sidebar-icon">🤖</span> Models</button>
-    <button class="sidebar-link" onclick="showPage('schema',this)"><span class="sidebar-icon">📐</span> Schema Browser</button>
-    <button class="sidebar-link" onclick="showPage('playground',this)"><span class="sidebar-icon">🧪</span> Playground</button>
-    <button class="sidebar-link" onclick="showPage('analytics',this)"><span class="sidebar-icon">📈</span> Analytics</button>
+  <div class="sidebar-inner">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <button class="sidebar-link active" onclick="showPage('overview',this)"><span class="sidebar-icon">📊</span> Dashboard</button>
+      <button class="sidebar-link" onclick="showPage('analytics',this)"><span class="sidebar-icon">📈</span> Analytics</button>
+      <button class="sidebar-link" onclick="showPage('logs',this)"><span class="sidebar-icon">📋</span> Request Logs</button>
+    </div>
+    <div class="sidebar-section" style="margin-top:8px;">
+      <div class="sidebar-label">Keys</div>
+      <button class="sidebar-link" onclick="showPage('keys',this)"><span class="sidebar-icon">🔑</span> API Keys</button>
+      <button class="sidebar-link" onclick="showPage('expiry',this)"><span class="sidebar-icon">⏱</span> Expiry Manager</button>
+    </div>
+    <div class="sidebar-section" style="margin-top:8px;">
+      <div class="sidebar-label">Configuration</div>
+      <button class="sidebar-link" onclick="showPage('models',this)"><span class="sidebar-icon">🤖</span> Models</button>
+      <button class="sidebar-link" onclick="showPage('schema',this)"><span class="sidebar-icon">📐</span> Schema Browser</button>
+    </div>
+    <div class="sidebar-section" style="margin-top:8px;">
+      <div class="sidebar-label">Tools</div>
+      <button class="sidebar-link" onclick="showPage('playground',this)"><span class="sidebar-icon">🧪</span> Playground</button>
+      <button class="sidebar-link" onclick="showPage('system',this);loadSystem()"><span class="sidebar-icon">⚙️</span> System</button>
+    </div>
   </div>
   <div class="sidebar-bottom">
-    <div class="sidebar-version">Searchology Admin v3.0</div>
+    <div class="sidebar-version">Searchology Admin v2.1</div>
   </div>
 </aside>
 
@@ -357,22 +436,67 @@ select.form-input option { background:var(--bg3); }
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-label">Total Requests</div><div class="stat-value blue" id="stat-total">—</div><div class="stat-sub">all time</div></div>
     <div class="stat-card"><div class="stat-label">Active Keys</div><div class="stat-value green" id="stat-active">—</div><div class="stat-sub">of <span id="stat-total-keys">—</span> total</div></div>
-    <div class="stat-card"><div class="stat-label">Avg Latency</div><div class="stat-value yellow" id="stat-latency">—</div><div class="stat-sub">server analytics</div></div>
-    <div class="stat-card"><div class="stat-label">Cache Hit Rate</div><div class="stat-value purple" id="stat-cache-rate">—</div><div class="stat-sub">all time</div></div>
+    <div class="stat-card"><div class="stat-label">Avg Latency</div><div class="stat-value yellow" id="stat-latency">—</div><div class="stat-sub">successful requests</div></div>
     <div class="stat-card"><div class="stat-label">Success Rate</div><div class="stat-value green" id="stat-success">—</div><div class="stat-sub">all time</div></div>
     <div class="stat-card"><div class="stat-label">Expiring Soon</div><div class="stat-value red" id="stat-expiring">—</div><div class="stat-sub">within 7 days</div></div>
   </div>
   <div class="charts-grid">
     <div class="card" style="margin-bottom:0;">
       <div class="card-header">
-        <span class="card-title">Requests Over Time</span>
-        <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">last 14 days · server analytics</span>
+        <span class="card-title">Requests — Last 14 Days</span>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">server timeline</span>
       </div>
       <div class="card-body"><div class="chart-wrap"><canvas id="requests-chart"></canvas></div></div>
     </div>
     <div class="card" style="margin-bottom:0;">
       <div class="card-header"><span class="card-title">Latency Distribution</span></div>
       <div class="card-body"><div class="chart-wrap"><canvas id="latency-chart"></canvas></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ANALYTICS PAGE ──────────────────────────────────────────────────────── -->
+<div class="page" id="page-analytics">
+  <div class="page-title">📈 Analytics</div>
+  <div class="analytics-summary">
+    <div class="stat-card"><div class="stat-label">Total Requests</div><div class="stat-value blue" id="an-total">—</div></div>
+    <div class="stat-card"><div class="stat-label">Successful</div><div class="stat-value green" id="an-success">—</div></div>
+    <div class="stat-card"><div class="stat-label">Failed</div><div class="stat-value red" id="an-failed">—</div></div>
+    <div class="stat-card"><div class="stat-label">Cache Hits</div><div class="stat-value purple" id="an-cache-hits">—</div></div>
+    <div class="stat-card"><div class="stat-label">Avg Latency</div><div class="stat-value yellow" id="an-latency">—</div></div>
+  </div>
+  <div class="analytics-grid">
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-header"><span class="card-title">Timeline — Last 14 Days</span></div>
+      <div class="card-body"><div class="chart-wrap" style="height:180px;"><canvas id="analytics-timeline-chart"></canvas></div></div>
+    </div>
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-header"><span class="card-title">Cache Performance</span></div>
+      <div class="card-body">
+        <div class="cache-ring-wrap">
+          <svg class="cache-ring-svg" width="100" height="100" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="36" fill="none" stroke="var(--bg3)" stroke-width="10"/>
+            <circle id="cache-ring-circle" cx="50" cy="50" r="36" fill="none" stroke="var(--purple)" stroke-width="10"
+              stroke-dasharray="226.2" stroke-dashoffset="226.2" stroke-linecap="round"
+              transform="rotate(-90 50 50)" style="transition:stroke-dashoffset .6s ease;"/>
+            <text x="50" y="55" text-anchor="middle" fill="var(--text)" font-family="JetBrains Mono" font-size="14" font-weight="700" id="cache-ring-pct">0%</text>
+          </svg>
+          <div class="cache-ring-info">
+            <div class="cache-ring-stat"><span class="cache-ring-val" id="an-cache-entries">—</span><span class="cache-ring-lbl">Active Entries</span></div>
+            <div class="cache-ring-stat"><span class="cache-ring-val" id="an-cache-total-hits">—</span><span class="cache-ring-lbl">Total Hits</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-grid">
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-header"><span class="card-title">Top Queries</span></div>
+      <div class="card-body" id="top-queries-body"><div class="empty"><span class="loading"></span></div></div>
+    </div>
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-header"><span class="card-title">Usage by Key</span></div>
+      <div class="card-body" id="by-key-body"><div class="empty"><span class="loading"></span></div></div>
     </div>
   </div>
 </div>
@@ -386,10 +510,10 @@ select.form-input option { background:var(--bg3); }
       <div class="card-actions">
         <div class="form-row">
           <input class="form-input input-w-md" id="new-key-name" placeholder="client name...">
-          <input class="form-input input-w-sm" id="new-key-days" type="number" placeholder="days" value="30" min="1" max="365">
-          <input class="form-input" id="new-key-rpm" type="number" placeholder="RPM limit" value="60" min="1" max="10000" style="width:100px;" title="Rate limit (requests per minute)">
+          <input class="form-input input-w-sm" id="new-key-days" type="number" placeholder="days" value="30" min="1" max="365" title="Expiry in days">
+          <input class="form-input input-w-sm" id="new-key-rpm"  type="number" placeholder="rpm"  value="60"  min="1" max="10000" title="Rate limit requests/min">
           <button class="btn btn-primary btn-sm" onclick="createKey()">+ Create</button>
-          <button class="btn btn-ghost btn-sm" onclick="loadKeys()">↻</button>
+          <button class="btn btn-ghost btn-sm" onclick="loadKeys()" title="Refresh">↻</button>
         </div>
       </div>
     </div>
@@ -400,6 +524,7 @@ select.form-input option { background:var(--bg3); }
           <div class="new-key-value" id="new-key-value"></div>
         </div>
         <button class="btn btn-ghost btn-sm" onclick="copyText(document.getElementById('new-key-value').textContent,this)">Copy</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('new-key-box').classList.remove('show')">✕</button>
       </div>
     </div>
     <div class="table-wrap">
@@ -424,18 +549,18 @@ select.form-input option { background:var(--bg3); }
     </div>
     <div class="filter-bar">
       <span class="filter-label">Filter:</span>
-      <select class="form-input" id="log-filter-key" style="font-size:11px;padding:4px 8px;background:var(--bg3);" onchange="applyLogFilter()">
+      <select class="form-input" id="log-filter-key" style="font-size:11px;padding:4px 8px;" onchange="applyLogFilter()">
         <option value="">All Keys</option>
       </select>
-      <select class="form-input" id="log-filter-status" style="font-size:11px;padding:4px 8px;background:var(--bg3);" onchange="applyLogFilter()">
+      <select class="form-input" id="log-filter-status" style="font-size:11px;padding:4px 8px;" onchange="applyLogFilter()">
         <option value="">All Status</option>
         <option value="200">200 OK</option>
         <option value="500">500 Error</option>
         <option value="413">413 Too Large</option>
         <option value="429">429 Rate Limited</option>
       </select>
-      <span class="filter-label" style="margin-left:8px;">Limit:</span>
-      <select class="form-input" id="log-limit" style="font-size:11px;padding:4px 8px;background:var(--bg3);" onchange="loadLogs()">
+      <span class="filter-label" style="margin-left:4px;">Limit:</span>
+      <select class="form-input" id="log-limit" style="font-size:11px;padding:4px 8px;" onchange="loadLogs()">
         <option value="50">50</option>
         <option value="100">100</option>
         <option value="200" selected>200</option>
@@ -443,8 +568,8 @@ select.form-input option { background:var(--bg3); }
     </div>
     <div class="table-wrap">
       <table class="data-table">
-        <thead><tr><th>Query</th><th>Key</th><th>Keys Found</th><th>Latency</th><th>Status</th><th>Time</th></tr></thead>
-        <tbody id="logs-tbody"><tr><td colspan="6" class="empty">Connect to load logs</td></tr></tbody>
+        <thead><tr><th>Query</th><th>Key</th><th>Keys Found</th><th>Latency</th><th>Cache</th><th>Status</th><th>Time</th></tr></thead>
+        <tbody id="logs-tbody"><tr><td colspan="7" class="empty">Connect to load logs</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -452,7 +577,7 @@ select.form-input option { background:var(--bg3); }
 
 <!-- ── EXPIRY MANAGER PAGE ────────────────────────────────────────────────── -->
 <div class="page" id="page-expiry">
-  <div class="page-title">⏱️ Expiry Manager</div>
+  <div class="page-title">⏱ Expiry Manager</div>
   <div class="card" style="margin-bottom:16px;">
     <div class="card-header">
       <div class="section-title">Bulk Actions</div>
@@ -460,7 +585,7 @@ select.form-input option { background:var(--bg3); }
     <div class="card-body" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
       <button class="btn btn-orange btn-sm" onclick="bulkRefreshExpiring()">↻ Refresh All Expiring (≤7d)</button>
       <button class="btn btn-danger btn-sm" onclick="bulkDeleteRevoked()">🗑 Delete All Revoked</button>
-      <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">Bulk refresh resets all expiring keys to 30 days. Bulk delete permanently removes revoked keys.</span>
+      <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">Bulk refresh resets all expiring keys to 30 days from now.</span>
     </div>
   </div>
   <div class="card">
@@ -479,37 +604,37 @@ select.form-input option { background:var(--bg3); }
 
 <!-- ── MODELS PAGE ────────────────────────────────────────────────────────── -->
 <div class="page" id="page-models">
-  <div class="page-title">🤖 Model Management</div>
-  <div id="active-model-banner" style="background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
-    <div style="width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);flex-shrink:0;animation:pulse 2s infinite;"></div>
-    <div>
-      <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;">Currently Active Model</div>
-      <div style="font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--accent);" id="active-model-name">—</div>
-      <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:2px;" id="active-model-id">—</div>
+  <div class="page-title">🤖 Models</div>
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-header">
+      <div class="section-title">Active Model</div>
+      <span class="count-badge" id="models-count">0</span>
     </div>
-    <div style="margin-left:auto;">
-      <span id="active-model-mode" class="badge"></span>
+    <div class="card-body" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <span style="font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--accent);" id="active-model-name">—</span>
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);" id="active-model-id">—</span>
+      </div>
+      <span class="badge badge-full" id="active-model-mode">—</span>
     </div>
   </div>
-  <div class="card">
+  <div class="card" style="margin-bottom:16px;">
     <div class="card-header">
-      <div class="section-title">Models <span class="count-badge" id="models-count">0</span></div>
-      <button class="btn btn-ghost btn-sm" onclick="loadModels()">↻ Refresh</button>
+      <div class="section-title">Add Model</div>
     </div>
-    <div class="card-body" style="border-bottom:1px solid var(--border);padding-bottom:16px;">
-      <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">Add New Model</div>
+    <div class="card-body">
       <div class="form-row" style="margin-bottom:10px;">
-        <input class="form-input" style="width:180px;" id="model-name-input" placeholder="Display name...">
-        <input class="form-input" style="width:260px;" id="model-id-input" placeholder="model_id e.g. llama-3.3-70b-versatile">
-        <input class="form-input input-w-sm" id="model-token-limit-input" type="number" placeholder="token limit" min="1000" style="width:110px;">
+        <input class="form-input input-w-lg" id="model-name-input"        placeholder="Display name e.g. LLaMA 3.3 70B">
+        <input class="form-input input-w-lg" id="model-id-input"          placeholder="Groq model ID e.g. llama-3.3-70b-versatile">
+        <input class="form-input input-w-sm" id="model-token-limit-input" type="number" placeholder="Token limit" min="1000" step="1000">
         <button class="btn btn-primary btn-sm" onclick="addModel()">+ Add</button>
       </div>
       <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">
         Quick-fill:
-        <span onclick="fillModelId('llama-3.1-8b-instant','LLaMA 3.1 8B Instant',6000)"     style="color:var(--blue);cursor:pointer;margin:0 6px;">llama-3.1-8b-instant</span>
+        <span onclick="fillModelId('llama-3.1-8b-instant','LLaMA 3.1 8B Instant',6000)"      style="color:var(--blue);cursor:pointer;margin:0 6px;">llama-3.1-8b-instant</span>
         <span onclick="fillModelId('llama-3.3-70b-versatile','LLaMA 3.3 70B Versatile',32768)" style="color:var(--blue);cursor:pointer;margin:0 6px;">llama-3.3-70b-versatile</span>
-        <span onclick="fillModelId('mixtral-8x7b-32768','Mixtral 8x7B',32768)"                style="color:var(--blue);cursor:pointer;margin:0 6px;">mixtral-8x7b-32768</span>
-        <span onclick="fillModelId('gemma2-9b-it','Gemma 2 9B',8192)"                         style="color:var(--blue);cursor:pointer;margin:0 6px;">gemma2-9b-it</span>
+        <span onclick="fillModelId('mixtral-8x7b-32768','Mixtral 8x7B',32768)"                 style="color:var(--blue);cursor:pointer;margin:0 6px;">mixtral-8x7b-32768</span>
+        <span onclick="fillModelId('gemma2-9b-it','Gemma 2 9B',8192)"                          style="color:var(--blue);cursor:pointer;margin:0 6px;">gemma2-9b-it</span>
       </div>
     </div>
     <div class="table-wrap">
@@ -527,125 +652,111 @@ select.form-input option { background:var(--bg3); }
   <div class="card" style="margin-bottom:16px;">
     <div class="card-body" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
       <span style="font-family:var(--font-mono);font-size:12px;color:var(--muted);">Total keys: <strong id="schema-total" style="color:var(--accent);">—</strong></span>
-      <input class="form-input" id="schema-search" placeholder="Search keys..." style="width:220px;" oninput="filterSchema(this.value)">
+      <input class="form-input" id="schema-search" placeholder="Search keys or descriptions..." style="width:280px;" oninput="filterSchema(this.value)">
       <button class="btn btn-ghost btn-sm" onclick="loadSchema()">↻ Reload</button>
     </div>
   </div>
   <div class="schema-grid" id="schema-grid"><div class="empty">Connect to load schema</div></div>
 </div>
 
-<!-- ── QUERY PLAYGROUND PAGE ──────────────────────────────────────────────── -->
+<!-- ── PLAYGROUND PAGE ───────────────────────────────────────────────────── -->
 <div class="page" id="page-playground">
-  <div class="page-title">🧪 Query Playground</div>
+  <div class="page-title">🧪 Playground</div>
+  <div class="playground-grid">
+    <div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-header"><span class="card-title">Query</span></div>
+        <div class="card-body">
+          <div class="form-row" style="margin-bottom:12px;">
+            <select class="form-input" id="playground-key" style="flex:1;">
+              <option value="">Select API Key...</option>
+            </select>
+            <label style="display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;color:var(--muted);cursor:pointer;">
+              <input type="checkbox" id="playground-custom-schema" style="accent-color:var(--accent);"> Custom Schema
+            </label>
+          </div>
+          <textarea id="playground-query" class="form-input" rows="3" style="width:100%;resize:vertical;" placeholder="e.g. black nike running shoes under $80"></textarea>
+          <div style="margin-top:10px;">
+            <button class="btn btn-primary" id="playground-run-btn" onclick="runPlayground()">▶ Extract</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" id="playground-result-card" style="margin-bottom:12px;display:none;">
+        <div class="card-header">
+          <span class="card-title">Result</span>
+          <div class="playground-meta">
+            <span id="playground-latency" style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);"></span>
+            <span id="playground-keys-found" style="font-family:var(--font-mono);font-size:11px;color:var(--accent);"></span>
+            <span id="playground-cached" style="font-family:var(--font-mono);font-size:11px;color:var(--purple);"></span>
+            <span id="playground-schema-used" style="font-family:var(--font-mono);font-size:11px;color:var(--muted);"></span>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <pre class="playground-result-json" id="playground-json"></pre>
+        </div>
+      </div>
+      <div class="card" id="playground-suggestions-card" style="margin-bottom:12px;display:none;">
+        <div class="card-header"><span class="card-title">Suggestions</span></div>
+        <div class="card-body" id="playground-suggestions"></div>
+      </div>
+      <div id="playground-error-card" style="display:none;" class="playground-error" id="playground-error"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SYSTEM PAGE ────────────────────────────────────────────────────────── -->
+<div class="page" id="page-system">
+  <div class="page-title">⚙️ System</div>
+
+  <!-- Health -->
   <div class="card" style="margin-bottom:16px;">
     <div class="card-header">
-      <div class="section-title">Test Extraction</div>
+      <span class="card-title">Server Health</span>
+      <button class="btn btn-ghost btn-sm" onclick="loadSystem()">↻ Refresh</button>
     </div>
     <div class="card-body">
-      <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;">Enter a natural language search query</div>
-      <div class="form-row" style="margin-bottom:12px;">
-        <input class="form-input" id="playground-query" placeholder='e.g. "red nike running shoes size 10 under $80"' style="flex:1;min-width:200px;">
-        <select class="form-input" id="playground-key" style="width:180px;font-size:11px;">
-          <option value="">Select API Key...</option>
-        </select>
-        <button class="btn btn-primary btn-sm" onclick="runPlayground()" id="playground-run-btn">▶ Extract</button>
+      <div class="system-health-grid">
+        <div class="sys-stat"><div class="sys-stat-label">Status</div><div class="sys-stat-value green" id="sys-status">—</div></div>
+        <div class="sys-stat"><div class="sys-stat-label">Uptime</div><div class="sys-stat-value blue" id="sys-uptime">—</div></div>
+        <div class="sys-stat"><div class="sys-stat-label">Database</div><div class="sys-stat-value" id="sys-db">—</div></div>
+        <div class="sys-stat"><div class="sys-stat-label">Server Time</div><div class="sys-stat-value yellow" id="sys-time">—</div></div>
+        <div class="sys-stat"><div class="sys-stat-label">Cache Entries</div><div class="sys-stat-value purple" id="sys-cache-entries">—</div></div>
+        <div class="sys-stat"><div class="sys-stat-label">Cache Hit Rate</div><div class="sys-stat-value purple" id="sys-cache-rate">—</div></div>
       </div>
-      <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:4px;">Tip: Select an API key that has a custom schema to test with custom schemas using the checkbox below.</div>
-      <label style="display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;color:var(--muted);cursor:pointer;">
-        <input type="checkbox" id="playground-custom-schema" style="accent-color:var(--accent);">
-        Use custom schema (if saved on key)
-      </label>
     </div>
   </div>
-  <div class="card" id="playground-result-card" style="display:none;">
-    <div class="card-header">
-      <div class="section-title">Result</div>
-      <div class="card-actions">
-        <span class="cell-mono" id="playground-latency" style="color:var(--yellow);"></span>
-        <span class="cell-mono" id="playground-keys-found" style="color:var(--accent);"></span>
-        <span class="badge" id="playground-schema-used"></span>
-      </div>
-    </div>
+
+  <!-- Quick Actions -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">Quick Actions</span></div>
     <div class="card-body">
-      <pre id="playground-json" style="font-family:var(--font-mono);font-size:12px;color:var(--text);background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:0;white-space:pre-wrap;max-height:500px;overflow-y:auto;"></pre>
-      <div id="playground-suggestions" style="display:none;margin-top:12px;">
-        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Suggested queries</div>
-        <div id="playground-suggestions-list" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
-      </div>
-    </div>
-  </div>
-  <div class="card" id="playground-error-card" style="display:none;">
-    <div class="card-body" style="color:var(--red);font-family:var(--font-mono);font-size:12px;" id="playground-error"></div>
-  </div>
-</div>
-
-<!-- ── ANALYTICS PAGE ────────────────────────────────────────────────────── -->
-<div class="page" id="page-analytics">
-  <div class="page-title">📈 Analytics</div>
-
-  <!-- Summary cards -->
-  <div class="stats-grid" style="margin-bottom:20px;">
-    <div class="stat-card"><div class="stat-label">Total Requests</div><div class="stat-value blue" id="an-total">—</div><div class="stat-sub">all time</div></div>
-    <div class="stat-card"><div class="stat-label">Successful</div><div class="stat-value green" id="an-success">—</div><div class="stat-sub">status 200</div></div>
-    <div class="stat-card"><div class="stat-label">Failed</div><div class="stat-value red" id="an-failed">—</div><div class="stat-sub">non-200</div></div>
-    <div class="stat-card"><div class="stat-label">Cache Hits</div><div class="stat-value purple" id="an-cache-hits">—</div><div class="stat-sub">all time</div></div>
-    <div class="stat-card"><div class="stat-label">Avg Latency</div><div class="stat-value yellow" id="an-latency">—</div><div class="stat-sub">live requests only</div></div>
-  </div>
-
-  <div class="analytics-grid">
-    <!-- Cache hit rate ring -->
-    <div class="card" style="margin-bottom:0;">
-      <div class="card-header">
-        <span class="card-title">Cache Performance</span>
-        <div class="card-actions">
-          <button class="btn btn-danger btn-sm" onclick="clearCache()">🗑 Clear Cache</button>
+      <div class="sys-action-grid">
+        <div class="sys-action-card">
+          <div class="sys-action-title">🗑 Clear Query Cache</div>
+          <div class="sys-action-desc">Delete all cached extraction results. Future identical queries will call Groq until the cache rebuilds naturally.</div>
+          <button class="btn btn-danger btn-sm" onclick="clearCache()">Clear Cache</button>
+        </div>
+        <div class="sys-action-card">
+          <div class="sys-action-title">🗑 Clear Request Logs</div>
+          <div class="sys-action-desc">Permanently delete all request logs. Analytics data will reset. Key request counters are not affected.</div>
+          <button class="btn btn-danger btn-sm" onclick="clearLogs()">Clear All Logs</button>
+        </div>
+        <div class="sys-action-card">
+          <div class="sys-action-title">↻ Bulk Refresh Keys</div>
+          <div class="sys-action-desc">Reset expiry on all keys expiring within 7 days to 30 days from today.</div>
+          <button class="btn btn-orange btn-sm" onclick="bulkRefreshExpiring()">Refresh Expiring</button>
+        </div>
+        <div class="sys-action-card">
+          <div class="sys-action-title">🗑 Delete Revoked Keys</div>
+          <div class="sys-action-desc">Permanently remove all revoked API keys and their associated request logs.</div>
+          <button class="btn btn-danger btn-sm" onclick="bulkDeleteRevoked()">Delete Revoked</button>
         </div>
       </div>
-      <div class="card-body" style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
-        <div class="cache-hit-ring">
-          <svg class="cache-ring-svg" width="90" height="90" viewBox="0 0 90 90">
-            <circle class="cache-ring-bg" cx="45" cy="45" r="36"/>
-            <circle class="cache-ring-fg" id="cache-ring-circle" cx="45" cy="45" r="36"
-              stroke-dasharray="226" stroke-dashoffset="226"/>
-          </svg>
-          <div class="cache-ring-label">
-            <span class="cache-ring-pct" id="cache-ring-pct">0%</span>
-            <span class="cache-ring-sub">HIT RATE</span>
-          </div>
-        </div>
-        <div style="flex:1;">
-          <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Cache table</div>
-          <div style="display:flex;gap:20px;flex-wrap:wrap;">
-            <div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;">Active Entries</div><div style="font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--accent);" id="an-cache-entries">—</div></div>
-            <div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;">Total Hits</div><div style="font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--purple);" id="an-cache-total-hits">—</div></div>
-          </div>
-          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-top:10px;">7-day TTL · only non-empty results cached · cleared on demand</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 14-day timeline chart -->
-    <div class="card" style="margin-bottom:0;">
-      <div class="card-header"><span class="card-title">14-Day Timeline</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">server aggregated</span></div>
-      <div class="card-body"><div class="chart-wrap"><canvas id="analytics-timeline-chart"></canvas></div></div>
-    </div>
-  </div>
-
-  <div class="analytics-grid" style="margin-top:16px;">
-    <!-- Top queries -->
-    <div class="card" style="margin-bottom:0;">
-      <div class="card-header"><span class="card-title">Top Queries</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">by frequency · successful only</span></div>
-      <div class="card-body" id="top-queries-body"><div class="empty">Load analytics to view</div></div>
-    </div>
-
-    <!-- Usage by key -->
-    <div class="card" style="margin-bottom:0;">
-      <div class="card-header"><span class="card-title">Usage by Key</span></div>
-      <div class="card-body" id="by-key-body"><div class="empty">Load analytics to view</div></div>
     </div>
   </div>
 </div>
-
 
 </main>
 </div><!-- /.layout -->
@@ -661,10 +772,26 @@ select.form-input option { background:var(--bg3); }
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
   <div class="drawer-stats">
-    <div class="drawer-stat"><div class="drawer-stat-label">Requests</div><div class="drawer-stat-value blue" id="drawer-total">—</div></div>
+    <div class="drawer-stat"><div class="drawer-stat-label">Total Requests</div><div class="drawer-stat-value blue" id="drawer-total">—</div></div>
     <div class="drawer-stat"><div class="drawer-stat-label">Avg Latency</div><div class="drawer-stat-value yellow" id="drawer-latency">—</div></div>
     <div class="drawer-stat"><div class="drawer-stat-label">Avg Keys Found</div><div class="drawer-stat-value green" id="drawer-keys">—</div></div>
+    <div class="drawer-stat"><div class="drawer-stat-label">7d Requests</div><div class="drawer-stat-value blue" id="drawer-7d-total">—</div></div>
   </div>
+
+  <!-- 7-day usage chart -->
+  <div class="drawer-section">
+    <div class="drawer-section-title">
+      Usage — Last 7 Days
+      <span id="drawer-usage-loading" style="font-family:var(--font-mono);font-size:10px;color:var(--muted);"></span>
+    </div>
+    <div class="usage-stat-row">
+      <div class="usage-stat-mini"><div class="usage-stat-mini-val green" id="drawer-7d-ok">—</div><div class="usage-stat-mini-lbl">Successful</div></div>
+      <div class="usage-stat-mini"><div class="usage-stat-mini-val red"   id="drawer-7d-err">—</div><div class="usage-stat-mini-lbl">Errors</div></div>
+      <div class="usage-stat-mini"><div class="usage-stat-mini-val yellow" id="drawer-7d-latency">—</div><div class="usage-stat-mini-lbl">Avg Latency</div></div>
+    </div>
+    <div class="drawer-usage-wrap"><canvas id="drawer-usage-chart"></canvas></div>
+  </div>
+
   <!-- Expiry -->
   <div class="drawer-section">
     <div class="drawer-section-title">Expiry</div>
@@ -675,19 +802,20 @@ select.form-input option { background:var(--bg3); }
       <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);">Extend by</span>
       <input type="number" id="drawer-refresh-days" value="30" min="1" max="365" class="form-input" style="width:70px;">
       <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);">days</span>
-      <button class="btn btn-orange btn-sm" onclick="refreshKeyExpiry()">↻ Extend Expiry</button>
+      <button class="btn btn-orange btn-sm" onclick="refreshKeyExpiry()">↻ Extend</button>
     </div>
   </div>
+
   <!-- Rate limit -->
   <div class="drawer-section">
     <div class="drawer-section-title">Rate Limit</div>
-    <div id="drawer-rpm-display" style="font-family:var(--font-mono);font-size:13px;color:var(--yellow);margin-bottom:10px;">— req/min</div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-      <input type="number" id="drawer-rpm-input" value="60" min="1" max="10000" class="form-input" style="width:90px;">
-      <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);">req/min</span>
-      <button class="btn btn-blue btn-sm" onclick="updateDrawerRateLimit()">Save Limit</button>
+      <span style="font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--yellow);" id="drawer-rpm-display">— req/min</span>
+      <input type="number" id="drawer-rpm-input" value="60" min="1" max="10000" class="form-input" style="width:80px;">
+      <button class="btn btn-blue btn-sm" onclick="updateDrawerRateLimit()">Update</button>
     </div>
   </div>
+
   <!-- Custom schema -->
   <div class="drawer-section" id="drawer-schema-section">
     <div class="drawer-section-title">Custom Schema</div>
@@ -697,12 +825,14 @@ select.form-input option { background:var(--bg3); }
       <button class="btn btn-danger btn-sm" id="drawer-del-schema-btn" onclick="deleteKeySchema()" style="display:none;">Delete Schema</button>
     </div>
   </div>
+
   <!-- Admin actions -->
   <div class="drawer-actions">
     <button class="btn btn-danger btn-sm" id="drawer-revoke-btn" onclick="drawerRevokeKey()">Revoke Key</button>
-    <button class="btn btn-danger btn-sm" id="drawer-delete-btn" onclick="drawerDeleteKey()" style="border-color:rgba(255,77,106,.5);">🗑 Delete Permanently</button>
+    <button class="btn btn-danger btn-sm" id="drawer-delete-btn" onclick="drawerDeleteKey()">🗑 Delete Permanently</button>
   </div>
-  <!-- Logs -->
+
+  <!-- Request history -->
   <div class="drawer-body">
     <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Request History</div>
     <table class="data-table">
@@ -712,7 +842,7 @@ select.form-input option { background:var(--bg3); }
   </div>
 </div>
 
-<!-- ── SCHEMA KEY MODAL ───────────────────────────────────────────────────── -->
+<!-- ── MODALS ─────────────────────────────────────────────────────────────── -->
 <div class="modal-overlay" id="schema-key-modal">
   <div class="schema-modal">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
@@ -726,7 +856,6 @@ select.form-input option { background:var(--bg3); }
   </div>
 </div>
 
-<!-- ── CUSTOM SCHEMA VIEW MODAL ───────────────────────────────────────────── -->
 <div class="modal-overlay" id="custom-schema-modal">
   <div class="schema-modal">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
@@ -738,7 +867,6 @@ select.form-input option { background:var(--bg3); }
   </div>
 </div>
 
-<!-- ── CONFIRM MODAL ──────────────────────────────────────────────────────── -->
 <div class="modal-overlay" id="confirm-modal">
   <div class="modal">
     <div class="modal-title" id="confirm-title">Confirm</div>
@@ -750,14 +878,13 @@ select.form-input option { background:var(--bg3); }
   </div>
 </div>
 
-<!-- ── TOKEN LIMIT EDIT MODAL ─────────────────────────────────────────────── -->
 <div class="modal-overlay" id="token-limit-modal">
   <div class="modal">
     <div class="modal-title">Edit Token Limit</div>
     <div class="modal-msg" id="tlm-model-name" style="color:var(--accent);margin-bottom:8px;">—</div>
     <div style="margin-bottom:16px;">
       <label style="font-family:var(--font-mono);font-size:10px;color:var(--muted);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Token Limit (min 1000, or 0 to clear)</label>
-      <input class="form-input" id="tlm-value" type="number" min="0" step="1000" style="width:100%;" placeholder="e.g. 6000 for llama-3.1-8b-instant">
+      <input class="form-input" id="tlm-value" type="number" min="0" step="1000" style="width:100%;" placeholder="e.g. 6000">
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost btn-sm" onclick="document.getElementById('token-limit-modal').classList.remove('open')">Cancel</button>
@@ -767,22 +894,61 @@ select.form-input option { background:var(--bg3); }
 </div>
 
 <div class="toast" id="toast"></div>
-<style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}</style>
 
 <script>
 'use strict'
 
 /* ── State ──────────────────────────────────────────────────────────────────── */
-let requestsChart   = null
-let latencyChart    = null
-let allKeys         = []
-let allLogs         = []
-let allSchemaData   = {}
-let activeDrawerKey = null   // full key object
-let autoRefreshTimer = null
-let confirmCallback  = null
-let tlmModelId       = null   // for token limit modal
+let requestsChart        = null
+let latencyChart         = null
 let analyticsTimelineChart = null
+let drawerUsageChart     = null
+let allKeys              = []
+let allLogs              = []
+let allSchemaData        = {}
+let activeDrawerKey      = null
+let autoRefreshTimer     = null
+let confirmCallback      = null
+let tlmModelId           = null
+
+const STORAGE_KEY = 'searchology_admin_creds'
+
+/* ── Credential persistence (localStorage) ──────────────────────────────────── */
+function loadSavedCredentials() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return
+    const { url, secret } = JSON.parse(raw)
+    if (url)    document.getElementById('api-url').value       = url
+    if (secret) document.getElementById('admin-secret').value  = secret
+    document.getElementById('remember-me-chk').checked = true
+    document.getElementById('cred-saved-badge').classList.add('show')
+  } catch { /* ignore */ }
+}
+
+function saveCredentials() {
+  const { url, secret } = getConfig()
+  if (!url || !secret) return
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ url, secret }))
+    document.getElementById('cred-saved-badge').classList.add('show')
+    toast('Credentials saved to browser', 'success')
+  } catch { toast('Failed to save credentials', 'error') }
+}
+
+function forgetCredentials() {
+  try {
+    localStorage.removeItem(STORAGE_KEY)
+    document.getElementById('remember-me-chk').checked = false
+    document.getElementById('cred-saved-badge').classList.remove('show')
+    toast('Saved credentials cleared', 'info')
+  } catch { /* ignore */ }
+}
+
+document.getElementById('remember-me-chk').addEventListener('change', function() {
+  if (this.checked) saveCredentials()
+  else forgetCredentials()
+})
 
 /* ── Config ─────────────────────────────────────────────────────────────────── */
 const getConfig = () => ({
@@ -794,28 +960,21 @@ const getConfig = () => ({
 function toast(msg, type = 'success') {
   const el = document.getElementById('toast')
   el.textContent = msg
-  el.className = `toast ${type} show`
+  el.className   = `toast ${type} show`
   clearTimeout(el._t)
   el._t = setTimeout(() => el.className = 'toast', 3200)
 }
 
 /* ── Confirm modal ──────────────────────────────────────────────────────────── */
 function confirmAction(title, msg, okLabel = 'Confirm', cb) {
-  document.getElementById('confirm-title').textContent = title
-  document.getElementById('confirm-msg').textContent = msg
-  document.getElementById('confirm-ok-btn').textContent = okLabel
+  document.getElementById('confirm-title').textContent    = title
+  document.getElementById('confirm-msg').textContent      = msg
+  document.getElementById('confirm-ok-btn').textContent   = okLabel
   confirmCallback = cb
   document.getElementById('confirm-modal').classList.add('open')
 }
-function confirmOk() {
-  document.getElementById('confirm-modal').classList.remove('open')
-  if (confirmCallback) confirmCallback()
-  confirmCallback = null
-}
-function confirmCancel() {
-  document.getElementById('confirm-modal').classList.remove('open')
-  confirmCallback = null
-}
+function confirmOk()     { document.getElementById('confirm-modal').classList.remove('open'); if (confirmCallback) confirmCallback(); confirmCallback = null }
+function confirmCancel() { document.getElementById('confirm-modal').classList.remove('open'); confirmCallback = null }
 
 /* ── Status & helpers ───────────────────────────────────────────────────────── */
 function setStatus(online) {
@@ -825,7 +984,6 @@ function setStatus(online) {
   })
 }
 
-// Normalize SQLite datetime ("YYYY-MM-DD HH:MM:SS") or ISO string to Date
 function parseDate(s) {
   if (!s) return null
   return new Date(s.includes('T') ? s : s.replace(' ', 'T') + 'Z')
@@ -854,7 +1012,7 @@ function copyText(text, btn) {
 
 function maskKey(key) {
   if (!key) return '—'
-  return key.slice(0, 10) + '••••••••' + key.slice(-4)
+  return key.slice(0, 10) + '••••••' + key.slice(-4)
 }
 
 function escHtml(s) {
@@ -863,11 +1021,10 @@ function escHtml(s) {
     .replace(/"/g,'&quot;').replace(/'/g,'&#39;')
 }
 
-// Compute expiry % using actual key lifespan
 function expiryPct(key) {
   if (!key.expires_at || key.days_left === null) return 100
-  const created = parseDate(key.created_at)
-  const expires = parseDate(key.expires_at)
+  const created   = parseDate(key.created_at)
+  const expires   = parseDate(key.expires_at)
   if (!created || !expires) return Math.min(100, Math.max(0, (key.days_left / 30) * 100))
   const totalDays = (expires - created) / 86400000
   return Math.min(100, Math.max(0, (key.days_left / totalDays) * 100))
@@ -889,29 +1046,17 @@ function expiryBadge(k) {
   return `<span class="badge badge-active">Active</span>`
 }
 
-function logsRows(logs) {
-  if (!logs.length) return '<tr><td colspan="5" class="empty">No requests yet</td></tr>'
-  return logs.map(l => `
-    <tr>
-      <td><span class="log-query" title="${escHtml(l.query)}">${escHtml(l.query)}</span></td>
-      <td><span class="log-keys">${l.keys_found ?? '—'}</span></td>
-      <td><span class="log-latency">${l.latency_ms ? l.latency_ms + 'ms' : '—'}</span></td>
-      <td><span class="${l.status === 200 ? 'log-ok' : 'log-err'}">${l.status}</span></td>
-      <td><span class="log-date">${timeAgo(l.created_at)}</span></td>
-    </tr>`).join('')
-}
-
 /* ── API fetch ──────────────────────────────────────────────────────────────── */
 async function apiFetch(path, options = {}) {
   const { url, secret } = getConfig()
   if (!url) throw new Error('No URL configured')
   const res = await fetch(`${url}${path}`, {
     ...options,
-    headers: { 'Content-Type':'application/json', 'x-admin-secret':secret, ...(options.headers || {}) }
+    headers: { 'Content-Type':'application/json', 'x-admin-secret':secret, ...(options.headers||{}) }
   })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
-    throw Object.assign(new Error(body.message || `${res.status}`), { status: res.status, body })
+    throw Object.assign(new Error(body.message || `HTTP ${res.status}`), { status:res.status, body })
   }
   return res.json()
 }
@@ -923,7 +1068,6 @@ function showPage(name, btn) {
   document.getElementById(`page-${name}`).classList.add('active')
   btn.classList.add('active')
   if (window.innerWidth <= 768) closeSidebar()
-  // Lazy load schema if switching to that page
   if (name === 'schema' && Object.keys(allSchemaData).length === 0) loadSchema()
 }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open') }
@@ -940,6 +1084,12 @@ function toggleAutoRefresh(on) {
 
 /* ── Load all ───────────────────────────────────────────────────────────────── */
 async function loadAll() {
+  const { url, secret } = getConfig()
+  if (!url) { toast('Enter a server URL first', 'error'); return }
+
+  // Save credentials if "Remember" is checked
+  if (document.getElementById('remember-me-chk').checked) saveCredentials()
+
   try {
     await Promise.all([loadHealth(), loadKeys(), loadLogs(), loadModels(), loadAnalytics()])
     document.getElementById('last-updated').textContent = 'updated ' + new Date().toLocaleTimeString()
@@ -957,34 +1107,56 @@ async function loadHealth() {
     const h = Math.floor(d.uptime_seconds / 3600)
     const m = Math.floor((d.uptime_seconds % 3600) / 60)
     document.getElementById('server-uptime').textContent = `${h}h ${m}m`
-    document.getElementById('server-time').textContent = new Date(d.timestamp).toLocaleTimeString()
+    document.getElementById('server-time').textContent   = new Date(d.timestamp).toLocaleTimeString()
   } catch { setStatus(false) }
+}
+
+/* ── System page ────────────────────────────────────────────────────────────── */
+async function loadSystem() {
+  document.getElementById('sys-status').textContent = '…'
+  document.getElementById('sys-uptime').textContent = '…'
+  try {
+    const { url } = getConfig()
+    const health  = await fetch(`${url}/health`).then(r => r.json())
+    const h = Math.floor(health.uptime_seconds / 3600)
+    const m = Math.floor((health.uptime_seconds % 3600) / 60)
+    document.getElementById('sys-status').textContent = health.status === 'ok' ? 'OK' : 'Error'
+    document.getElementById('sys-status').className   = `sys-stat-value ${health.status === 'ok' ? 'green' : 'red'}`
+    document.getElementById('sys-uptime').textContent = `${h}h ${m}m`
+    document.getElementById('sys-time').textContent   = new Date(health.timestamp).toLocaleTimeString()
+    document.getElementById('sys-db').textContent     = health.database === 'connected' ? 'Connected' : 'Error'
+    document.getElementById('sys-db').className       = `sys-stat-value ${health.database === 'connected' ? 'green' : 'red'}`
+  } catch {
+    document.getElementById('sys-status').textContent = 'Offline'
+    document.getElementById('sys-status').className   = 'sys-stat-value red'
+  }
+  try {
+    const analytics = await apiFetch('/analytics')
+    const s = analytics.summary || {}
+    const c = analytics.cache   || {}
+    document.getElementById('sys-cache-entries').textContent = (c.active_entries || 0).toLocaleString()
+    document.getElementById('sys-cache-rate').textContent    = (s.cache_hit_rate || 0) + '%'
+  } catch { /* non-critical */ }
 }
 
 /* ── Keys ───────────────────────────────────────────────────────────────────── */
 async function loadKeys() {
   document.getElementById('keys-tbody').innerHTML   = '<tr><td colspan="8" class="empty"><span class="loading"></span></td></tr>'
   document.getElementById('expiry-tbody').innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
-
   try {
     const data = await apiFetch('/keys')
-    allKeys = data.keys || []
+    allKeys    = data.keys || []
+    document.getElementById('keys-count').textContent      = allKeys.length
+    document.getElementById('stat-active').textContent     = allKeys.filter(k => k.is_active).length
+    document.getElementById('stat-total-keys').textContent = allKeys.length
+    document.getElementById('stat-expiring').textContent   = allKeys.filter(k => k.is_active && k.days_left !== null && k.days_left <= 7).length
 
-    // stats
-    document.getElementById('keys-count').textContent        = allKeys.length
-    document.getElementById('stat-active').textContent       = allKeys.filter(k => k.is_active).length
-    document.getElementById('stat-total-keys').textContent   = allKeys.length
-    document.getElementById('stat-total').textContent        = allKeys.reduce((s, k) => s + k.requests, 0).toLocaleString()
-    document.getElementById('stat-expiring').textContent     = allKeys.filter(k => k.is_active && k.days_left !== null && k.days_left <= 7).length
-
-    // populate key filter dropdown in logs
     const sel = document.getElementById('log-filter-key')
     const cur = sel.value
     sel.innerHTML = '<option value="">All Keys</option>' +
       allKeys.map(k => `<option value="${k.id}">${escHtml(k.name)}</option>`).join('')
     sel.value = cur
 
-    // populate playground key dropdown
     const pgSel = document.getElementById('playground-key')
     if (pgSel) {
       const pgCur = pgSel.value
@@ -996,46 +1168,43 @@ async function loadKeys() {
     renderKeysTable(allKeys)
     renderExpiryTable(allKeys)
   } catch (e) {
-    document.getElementById('keys-tbody').innerHTML = `<tr><td colspan="7" class="empty" style="color:var(--red);">Failed to load keys</td></tr>`
+    document.getElementById('keys-tbody').innerHTML = `<tr><td colspan="8" class="empty" style="color:var(--red);">Failed to load keys</td></tr>`
     throw e
   }
 }
 
 function renderKeysTable(keys) {
   if (!keys.length) {
-    document.getElementById('keys-tbody').innerHTML = '<tr><td colspan="7" class="empty">No API keys yet</td></tr>'
+    document.getElementById('keys-tbody').innerHTML = '<tr><td colspan="8" class="empty">No API keys yet — create one above</td></tr>'
     return
   }
   document.getElementById('keys-tbody').innerHTML = keys.map(k => {
-    const color = expiryColor(k.days_left)
-    const pct   = expiryPct(k)
+    const color      = expiryColor(k.days_left)
+    const pct        = expiryPct(k)
     const schemaCell = k.custom_schema
-      ? `<span class="badge badge-schema" onclick="openCustomSchemaBadge('${k.id}','${escHtml(k.name)}')" title="Custom schema saved — click to view">Schema ↗</span>`
+      ? `<span class="badge badge-schema" onclick="openCustomSchemaBadge('${k.id}','${escHtml(k.name)}')" title="Custom schema — click to view">Custom ↗</span>`
       : `<span style="color:var(--muted);font-family:var(--font-mono);font-size:10px;">built-in</span>`
-    const rpmColor = (k.rate_limit_rpm || 60) > 60 ? 'var(--accent)' : (k.rate_limit_rpm < 60 ? 'var(--orange)' : 'var(--yellow)')
-
+    const rpmColor = (k.rate_limit_rpm||60) > 60 ? 'var(--accent)' : (k.rate_limit_rpm < 60 ? 'var(--orange)' : 'var(--yellow)')
     return `<tr>
       <td><span class="cell-name">${escHtml(k.name)}</span></td>
       <td><div class="cell-key">
         <span class="cell-key-val" title="${escHtml(k.key)}">${maskKey(k.key)}</span>
         <button class="btn btn-blue btn-xs" onclick="copyText('${escHtml(k.key)}',this)">Copy</button>
       </div></td>
-      <td><span class="cell-num">${(k.requests || 0).toLocaleString()}</span></td>
-      <td>
-        <div class="expiry-cell">
-          <div class="expiry-bar"><div class="expiry-fill" style="width:${pct}%;background:${color};"></div></div>
-          <span class="expiry-text" style="color:${color};">${k.days_left !== null ? k.days_left + 'd' : '—'}</span>
-        </div>
-      </td>
+      <td><span class="cell-num">${(k.requests||0).toLocaleString()}</span></td>
+      <td><div class="expiry-cell">
+        <div class="expiry-bar"><div class="expiry-fill" style="width:${pct}%;background:${color};"></div></div>
+        <span class="expiry-text" style="color:${color};">${k.days_left!==null?k.days_left+'d':'—'}</span>
+      </div></td>
       <td>${expiryBadge(k)}</td>
       <td>${schemaCell}</td>
-      <td><span style="font-family:var(--font-mono);font-size:12px;color:${rpmColor};">${k.rate_limit_rpm || 60}</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);"> rpm</span></td>
+      <td><span style="font-family:var(--font-mono);font-size:12px;color:${rpmColor};">${k.rate_limit_rpm||60}</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);"> rpm</span></td>
       <td><div class="cell-actions">
         <button class="btn btn-green btn-xs" onclick="openDrawer('${k.id}')">Details</button>
         ${k.is_active
           ? `<button class="btn btn-danger btn-xs" onclick="revokeKey('${k.id}','${escHtml(k.name)}')">Revoke</button>`
           : `<span class="badge badge-revoked">revoked</span>`}
-        <button class="btn btn-danger btn-xs" style="border-color:rgba(255,77,106,.5);" onclick="deleteKey('${k.id}','${escHtml(k.name)}')">🗑</button>
+        <button class="btn btn-danger btn-xs" onclick="deleteKey('${k.id}','${escHtml(k.name)}')">🗑</button>
       </div></td>
     </tr>`
   }).join('')
@@ -1053,12 +1222,10 @@ function renderExpiryTable(keys) {
       <td><span class="cell-name">${escHtml(k.name)}</span></td>
       <td>${expiryBadge(k)}</td>
       <td><span class="cell-mono">${k.expires_at ? parseDate(k.expires_at).toLocaleDateString() : '—'}</span></td>
-      <td>
-        <div class="expiry-cell">
-          <div class="expiry-bar" style="width:80px;"><div class="expiry-fill" style="width:${pct}%;background:${color};"></div></div>
-          <span class="expiry-text" style="color:${color};">${k.days_left !== null ? k.days_left + 'd left' : '—'}</span>
-        </div>
-      </td>
+      <td><div class="expiry-cell">
+        <div class="expiry-bar" style="width:80px;"><div class="expiry-fill" style="width:${pct}%;background:${color};"></div></div>
+        <span class="expiry-text" style="color:${color};">${k.days_left!==null?k.days_left+'d left':'—'}</span>
+      </div></td>
       <td><div class="cell-actions">
         <input type="number" value="30" min="1" max="365" class="form-input" style="width:64px;padding:4px 6px;font-size:11px;" id="expiry-days-${k.id}">
         <button class="btn btn-orange btn-xs" onclick="quickRefresh('${k.id}','${escHtml(k.name)}')">↻ Refresh</button>
@@ -1072,24 +1239,22 @@ function renderExpiryTable(keys) {
 
 async function createKey() {
   const nameInput = document.getElementById('new-key-name')
-  const daysInput = document.getElementById('new-key-days')
-  const rpmInput  = document.getElementById('new-key-rpm')
   const name = nameInput.value.trim()
-  const days = parseInt(daysInput.value) || 30
-  const rpm  = parseInt(rpmInput?.value) || 60
+  const days = parseInt(document.getElementById('new-key-days').value) || 30
+  const rpm  = parseInt(document.getElementById('new-key-rpm').value)  || 60
   if (!name) { toast('Enter a client name first', 'error'); nameInput.focus(); return }
   try {
-    const data = await apiFetch('/keys', { method:'POST', body: JSON.stringify({ name, expires_in_days: days, rate_limit_rpm: rpm }) })
+    const data = await apiFetch('/keys', { method:'POST', body: JSON.stringify({ name, expires_in_days:days, rate_limit_rpm:rpm }) })
     nameInput.value = ''
     document.getElementById('new-key-value').textContent = data.key
     document.getElementById('new-key-box').classList.add('show')
-    toast(`Key created for "${name}" — ${days} days`)
+    toast(`Key created for "${name}" — ${days} days, ${rpm} rpm`)
     await loadKeys()
-  } catch (e) { toast('Failed to create key: ' + (e.message || 'unknown error'), 'error') }
+  } catch (e) { toast('Failed to create key: ' + (e.message||'unknown error'), 'error') }
 }
 
 async function revokeKey(id, name) {
-  confirmAction('Revoke Key', `Revoke the key for "${name}"? The key will stop working immediately but can still be seen in the table.`, 'Revoke', async () => {
+  confirmAction('Revoke Key', `Revoke the key for "${name}"? It will stop working immediately.`, 'Revoke', async () => {
     try {
       await apiFetch(`/keys/${id}`, { method:'DELETE' })
       toast(`Key for "${name}" revoked`)
@@ -1100,7 +1265,7 @@ async function revokeKey(id, name) {
 }
 
 async function deleteKey(id, name) {
-  confirmAction('Delete Permanently', `Permanently delete the key for "${name}"? This cannot be undone — the key record and all its logs will be removed entirely.`, '🗑 Delete', async () => {
+  confirmAction('Delete Permanently', `Delete the key for "${name}"? All logs for this key will also be removed. This cannot be undone.`, '🗑 Delete', async () => {
     try {
       await apiFetch(`/keys/${id}?permanent=true`, { method:'DELETE' })
       toast(`Key for "${name}" permanently deleted`)
@@ -1111,9 +1276,8 @@ async function deleteKey(id, name) {
   })
 }
 
-// Fixed: now calls PATCH /keys/:id/expiry (not POST /keys/:id/refresh)
 async function quickRefresh(id, name) {
-  const inp = document.getElementById(`expiry-days-${id}`)
+  const inp  = document.getElementById(`expiry-days-${id}`)
   const days = parseInt(inp?.value) || 30
   try {
     await apiFetch(`/keys/${id}/expiry`, { method:'PATCH', body: JSON.stringify({ expires_in_days: days }) })
@@ -1128,12 +1292,10 @@ async function bulkRefreshExpiring() {
   confirmAction('Bulk Refresh', `Refresh expiry for ${expiring.length} key(s) to 30 days?`, 'Refresh All', async () => {
     let ok = 0, fail = 0
     for (const k of expiring) {
-      try {
-        await apiFetch(`/keys/${k.id}/expiry`, { method:'PATCH', body: JSON.stringify({ expires_in_days: 30 }) })
-        ok++
-      } catch { fail++ }
+      try { await apiFetch(`/keys/${k.id}/expiry`, { method:'PATCH', body: JSON.stringify({ expires_in_days:30 }) }); ok++ }
+      catch { fail++ }
     }
-    toast(`Refreshed ${ok} key(s)${fail ? `, ${fail} failed` : ''}`, fail ? 'error' : 'success')
+    toast(`Refreshed ${ok} key(s)${fail?`, ${fail} failed`:''}`, fail?'error':'success')
     await loadKeys()
   })
 }
@@ -1141,13 +1303,13 @@ async function bulkRefreshExpiring() {
 async function bulkDeleteRevoked() {
   const revoked = allKeys.filter(k => !k.is_active)
   if (!revoked.length) { toast('No revoked keys to delete', 'info'); return }
-  confirmAction('Delete Revoked', `Permanently delete ${revoked.length} revoked key(s)? This cannot be undone.`, '🗑 Delete All', async () => {
+  confirmAction('Delete Revoked', `Permanently delete ${revoked.length} revoked key(s)?`, '🗑 Delete All', async () => {
     let ok = 0, fail = 0
     for (const k of revoked) {
       try { await apiFetch(`/keys/${k.id}?permanent=true`, { method:'DELETE' }); ok++ }
       catch { fail++ }
     }
-    toast(`Deleted ${ok} revoked key(s)${fail ? `, ${fail} failed` : ''}`, fail ? 'error' : 'success')
+    toast(`Deleted ${ok} revoked key(s)${fail?`, ${fail} failed`:''}`, fail?'error':'success')
     await loadKeys()
   })
 }
@@ -1160,17 +1322,19 @@ async function openDrawer(id) {
 
   document.getElementById('drawer-title').textContent = k.name
   document.getElementById('drawer-sub').textContent   = maskKey(k.key)
-  document.getElementById('drawer-total').textContent = (k.requests || 0).toLocaleString()
+  document.getElementById('drawer-total').textContent = (k.requests||0).toLocaleString()
   document.getElementById('drawer-latency').textContent = '—'
   document.getElementById('drawer-keys').textContent    = '—'
+  document.getElementById('drawer-7d-total').textContent = '…'
+  document.getElementById('drawer-7d-ok').textContent    = '—'
+  document.getElementById('drawer-7d-err').textContent   = '—'
+  document.getElementById('drawer-7d-latency').textContent = '—'
   document.getElementById('drawer-tbody').innerHTML = '<tr><td colspan="5" class="empty"><span class="loading"></span></td></tr>'
 
-  // Rate limit
   const rpm = k.rate_limit_rpm || 60
   document.getElementById('drawer-rpm-display').textContent = rpm + ' req/min'
-  document.getElementById('drawer-rpm-input').value = rpm
+  document.getElementById('drawer-rpm-input').value         = rpm
 
-  // Expiry
   const expiry = k.expires_at ? parseDate(k.expires_at) : null
   document.getElementById('drawer-expires-at').textContent = expiry
     ? expiry.toLocaleDateString('en',{year:'numeric',month:'long',day:'numeric'})
@@ -1179,36 +1343,98 @@ async function openDrawer(id) {
   const pct   = expiryPct(k)
   document.getElementById('drawer-expiry-fill').style.width      = pct + '%'
   document.getElementById('drawer-expiry-fill').style.background = color
-  document.getElementById('drawer-days-left').textContent = k.days_left !== null ? `${k.days_left} days remaining` : '—'
-  document.getElementById('drawer-days-left').style.color = color
+  document.getElementById('drawer-days-left').textContent        = k.days_left !== null ? `${k.days_left} days remaining` : '—'
+  document.getElementById('drawer-days-left').style.color        = color
 
-  // Custom schema
   const hasSchema = !!k.custom_schema
-  document.getElementById('drawer-schema-status').textContent = hasSchema
-    ? `Custom schema saved — ${Object.keys(JSON.parse(k.custom_schema || '{}')).length} keys`
+  document.getElementById('drawer-schema-status').textContent   = hasSchema
+    ? `Custom schema saved — ${Object.keys(JSON.parse(k.custom_schema||'{}')).length} keys`
     : 'Using built-in schema'
   document.getElementById('drawer-view-schema-btn').style.display = hasSchema ? '' : 'none'
   document.getElementById('drawer-del-schema-btn').style.display  = hasSchema ? '' : 'none'
-
-  // Action buttons
-  document.getElementById('drawer-revoke-btn').style.display = k.is_active ? '' : 'none'
-  document.getElementById('drawer-delete-btn').style.display = ''
+  document.getElementById('drawer-revoke-btn').style.display      = k.is_active ? '' : 'none'
 
   document.getElementById('drawer-overlay').classList.add('open')
   document.getElementById('drawer').classList.add('open')
   document.body.style.overflow = 'hidden'
 
-  // Load logs for this key
+  // Load logs + usage concurrently
   apiFetch(`/logs?key_id=${id}&limit=100`).then(data => {
     const logs = data.logs || []
     if (logs.length > 0) {
-      document.getElementById('drawer-latency').textContent = Math.round(logs.reduce((s,l) => s+(l.latency_ms||0),0)/logs.length) + 'ms'
-      document.getElementById('drawer-keys').textContent    = (logs.reduce((s,l) => s+(l.keys_found||0),0)/logs.length).toFixed(1)
+      document.getElementById('drawer-latency').textContent = Math.round(logs.reduce((s,l)=>s+(l.latency_ms||0),0)/logs.length) + 'ms'
+      document.getElementById('drawer-keys').textContent    = (logs.reduce((s,l)=>s+(l.keys_found||0),0)/logs.length).toFixed(1)
     }
     document.getElementById('drawer-tbody').innerHTML = logsRows(logs)
   }).catch(() => {
     document.getElementById('drawer-tbody').innerHTML = `<tr><td colspan="5" class="empty" style="color:var(--red);">Failed to load logs</td></tr>`
   })
+
+  loadKeyUsageChart(id)
+}
+
+function logsRows(logs) {
+  if (!logs.length) return '<tr><td colspan="5" class="empty">No requests yet</td></tr>'
+  return logs.map(l => `
+    <tr>
+      <td><span class="log-query" title="${escHtml(l.query)}">${escHtml(l.query)}</span></td>
+      <td><span class="log-keys">${l.keys_found??'—'}</span></td>
+      <td><span class="log-latency">${l.latency_ms?l.latency_ms+'ms':'—'}</span></td>
+      <td><span class="${l.status===200?'log-ok':'log-err'}">${l.status}</span></td>
+      <td><span class="log-date">${timeAgo(l.created_at)}</span></td>
+    </tr>`).join('')
+}
+
+/* ── Key 7-day usage chart (drawer) ─────────────────────────────────────────── */
+async function loadKeyUsageChart(keyId) {
+  document.getElementById('drawer-usage-loading').textContent = 'loading…'
+  try {
+    const data = await apiFetch(`/key-stats/${keyId}`)
+    document.getElementById('drawer-usage-loading').textContent = ''
+
+    const t = data.totals || {}
+    document.getElementById('drawer-7d-total').textContent   = (t.requests_7d  || 0).toLocaleString()
+    document.getElementById('drawer-7d-ok').textContent      = (t.successful_7d || 0).toLocaleString()
+    document.getElementById('drawer-7d-err').textContent     = (t.errors_7d     || 0).toLocaleString()
+    document.getElementById('drawer-7d-latency').textContent = t.avg_latency_7d ? Math.round(t.avg_latency_7d) + 'ms' : '—'
+
+    // Build a day map for the last 7 days
+    const dayMap = {}
+    const errMap = {}
+    ;(data.daily || []).forEach(d => { dayMap[d.day] = d.successful || 0; errMap[d.day] = d.errors || 0 })
+
+    const labels = [], okData = [], errData = []
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date()
+      d.setDate(d.getDate() - i)
+      const dayStr = d.toISOString().slice(0,10)
+      labels.push(d.toLocaleDateString('en',{month:'short',day:'numeric'}))
+      okData.push(dayMap[dayStr] || 0)
+      errData.push(errMap[dayStr] || 0)
+    }
+
+    if (drawerUsageChart) drawerUsageChart.destroy()
+    drawerUsageChart = new Chart(document.getElementById('drawer-usage-chart'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { label:'OK',    data:okData,  backgroundColor:'rgba(0,255,136,.25)', borderColor:'#00ff88', borderWidth:1, borderRadius:2, stack:'s' },
+          { label:'Error', data:errData, backgroundColor:'rgba(255,77,106,.25)', borderColor:'#ff4d6a', borderWidth:1, borderRadius:2, stack:'s' },
+        ]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ display:true, position:'bottom', labels:{ color:'#64748b', font:{ family:'JetBrains Mono', size:9 }, padding:8, boxWidth:10 } } },
+        scales:{
+          x:{ grid:{color:'#1e2535'}, ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:9}} },
+          y:{ grid:{color:'#1e2535'}, ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:9},precision:0}, beginAtZero:true }
+        }
+      }
+    })
+  } catch {
+    document.getElementById('drawer-usage-loading').textContent = 'failed to load'
+  }
 }
 
 function closeDrawer() {
@@ -1218,7 +1444,6 @@ function closeDrawer() {
   activeDrawerKey = null
 }
 
-// Fixed: now calls PATCH /keys/:id/expiry
 async function refreshKeyExpiry() {
   if (!activeDrawerKey) return
   const days = parseInt(document.getElementById('drawer-refresh-days').value) || 30
@@ -1226,30 +1451,22 @@ async function refreshKeyExpiry() {
     await apiFetch(`/keys/${activeDrawerKey.id}/expiry`, { method:'PATCH', body: JSON.stringify({ expires_in_days: days }) })
     toast(`Expiry extended by ${days} days`)
     await loadKeys()
-    // Refresh drawer data
     const updated = allKeys.find(k => k.id === activeDrawerKey.id)
     if (updated) openDrawer(updated.id)
     else closeDrawer()
   } catch (e) { toast('Failed to refresh expiry', 'error') }
 }
 
-function drawerRevokeKey() {
-  if (!activeDrawerKey) return
-  revokeKey(activeDrawerKey.id, activeDrawerKey.name)
-}
-
-function drawerDeleteKey() {
-  if (!activeDrawerKey) return
-  deleteKey(activeDrawerKey.id, activeDrawerKey.name)
-}
+function drawerRevokeKey() { if (activeDrawerKey) revokeKey(activeDrawerKey.id, activeDrawerKey.name) }
+function drawerDeleteKey()  { if (activeDrawerKey) deleteKey(activeDrawerKey.id, activeDrawerKey.name) }
 
 function viewKeySchema() {
   if (!activeDrawerKey?.custom_schema) return
   try {
     const schema = JSON.parse(activeDrawerKey.custom_schema)
     document.getElementById('csm-key-name').textContent = activeDrawerKey.name
-    document.getElementById('csm-count').textContent = `${Object.keys(schema).length} keys saved`
-    document.getElementById('csm-list').innerHTML = Object.entries(schema).map(([k, v]) =>
+    document.getElementById('csm-count').textContent    = `${Object.keys(schema).length} keys saved`
+    document.getElementById('csm-list').innerHTML = Object.entries(schema).map(([k,v]) =>
       `<div class="schema-kv-row">
         <div class="schema-kv-key">${escHtml(k)}</div>
         <div class="schema-kv-val">${escHtml(v)}</div>
@@ -1267,12 +1484,11 @@ async function openCustomSchemaBadge(id, name) {
 
 async function deleteKeySchema() {
   if (!activeDrawerKey) return
-  confirmAction('Delete Custom Schema', `Remove the custom schema for "${activeDrawerKey.name}"? Extractions will revert to the built-in schema.`, 'Delete Schema', async () => {
+  confirmAction('Delete Schema', `Remove the custom schema for "${activeDrawerKey.name}"? Extractions will revert to built-in schema.`, 'Delete', async () => {
     try {
-      await apiFetch(`/keys/${activeDrawerKey.id}/schema`, { method: 'DELETE' })
+      await apiFetch(`/keys/${activeDrawerKey.id}/schema`, { method:'DELETE' })
       toast('Custom schema deleted')
       await loadKeys()
-      // Refresh drawer
       const updated = allKeys.find(k => k.id === activeDrawerKey.id)
       if (updated) openDrawer(updated.id)
       else closeDrawer()
@@ -1280,21 +1496,31 @@ async function deleteKeySchema() {
   })
 }
 
+async function updateDrawerRateLimit() {
+  if (!activeDrawerKey) return
+  const rpm = parseInt(document.getElementById('drawer-rpm-input').value)
+  if (!rpm || rpm < 1) { toast('Enter a valid rate limit (min 1)', 'error'); return }
+  try {
+    await apiFetch(`/keys/${activeDrawerKey.id}/rate-limit`, { method:'PATCH', body: JSON.stringify({ rate_limit_rpm:rpm }) })
+    toast(`Rate limit updated to ${rpm} req/min`)
+    await loadKeys()
+    const updated = allKeys.find(k => k.id === activeDrawerKey.id)
+    if (updated) openDrawer(updated.id)
+  } catch (e) { toast('Failed to update rate limit: ' + (e.message||''), 'error') }
+}
+
 /* ── Logs ───────────────────────────────────────────────────────────────────── */
 async function loadLogs() {
-  document.getElementById('logs-tbody').innerHTML = '<tr><td colspan="6" class="empty"><span class="loading"></span></td></tr>'
+  document.getElementById('logs-tbody').innerHTML = '<tr><td colspan="7" class="empty"><span class="loading"></span></td></tr>'
   const limit = document.getElementById('log-limit')?.value || 200
   try {
     const data = await apiFetch(`/logs?limit=${limit}`)
-    allLogs = data.logs || []
+    allLogs    = data.logs || []
     document.getElementById('logs-count').textContent = allLogs.length
-
-    // Stats are now driven by /analytics — loadLogs no longer overwrites them
-
     buildCharts(allLogs, window._serverTimeline || null)
     applyLogFilter()
   } catch (e) {
-    document.getElementById('logs-tbody').innerHTML = `<tr><td colspan="6" class="empty" style="color:var(--red);">Failed to load logs</td></tr>`
+    document.getElementById('logs-tbody').innerHTML = `<tr><td colspan="7" class="empty" style="color:var(--red);">Failed to load logs</td></tr>`
     buildCharts([], null)
   }
 }
@@ -1302,89 +1528,89 @@ async function loadLogs() {
 function applyLogFilter() {
   const keyId  = document.getElementById('log-filter-key')?.value || ''
   const status = document.getElementById('log-filter-status')?.value || ''
-
   let filtered = allLogs
   if (keyId)  filtered = filtered.filter(l => l.api_key_id === keyId)
   if (status) filtered = filtered.filter(l => String(l.status) === status)
-
   document.getElementById('logs-count').textContent = filtered.length
 
   if (!filtered.length) {
-    document.getElementById('logs-tbody').innerHTML = '<tr><td colspan="6" class="empty">No logs match the current filter</td></tr>'
+    document.getElementById('logs-tbody').innerHTML = '<tr><td colspan="7" class="empty">No logs match the current filter</td></tr>'
     return
   }
-
-  // Build key name lookup
   const keyMap = {}
   allKeys.forEach(k => { keyMap[k.id] = k.name })
 
   document.getElementById('logs-tbody').innerHTML = filtered.map(l => `
     <tr>
       <td><span class="log-query" title="${escHtml(l.query)}">${escHtml(l.query)}</span></td>
-      <td><span class="cell-mono" style="color:var(--blue);">${escHtml(keyMap[l.api_key_id] || l.api_key_id || '—')}</span></td>
-      <td><span class="log-keys">${l.keys_found ?? '—'}</span></td>
-      <td><span class="log-latency">${l.latency_ms ? l.latency_ms + 'ms' : '—'}</span></td>
-      <td><span class="${l.status === 200 ? 'log-ok' : 'log-err'}">${l.status}</span></td>
+      <td><span class="cell-mono" style="color:var(--blue);">${escHtml(keyMap[l.api_key_id]||l.api_key_id||'—')}</span></td>
+      <td><span class="log-keys">${l.keys_found??'—'}</span></td>
+      <td><span class="log-latency">${l.latency_ms?l.latency_ms+'ms':'—'}</span></td>
+      <td>${l.cache_hit?`<span class="log-cached">●&nbsp;cached</span>`:`<span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">live</span>`}</td>
+      <td><span class="${l.status===200?'log-ok':'log-err'}">${l.status}</span></td>
       <td><span class="log-date">${timeAgo(l.created_at)}</span></td>
     </tr>`).join('')
 }
 
+async function clearLogs() {
+  if (!allLogs.length) { toast('No logs to clear', 'info'); return }
+  confirmAction('Clear All Logs', `Permanently delete all ${allLogs.length} request log(s)?`, '🗑 Clear All', async () => {
+    try {
+      const data = await apiFetch('/logs', { method:'DELETE' })
+      toast(`Cleared ${data.deleted} log(s)`)
+      await loadLogs()
+      await loadKeys()
+    } catch (e) { toast('Failed to clear logs', 'error') }
+  })
+}
+
 /* ── Charts ─────────────────────────────────────────────────────────────────── */
-// serverTimeline: array of { day, total } from GET /analytics — preferred over log scan.
-// Falls back to local log scan when analytics data is unavailable.
 function buildCharts(logs, serverTimeline) {
   const days = [], counts = []
   if (serverTimeline && serverTimeline.length > 0) {
-    // Build a day→count map from server data for O(1) lookup
     const dayMap = {}
-    serverTimeline.forEach(row => { dayMap[row.day] = row.total })
+    serverTimeline.forEach(r => { dayMap[r.day] = r.total })
     for (let i = 13; i >= 0; i--) {
-      const d = new Date()
-      d.setDate(d.getDate() - i)
-      const dayStr = d.toISOString().slice(0, 10)
-      days.push(d.toLocaleDateString('en', {month:'short', day:'numeric'}))
-      counts.push(dayMap[dayStr] || 0)
+      const d = new Date(); d.setDate(d.getDate()-i)
+      const dayStr = d.toISOString().slice(0,10)
+      days.push(d.toLocaleDateString('en',{month:'short',day:'numeric'}))
+      counts.push(dayMap[dayStr]||0)
     }
   } else {
-    // Fallback: scan local logs (limited to whatever was fetched)
     for (let i = 13; i >= 0; i--) {
-      const d = new Date()
-      d.setDate(d.getDate() - i)
-      const dayStr = d.toISOString().slice(0, 10)
-      days.push(d.toLocaleDateString('en', {month:'short', day:'numeric'}))
+      const d = new Date(); d.setDate(d.getDate()-i)
+      const dayStr = d.toISOString().slice(0,10)
+      days.push(d.toLocaleDateString('en',{month:'short',day:'numeric'}))
       counts.push(logs.filter(l => {
         if (!l.created_at) return false
-        const normalized = l.created_at.includes('T') ? l.created_at : l.created_at.replace(' ', 'T')
-        return normalized.startsWith(dayStr)
+        const n = l.created_at.includes('T') ? l.created_at : l.created_at.replace(' ','T')
+        return n.startsWith(dayStr)
       }).length)
     }
   }
 
-  const buckets = {'<500ms':0,'500ms-1s':0,'1s-2s':0,'2s-3s':0,'>3s':0}
+  const buckets = {'<500ms':0,'500–1s':0,'1–2s':0,'2–3s':0,'>3s':0}
   logs.forEach(l => {
-    const ms = l.latency_ms || 0
-    if      (ms < 500)  buckets['<500ms']++
-    else if (ms < 1000) buckets['500ms-1s']++
-    else if (ms < 2000) buckets['1s-2s']++
-    else if (ms < 3000) buckets['2s-3s']++
-    else                buckets['>3s']++
+    const ms = l.latency_ms||0
+    if      (ms<500)  buckets['<500ms']++
+    else if (ms<1000) buckets['500–1s']++
+    else if (ms<2000) buckets['1–2s']++
+    else if (ms<3000) buckets['2–3s']++
+    else              buckets['>3s']++
   })
 
-  const grid = '#1e2535'
-  const tick = {family:'JetBrains Mono', size:10}
-
+  const grid = '#1e2535', tick = {family:'JetBrains Mono',size:10}
   if (requestsChart) requestsChart.destroy()
   requestsChart = new Chart(document.getElementById('requests-chart'), {
-    type: 'bar',
-    data: { labels:days, datasets:[{data:counts,backgroundColor:'rgba(0,255,136,.15)',borderColor:'#00ff88',borderWidth:1,borderRadius:3}] },
-    options: {responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:grid},ticks:{color:'#64748b',font:tick}},y:{grid:{color:grid},ticks:{color:'#64748b',font:tick}}}}
+    type:'bar',
+    data:{ labels:days, datasets:[{data:counts,backgroundColor:'rgba(0,255,136,.12)',borderColor:'#00ff88',borderWidth:1,borderRadius:3}] },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:grid},ticks:{color:'#64748b',font:tick}},y:{grid:{color:grid},ticks:{color:'#64748b',font:tick},beginAtZero:true}}}
   })
-
   if (latencyChart) latencyChart.destroy()
   latencyChart = new Chart(document.getElementById('latency-chart'), {
-    type: 'doughnut',
-    data: { labels:Object.keys(buckets), datasets:[{data:Object.values(buckets),backgroundColor:['#00ff88','#4d9fff','#ffd166','#ff9f40','#ff4d6a'],borderColor:'#161b27',borderWidth:2}] },
-    options: {responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:'#64748b',font:{family:'JetBrains Mono',size:10},padding:10}}}}
+    type:'doughnut',
+    data:{ labels:Object.keys(buckets), datasets:[{data:Object.values(buckets),backgroundColor:['#00ff88','#4d9fff','#ffd166','#ff9f40','#ff4d6a'],borderColor:'#161b27',borderWidth:2}] },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:'#64748b',font:{family:'JetBrains Mono',size:10},padding:10}}}}
   })
 }
 
@@ -1393,12 +1619,10 @@ async function loadModels() {
   const tbody = document.getElementById('models-tbody')
   if (!tbody) return
   tbody.innerHTML = '<tr><td colspan="7" class="empty"><span class="loading"></span></td></tr>'
-
   try {
     const data   = await apiFetch('/models')
     const models = data.models || []
     document.getElementById('models-count').textContent = models.length
-
     const active = models.find(m => m.is_active)
     if (active) {
       document.getElementById('active-model-name').textContent = active.name
@@ -1407,40 +1631,27 @@ async function loadModels() {
       modeEl.textContent = active.prompt_mode === 'compact' ? 'Compact Prompt' : 'Full Prompt'
       modeEl.className   = `badge ${active.prompt_mode === 'compact' ? 'badge-compact' : 'badge-full'}`
     }
-
-    if (!models.length) {
-      tbody.innerHTML = '<tr><td colspan="7" class="empty">No models found</td></tr>'
-      return
-    }
-
+    if (!models.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">No models found</td></tr>'; return }
     tbody.innerHTML = models.map(m => `
       <tr>
         <td><span class="cell-name">${escHtml(m.name)}</span></td>
         <td><span class="cell-mono" style="color:var(--blue);">${escHtml(m.model_id)}</span></td>
-        <td>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <span class="cell-mono" style="color:${m.token_limit ? 'var(--yellow)' : 'var(--muted)'};">
-              ${m.token_limit ? m.token_limit.toLocaleString() : 'unset'}
-            </span>
-            <button class="btn btn-ghost btn-xs" onclick="openTokenLimitModal('${m.id}','${escHtml(m.name)}',${m.token_limit || 0})">Edit</button>
-          </div>
-        </td>
-        <td><span class="badge ${m.prompt_mode === 'compact' ? 'badge-compact' : 'badge-full'}">${m.prompt_mode === 'compact' ? 'Compact' : 'Full'}</span></td>
+        <td><div style="display:flex;align-items:center;gap:6px;">
+          <span class="cell-mono" style="color:${m.token_limit?'var(--yellow)':'var(--muted)'};">${m.token_limit?m.token_limit.toLocaleString():'unset'}</span>
+          <button class="btn btn-ghost btn-xs" onclick="openTokenLimitModal('${m.id}','${escHtml(m.name)}',${m.token_limit||0})">Edit</button>
+        </div></td>
+        <td><span class="badge ${m.prompt_mode==='compact'?'badge-compact':'badge-full'}">${m.prompt_mode==='compact'?'Compact':'Full'}</span></td>
         <td>${m.is_active
-          ? `<span class="badge badge-active">● Active</span>`
-          : `<span class="badge" style="background:var(--bg3);color:var(--muted);border:1px solid var(--border);">Inactive</span>`}
+          ?`<span class="badge badge-active">● Active</span>`
+          :`<span class="badge" style="background:var(--bg3);color:var(--muted);border:1px solid var(--border);">Inactive</span>`}
         </td>
         <td><span class="log-date">${timeAgo(m.created_at)}</span></td>
         <td><div class="cell-actions">
-          ${!m.is_active
-            ? `<button class="btn btn-green btn-xs" onclick="activateModel('${m.id}','${escHtml(m.name)}')">Set Active</button>`
-            : `<span class="cell-mono" style="color:var(--accent);font-size:10px;">✓ Active</span>`}
+          ${!m.is_active?`<button class="btn btn-green btn-xs" onclick="activateModel('${m.id}','${escHtml(m.name)}')">Set Active</button>`:`<span class="cell-mono" style="color:var(--accent);font-size:10px;">✓ Active</span>`}
           <button class="btn btn-danger btn-xs" onclick="deleteModel('${m.id}','${escHtml(m.name)}','${escHtml(m.model_id)}')">🗑</button>
         </div></td>
       </tr>`).join('')
-  } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="7" class="empty" style="color:var(--red);">Failed to load models</td></tr>`
-  }
+  } catch (e) { tbody.innerHTML = `<tr><td colspan="7" class="empty" style="color:var(--red);">Failed to load models</td></tr>` }
 }
 
 function fillModelId(modelId, name, tokenLimit) {
@@ -1456,16 +1667,14 @@ async function addModel() {
   const name       = nameInput.value.trim()
   const model_id   = idInput.value.trim()
   const token_limit = limitInput.value ? parseInt(limitInput.value) : undefined
-
   if (!name)     { toast('Enter a display name', 'error'); nameInput.focus(); return }
   if (!model_id) { toast('Enter a model ID',     'error'); idInput.focus();   return }
-
   try {
     await apiFetch('/models', { method:'POST', body: JSON.stringify({ name, model_id, token_limit }) })
-    nameInput.value = ''; idInput.value = ''; limitInput.value = ''
+    nameInput.value=''; idInput.value=''; limitInput.value=''
     toast(`Model "${name}" added`)
     await loadModels()
-  } catch (e) { toast('Failed to add model: ' + (e.message || 'may already exist'), 'error') }
+  } catch (e) { toast('Failed to add model: ' + (e.message||'may already exist'), 'error') }
 }
 
 async function activateModel(id, name) {
@@ -1477,8 +1686,8 @@ async function activateModel(id, name) {
 }
 
 async function deleteModel(id, name, modelId) {
-  if (modelId === 'llama-3.1-8b-instant') { toast('Cannot delete the default model', 'error'); return }
-  confirmAction('Delete Model', `Remove model "${name}"? If it is active, the system will fall back to the default.`, '🗑 Delete', async () => {
+  if (modelId==='llama-3.1-8b-instant') { toast('Cannot delete the default model', 'error'); return }
+  confirmAction('Delete Model', `Remove model "${name}"? If it is active, the system falls back to the default.`, '🗑 Delete', async () => {
     try {
       await apiFetch(`/models/${id}`, { method:'DELETE' })
       toast(`Model "${name}" removed`)
@@ -1487,7 +1696,6 @@ async function deleteModel(id, name, modelId) {
   })
 }
 
-/* ── Token limit modal ──────────────────────────────────────────────────────── */
 function openTokenLimitModal(id, name, currentLimit) {
   tlmModelId = id
   document.getElementById('tlm-model-name').textContent = name
@@ -1498,14 +1706,14 @@ function openTokenLimitModal(id, name, currentLimit) {
 async function saveTokenLimit() {
   if (!tlmModelId) return
   const raw = document.getElementById('tlm-value').value.trim()
-  const token_limit = raw === '' || raw === '0' ? null : parseInt(raw)
+  const token_limit = raw===''||raw==='0' ? null : parseInt(raw)
   try {
     await apiFetch(`/models/${tlmModelId}/token-limit`, { method:'PATCH', body: JSON.stringify({ token_limit }) })
     toast('Token limit updated')
     document.getElementById('token-limit-modal').classList.remove('open')
     tlmModelId = null
     await loadModels()
-  } catch (e) { toast('Failed to update token limit: ' + (e.message || ''), 'error') }
+  } catch (e) { toast('Failed to update token limit: ' + (e.message||''), 'error') }
 }
 
 /* ── Schema browser ─────────────────────────────────────────────────────────── */
@@ -1516,7 +1724,7 @@ async function loadSchema() {
     allSchemaData = data.schema || {}
     document.getElementById('schema-total').textContent = data.total_keys
     renderSchemaGrid(allSchemaData)
-  } catch (e) {
+  } catch {
     document.getElementById('schema-grid').innerHTML = `<div class="empty" style="color:var(--red);">Failed to load schema — connect first</div>`
   }
 }
@@ -1535,7 +1743,7 @@ function renderSchemaGrid(schemaObj) {
       ${Object.entries(keys).map(([k, desc]) => `
         <div class="schema-key-row" onclick="openSchemaKeyModal('${escHtml(k)}',allSchemaData)" style="cursor:pointer;" title="Click to expand">
           <div class="schema-key-name">${escHtml(k)}</div>
-          <div class="schema-key-desc">${escHtml(desc.slice(0, 80))}${desc.length > 80 ? '…' : ''}</div>
+          <div class="schema-key-desc">${escHtml(desc.slice(0,80))}${desc.length>80?'…':''}</div>
         </div>`).join('')}
     </div>`).join('')
 }
@@ -1546,186 +1754,130 @@ function filterSchema(q) {
   const filtered = {}
   Object.entries(allSchemaData).forEach(([cat, keys]) => {
     const matched = {}
-    Object.entries(keys).forEach(([k, v]) => {
-      if (k.toLowerCase().includes(lower) || v.toLowerCase().includes(lower)) matched[k] = v
-    })
+    Object.entries(keys).forEach(([k,v]) => { if (k.toLowerCase().includes(lower)||v.toLowerCase().includes(lower)) matched[k]=v })
     if (Object.keys(matched).length) filtered[cat] = matched
   })
   renderSchemaGrid(filtered)
 }
 
 function openSchemaKeyModal(key, schemaData) {
-  // Find the full description from schema data
   let fullDesc = key
   if (schemaData && typeof schemaData === 'object') {
-    for (const [cat, keys] of Object.entries(schemaData)) {
-      if (keys[key]) { fullDesc = keys[key]; break }
-    }
-  } else if (typeof schemaData === 'string') {
-    fullDesc = schemaData
+    for (const [, keys] of Object.entries(schemaData)) { if (keys[key]) { fullDesc = keys[key]; break } }
   }
   document.getElementById('skm-key').textContent  = key
   document.getElementById('skm-desc').textContent = fullDesc
   document.getElementById('schema-key-modal').classList.add('open')
 }
-function closeSchemaKeyModal() {
-  document.getElementById('schema-key-modal').classList.remove('open')
-}
+function closeSchemaKeyModal() { document.getElementById('schema-key-modal').classList.remove('open') }
 
-/* ── Clear logs ──────────────────────────────────────────────────────────────────── */
-async function clearLogs() {
-  if (!allLogs.length) { toast('No logs to clear', 'info'); return }
-  confirmAction('Clear All Logs', `Permanently delete all ${allLogs.length} request log(s)? This cannot be undone.`, '🗑 Clear All', async () => {
-    try {
-      const data = await apiFetch('/logs', { method: 'DELETE' })
-      toast(`Cleared ${data.deleted} log(s)`)
-      await loadLogs()
-      await loadKeys() // refresh stats
-    } catch (e) { toast('Failed to clear logs', 'error') }
-  })
-}
-
-/* ── Playground ────────────────────────────────────────────────────────────────── */
+/* ── Playground ──────────────────────────────────────────────────────────────── */
 async function runPlayground() {
-  const query = document.getElementById('playground-query').value.trim()
-  const key = document.getElementById('playground-key').value
-  const useCustom = document.getElementById('playground-custom-schema').checked
-
+  const query      = document.getElementById('playground-query').value.trim()
+  const key        = document.getElementById('playground-key').value
+  const useCustom  = document.getElementById('playground-custom-schema').checked
   if (!query) { toast('Enter a search query first', 'error'); document.getElementById('playground-query').focus(); return }
-  if (!key) { toast('Select an API key first', 'error'); return }
+  if (!key)   { toast('Select an API key first', 'error'); return }
 
   const btn = document.getElementById('playground-run-btn')
-  btn.disabled = true
-  btn.innerHTML = '<span class="loading"></span> Running...'
+  btn.disabled  = true
+  btn.innerHTML = '<span class="loading"></span> Running…'
   document.getElementById('playground-result-card').style.display = 'none'
-  document.getElementById('playground-error-card').style.display = 'none'
+  document.getElementById('playground-error-card').style.display  = 'none'
+  document.getElementById('playground-suggestions-card').style.display = 'none'
 
   try {
     const { url } = getConfig()
     const path = useCustom ? '/extract?schema=true' : '/extract'
-    const res = await fetch(`${url}${path}`, {
+    const res  = await fetch(`${url}${path}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+      headers: { 'Content-Type':'application/json', 'Authorization':`Bearer ${key}` },
       body: JSON.stringify({ query })
     })
     const data = await res.json()
 
     if (!res.ok) {
-      document.getElementById('playground-error').textContent = data.message || data.error || `Error ${res.status}`
+      document.getElementById('playground-error-card').textContent = data.message || data.error || `Error ${res.status}`
       document.getElementById('playground-error-card').style.display = ''
       return
     }
 
-    // Show result
-    document.getElementById('playground-json').textContent = JSON.stringify(data.result || {}, null, 2)
-    document.getElementById('playground-latency').textContent = data.latency_ms ? data.latency_ms + 'ms' : ''
-    document.getElementById('playground-keys-found').textContent = data.keys_found !== undefined ? data.keys_found + ' keys found' : ''
-    const schemaEl = document.getElementById('playground-schema-used')
-    schemaEl.textContent = data.schema_used === 'custom' ? 'Custom Schema' : 'Built-in Schema'
-    schemaEl.className = `badge ${data.schema_used === 'custom' ? 'badge-compact' : 'badge-full'}`
+    document.getElementById('playground-json').textContent     = JSON.stringify(data.result||{}, null, 2)
+    document.getElementById('playground-latency').textContent  = data.latency_ms ? data.latency_ms+'ms' : ''
+    document.getElementById('playground-keys-found').textContent = data.keys_found !== undefined ? `${data.keys_found} keys found` : ''
+    document.getElementById('playground-cached').textContent   = data.cached ? '● cached' : ''
+    document.getElementById('playground-schema-used').textContent = data.schema_used ? `schema: ${data.schema_used}` : ''
     document.getElementById('playground-result-card').style.display = ''
 
-    // Suggestions
-    const sugDiv = document.getElementById('playground-suggestions')
-    const sugList = document.getElementById('playground-suggestions-list')
-    if (data.suggestions && data.suggestions.length) {
-      sugList.innerHTML = data.suggestions.map(s =>
-        `<button class="btn btn-ghost btn-xs" onclick="document.getElementById('playground-query').value='${escHtml(s)}';runPlayground()">${escHtml(s)}</button>`
-      ).join('')
-      sugDiv.style.display = ''
-    } else {
-      sugDiv.style.display = 'none'
+    if (data.suggestions?.length) {
+      document.getElementById('playground-suggestions').innerHTML =
+        data.suggestions.map(s => `<div style="font-family:var(--font-mono);font-size:12px;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border);">${escHtml(s)}</div>`).join('')
+      document.getElementById('playground-suggestions-card').style.display = ''
     }
   } catch (e) {
-    document.getElementById('playground-error').textContent = 'Network error: ' + (e.message || 'check connection')
+    document.getElementById('playground-error-card').textContent = e.message || 'Request failed'
     document.getElementById('playground-error-card').style.display = ''
   } finally {
-    btn.disabled = false
+    btn.disabled  = false
     btn.innerHTML = '▶ Extract'
   }
-}
-
-
-/* ── Rate limit update from drawer ──────────────────────────────────────────── */
-async function updateDrawerRateLimit() {
-  if (!activeDrawerKey) return
-  const rpm = parseInt(document.getElementById('drawer-rpm-input').value)
-  if (!rpm || rpm < 1) { toast('Enter a valid rate limit (min 1)', 'error'); return }
-  try {
-    await apiFetch(`/keys/${activeDrawerKey.id}/rate-limit`, { method:'PATCH', body: JSON.stringify({ rate_limit_rpm: rpm }) })
-    toast(`Rate limit updated to ${rpm} req/min`)
-    await loadKeys()
-    const updated = allKeys.find(k => k.id === activeDrawerKey.id)
-    if (updated) openDrawer(updated.id)
-  } catch (e) { toast('Failed to update rate limit: ' + (e.message || ''), 'error') }
 }
 
 /* ── Analytics ───────────────────────────────────────────────────────────────── */
 async function loadAnalytics() {
   try {
     const data = await apiFetch('/analytics')
-
-    // ── Dashboard stat cards ────────────────────────────────────────────────
     const s = data.summary || {}
-    document.getElementById('stat-total').textContent       = (s.total_requests || 0).toLocaleString()
-    document.getElementById('stat-latency').textContent     = s.avg_latency_ms ? Math.round(s.avg_latency_ms) + 'ms' : '—'
-    document.getElementById('stat-success').textContent     = s.total_requests ? Math.round((s.successful / s.total_requests) * 100) + '%' : '—'
-    document.getElementById('stat-cache-rate').textContent  = (s.cache_hit_rate || 0) + '%'
 
-    // ── Server timeline → update dashboard chart ───────────────────────────
+    document.getElementById('stat-total').textContent   = (s.total_requests||0).toLocaleString()
+    document.getElementById('stat-latency').textContent = s.avg_latency_ms ? Math.round(s.avg_latency_ms)+'ms' : '—'
+    document.getElementById('stat-success').textContent = s.total_requests ? Math.round((s.successful/s.total_requests)*100)+'%' : '—'
+
     window._serverTimeline = data.timeline || []
     buildCharts(allLogs, window._serverTimeline)
 
-    // ── Analytics page summary ─────────────────────────────────────────────
-    document.getElementById('an-total').textContent          = (s.total_requests || 0).toLocaleString()
-    document.getElementById('an-success').textContent        = (s.successful || 0).toLocaleString()
-    document.getElementById('an-failed').textContent         = (s.failed || 0).toLocaleString()
-    document.getElementById('an-cache-hits').textContent     = (s.total_cache_hits || 0).toLocaleString()
-    document.getElementById('an-latency').textContent        = s.avg_latency_ms ? Math.round(s.avg_latency_ms) + 'ms' : '—'
+    document.getElementById('an-total').textContent        = (s.total_requests||0).toLocaleString()
+    document.getElementById('an-success').textContent      = (s.successful||0).toLocaleString()
+    document.getElementById('an-failed').textContent       = (s.failed||0).toLocaleString()
+    document.getElementById('an-cache-hits').textContent   = (s.total_cache_hits||0).toLocaleString()
+    document.getElementById('an-latency').textContent      = s.avg_latency_ms ? Math.round(s.avg_latency_ms)+'ms' : '—'
 
-    // ── Cache ring ─────────────────────────────────────────────────────────
     const rate = s.cache_hit_rate || 0
     document.getElementById('cache-ring-pct').textContent = rate + '%'
-    const circ = 2 * Math.PI * 36  // r=36 → circumference ≈ 226.2
-    document.getElementById('cache-ring-circle').setAttribute('stroke-dashoffset', circ * (1 - rate / 100))
+    const circ = 2 * Math.PI * 36
+    document.getElementById('cache-ring-circle').setAttribute('stroke-dashoffset', circ * (1 - rate/100))
 
     const c = data.cache || {}
-    document.getElementById('an-cache-entries').textContent    = (c.active_entries || 0).toLocaleString()
-    document.getElementById('an-cache-total-hits').textContent = (c.total_hits || 0).toLocaleString()
+    document.getElementById('an-cache-entries').textContent    = (c.active_entries||0).toLocaleString()
+    document.getElementById('an-cache-total-hits').textContent = (c.total_hits||0).toLocaleString()
 
-    // ── Analytics timeline chart ───────────────────────────────────────────
     const tl = data.timeline || []
     const tlDays   = tl.map(r => { const d = new Date(r.day); return d.toLocaleDateString('en',{month:'short',day:'numeric'}) })
-    const tlTotal  = tl.map(r => r.total || 0)
+    const tlTotal  = tl.map(r => r.total  || 0)
     const tlCached = tl.map(r => r.cached || 0)
-    const grid = '#1e2535', tick = {family:'JetBrains Mono', size:10}
+    const grid = '#1e2535', tick = {family:'JetBrains Mono',size:10}
     if (analyticsTimelineChart) analyticsTimelineChart.destroy()
     const canvas = document.getElementById('analytics-timeline-chart')
     if (canvas) {
       analyticsTimelineChart = new Chart(canvas, {
-        type: 'bar',
-        data: {
-          labels: tlDays,
-          datasets: [
-            { label:'Total',  data:tlTotal,  backgroundColor:'rgba(77,159,255,.2)', borderColor:'#4d9fff', borderWidth:1, borderRadius:2 },
-            { label:'Cached', data:tlCached, backgroundColor:'rgba(180,142,255,.3)', borderColor:'#b48eff', borderWidth:1, borderRadius:2 },
-          ]
-        },
-        options: {
-          responsive:true, maintainAspectRatio:false,
-          plugins:{ legend:{ display:true, position:'bottom', labels:{ color:'#64748b', font:{ family:'JetBrains Mono', size:10 }, padding:10 } } },
-          scales:{ x:{ grid:{color:grid}, ticks:{color:'#64748b',font:tick}, stacked:false }, y:{ grid:{color:grid}, ticks:{color:'#64748b',font:tick} } }
+        type:'bar',
+        data:{ labels:tlDays, datasets:[
+          { label:'Total',  data:tlTotal,  backgroundColor:'rgba(77,159,255,.18)', borderColor:'#4d9fff', borderWidth:1, borderRadius:2 },
+          { label:'Cached', data:tlCached, backgroundColor:'rgba(180,142,255,.28)', borderColor:'#b48eff', borderWidth:1, borderRadius:2 }
+        ]},
+        options:{
+          responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:true,position:'bottom',labels:{color:'#64748b',font:{family:'JetBrains Mono',size:10},padding:10}}},
+          scales:{x:{grid:{color:grid},ticks:{color:'#64748b',font:tick}},y:{grid:{color:grid},ticks:{color:'#64748b',font:tick},beginAtZero:true}}
         }
       })
     }
 
-    // ── Top queries ─────────────────────────────────────────────────────────
     const topQ = data.top_queries || []
     const topQBody = document.getElementById('top-queries-body')
     if (topQBody) {
-      if (!topQ.length) {
-        topQBody.innerHTML = '<div class="empty">No data yet</div>'
-      } else {
+      if (!topQ.length) { topQBody.innerHTML='<div class="empty">No data yet</div>'; }
+      else {
         const maxCount = topQ[0]?.count || 1
         topQBody.innerHTML = topQ.map(q => `
           <div class="mini-bar-row">
@@ -1736,20 +1888,18 @@ async function loadAnalytics() {
       }
     }
 
-    // ── Usage by key ────────────────────────────────────────────────────────
-    const byKey = data.by_key || []
+    const byKey    = data.by_key || []
     const byKeyBody = document.getElementById('by-key-body')
     if (byKeyBody) {
-      if (!byKey.length) {
-        byKeyBody.innerHTML = '<div class="empty">No data yet</div>'
-      } else {
+      if (!byKey.length) { byKeyBody.innerHTML='<div class="empty">No data yet</div>'; }
+      else {
         const keyMap = {}
         allKeys.forEach(k => { keyMap[k.id] = k.name })
         const maxReqs = byKey[0]?.total_requests || 1
         byKeyBody.innerHTML = byKey.map(k => {
-          const name = escHtml(k.name || keyMap[k.api_key_id] || k.api_key_id || 'Unknown')
-          const pct  = Math.round((k.total_requests / maxReqs) * 100)
-          const hitPct = k.total_requests ? Math.round((k.cache_hits / k.total_requests) * 100) : 0
+          const name    = escHtml(k.name || keyMap[k.api_key_id] || k.api_key_id || 'Unknown')
+          const pct     = Math.round((k.total_requests/maxReqs)*100)
+          const hitPct  = k.total_requests ? Math.round((k.cache_hits/k.total_requests)*100) : 0
           return `<div class="by-key-bar">
             <div class="by-key-name" title="${name}">${name}</div>
             <div class="by-key-track"><div class="by-key-fill" style="width:${pct}%"></div></div>
@@ -1759,17 +1909,14 @@ async function loadAnalytics() {
         }).join('')
       }
     }
-
   } catch (e) {
-    // Analytics is non-critical — fail silently on dashboard, show error on analytics page
     const body = document.getElementById('top-queries-body')
-    if (body) body.innerHTML = `<div class="empty" style="color:var(--red);">Failed to load analytics</div>`
+    if (body) body.innerHTML = `<div class="empty" style="color:var(--red);">Analytics unavailable</div>`
   }
 }
 
-/* ── Clear query cache ───────────────────────────────────────────────────────── */
 async function clearCache() {
-  confirmAction('Clear Query Cache', 'Delete all cached query results? Future identical queries will hit Groq until the cache rebuilds.', '🗑 Clear Cache', async () => {
+  confirmAction('Clear Query Cache', 'Delete all cached results? Future queries will call Groq until the cache rebuilds.', '🗑 Clear Cache', async () => {
     try {
       const data = await apiFetch('/cache', { method:'DELETE' })
       toast(`Cache cleared — ${data.deleted} entries removed`)
@@ -1779,36 +1926,36 @@ async function clearCache() {
 }
 
 /* ── Event listeners ────────────────────────────────────────────────────────── */
-document.getElementById('admin-secret').addEventListener('keydown', e => { if (e.key === 'Enter') loadAll() })
-document.getElementById('new-key-name').addEventListener('keydown', e => { if (e.key === 'Enter') createKey() })
-document.getElementById('model-id-input').addEventListener('keydown', e => { if (e.key === 'Enter') addModel() })
-document.getElementById('playground-query').addEventListener('keydown', e => { if (e.key === 'Enter') runPlayground() })
+document.getElementById('admin-secret').addEventListener('keydown',   e => { if (e.key==='Enter') loadAll() })
+document.getElementById('api-url').addEventListener('keydown',        e => { if (e.key==='Enter') loadAll() })
+document.getElementById('new-key-name').addEventListener('keydown',   e => { if (e.key==='Enter') createKey() })
+document.getElementById('model-id-input').addEventListener('keydown', e => { if (e.key==='Enter') addModel() })
+document.getElementById('playground-query').addEventListener('keydown', e => { if (e.key==='Enter'&&!e.shiftKey) runPlayground() })
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
+  if (e.key==='Escape') {
     closeDrawer()
     document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'))
   }
 })
 
-// Close sidebar on outside tap (mobile)
 document.addEventListener('click', e => {
   const sidebar   = document.getElementById('sidebar')
   const hamburger = document.querySelector('.hamburger')
-  if (window.innerWidth <= 768 && sidebar.classList.contains('open')
-      && !sidebar.contains(e.target) && !hamburger.contains(e.target)) {
-    closeSidebar()
-  }
+  if (window.innerWidth<=768 && sidebar.classList.contains('open')
+      && !sidebar.contains(e.target) && !hamburger.contains(e.target)) closeSidebar()
 })
 
-// Mobile status dot visibility
 function updateMobileDot() {
   const isMobile = window.innerWidth <= 768
-  document.getElementById('status-dot').parentElement.style.display = isMobile ? 'none' : 'flex'
-  document.getElementById('status-dot-mobile').style.display = isMobile ? 'block' : 'none'
+  document.getElementById('status-dot').parentElement.style.display  = isMobile ? 'none' : 'flex'
+  document.getElementById('status-dot-mobile').style.display         = isMobile ? 'block' : 'none'
 }
 window.addEventListener('resize', updateMobileDot)
 updateMobileDot()
+
+// ── Init: load saved credentials on page open ─────────────────────────────────
+loadSavedCredentials()
 </script>
 </body>
 </html>
